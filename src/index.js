@@ -4,10 +4,10 @@ import './ui-counter'
 // import './ui-headline'
 
 function stateSerializer (state) {
-  state.friends = [
-    { id: 1, name: 'Alex', title: 'webdev' },
-    { id: 2, name: 'Agatha', title: 'educator', final: 'final' }
-  ]
+  // state.friends = [
+  //   { id: 1, name: 'Alex', title: 'webdev' },
+  //   { id: 2, name: 'Agatha', title: 'educator', final: 'final' }
+  // ]
   return state
 }
 

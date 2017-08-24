@@ -7,11 +7,11 @@ class UICounter extends HTMLElement { // eslint-disable-line
     subscribe(this, 'counter')
     this.root = this.attachShadow({ mode: 'open' })
     this.root.innerHTML = /* @html */`
-    <b>Counting to<span bind:text="counter"></span></b>
+    <b>Counting to <span :text="counter"></span></b>
     <button on:click="increase">Increase</button>
     <button on:click="decrease">Decrease</button>
-    <div bind:show="exceeded">
-      <input type="checkbox" bind:checked="exceededCheckbox">
+    <div :show="exceeded">
+      <input type="checkbox" attr:checked="exceededCheckbox">
       You have exceeded!
     </div>`
   }
@@ -22,10 +22,8 @@ class UICounter extends HTMLElement { // eslint-disable-line
       counter,
       exceeded,
       exceededCheckbox: exceeded ? 'checked' : null,
-      events: {
-        increase: () => store.dispatch({ type: 'INCREMENT' }),
-        decrease: () => store.dispatch({ type: 'DECREMENT' })
-      }
+      increase: () => store.dispatch({ type: 'INCREMENT' }),
+      decrease: () => store.dispatch({ type: 'DECREMENT' })
     }
   }
 }
