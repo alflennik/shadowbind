@@ -4,23 +4,10 @@ import { subscribe } from '../lib/domino'
 export default class UIHeadline extends HTMLElement { // eslint-disable-line
   constructor () {
     super()
-    subscribe(this, 'color')
+    subscribe(this, 'friends')
     this.root = this.attachShadow({ mode: 'open' })
     this.root.innerHTML = /* @html */`
-    <div :css>
-      <h1 on:click="toggleColor"><slot></slot></h1>
-    </div>
-    <style>
-      div {
-        border: 5px solid #eee;
-        margin: 20px;
-        padding: 20px;
-      }
-      h1 {
-        color: var(--color);
-        text-align: center;
-      }
-    </style>`
+    `
   }
 
   bind (color) {

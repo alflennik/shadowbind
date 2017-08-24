@@ -6,8 +6,6 @@ function counter (state = 0, action) {
       return state + 1
     case 'DECREMENT':
       return state - 1
-    case 'SIT':
-      return state
     default:
       return state
   }
@@ -15,8 +13,8 @@ function counter (state = 0, action) {
 
 function color (state = '#444', action) {
   switch (action.type) {
-    case 'TOGGLE':
-      return state !== 'red' ? 'red' : '#444'
+    case 'TOGGLE_COLOR':
+      return state !== 'coral' ? 'coral' : 'red'
     default:
       return state
   }
