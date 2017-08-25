@@ -4,31 +4,33 @@ import { subscribe } from '../lib/domino'
 export default class UIHeadline extends HTMLElement { // eslint-disable-line
   constructor () {
     super()
-    subscribe(this, 'color')
+    subscribe(this, 'headline')
     this.root = this.attachShadow({ mode: 'open' })
     this.root.innerHTML = /* @html */`
-    <div :css>
-      <h1 on:click="toggleColor"><slot></slot></h1>
+    <div :css="css">
+      <h1><slot></slot></h1>
+      <button on:click="toggleColor">Toggle Color</button>
+      <button on:click="bolder">Make bolder</button>
     </div>
     <style>
       div {
         border: 5px solid #eee;
         margin: 20px;
         padding: 20px;
+        text-align: center;
       }
       h1 {
         color: var(--color);
-        text-align: center;
+        font-weight: var(--boldness);
       }
     </style>`
   }
 
-  bind (color) {
+  bind (headlineState) {
     return {
-      css: {
-        color: color
-      },
-      toggleColor: () => store.dispatch({ type: 'TOGGLE_COLOR' })
+      css: headlineState,
+      toggleColor: () => store.dispatch({ type: 'TOGGLE_COLOR' }),
+      bolder: () => store.dispatch({ type: 'MAKE_BOLDER' })
     }
   }
 }
