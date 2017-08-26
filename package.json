@@ -1,21 +1,20 @@
 {
   "name": "domino",
-  "version": "1.0.0",
+  "version": "0.1.0",
   "description": "",
   "main": "index.js",
-  "dependencies": {
-    "dom-walk": "^0.1.1",
-    "redux": "^3.7.2"
-  },
   "devDependencies": {
+    "ava": "^0.22.0",
     "eslint": "^4.4.1",
     "live-server": "^1.2.0",
+    "puppeteer": "^0.10.1",
+    "redux": "^3.7.2",
     "standard": "^10.0.3",
     "webpack": "^3.5.5"
   },
   "scripts": {
-    "dev": "webpack -d --watch",
-    "serve": "live-server"
+    "test": "ava",
+    "spec": "ava **/*.spec.js"
   },
   "author": "Alex",
   "license": "MIT"
