@@ -11,14 +11,16 @@ function counter (state = 0, action) {
   }
 }
 
-function headline (state = { color: '#444', boldness: 100 }, action) {
+function headline (state = { color: '#444', boldness: 'lighter' }, action) {
   switch (action.type) {
     case 'TOGGLE_COLOR':
       const color = state.color !== 'coral' ? 'coral' : 'red'
       return { boldness: state.boldness, color }
     case 'MAKE_BOLDER':
-      let boldness = state.boldness + 100
-      if (boldness > 900) boldness = 100
+      let boldness = state.boldness
+      if (boldness === 'lighter') boldness = 'normal'
+      else if (boldness === 'normal') boldness = 'bold'
+      else if (boldness === 'bold') boldness = 'lighter'
       return { color: state.color, boldness }
     default:
       return state
