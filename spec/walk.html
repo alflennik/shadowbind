@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Walk Test</title>
+</head>
+<body>
+  <shadow-walk></shadow-walk>
+  <script type="module">
+    import { subscribe, publish } from '../src/shadowbind.js'
+
+    window.customElements.define('shadow-walk', class extends HTMLElement { // eslint-disable-line
+      constructor () {
+        super()
+        subscribe(this)
+        this.root = this.attachShadow({ mode: 'open' })
+        this.root.innerHTML = /* @html */`
+        <ul>
+          <li :for="location of locations">
+            <h1 :text="location.name"></h1>
+          </li>
+        </ul>
+        `
+      }
+    })
+
+    publish({ locations: [
+      { name: 'Seattle' },
+      { name: 'Tacoma' },
+      { name: 'Port Orchard' }
+    ]})
+</script>
+</body>
+</html>

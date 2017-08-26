@@ -1,6 +1,5 @@
 import test from 'ava'
 import server from './server'
-import shadowbind from './shadowbind'
 
 test.before(() => server.start())
 test.after(() => server.end())

@@ -2,6 +2,12 @@ let subscribedComponents = []
 let eventStorage = {}
 let previousState = null
 
+// Track subscribed web components
+export function subscribe (selector, stateKey) {
+  subscribedComponents.push({ selector, stateKey })
+}
+
+// Apply data-binding to all affected web components when the state changes
 export function publish (state) {
   if (previousState !== null && state === previousState) return
   for (const subscribedComponent of subscribedComponents) {
@@ -21,23 +27,57 @@ export function publish (state) {
   previousState = state
 }
 
-export function subscribe (selector, stateKey) {
-  subscribedComponents.push({ selector, stateKey })
-}
-
+// Apply your bindings to the element's shadowDom
 function walk (selector, bindings) {
-  walkDom(selector.root, node => {
-    let repeater = {}
+  walkDom(selector.root, bindings, (node, localBindings) => {
     walkAttributes(node, attribute => {
       const bindAction = parseAttribute(attribute)
-      if (bindAction) {
-        if (bindAction.type === 'for') repeater['key'] = bindAction.key
-        else if (bindAction.type === 'key') repeater['id'] = bindAction.key
-        else applyBind(node, bindings, bindAction)
-      }
-      if (repeater.key) applyRepeater(node, bindings, repeater)
+      if (bindAction) applyBind(node, localBindings, bindAction)
     })
   })
+}
+
+// Run callback on every element in the shadowDom, applying repeaters as needed
+function walkDom (selector, bindings, callback) {
+  const walkTool = getWalkTool(selector)
+  const stateTracker = getStateTracker(bindings)
+
+  while (walkTool.next()) {
+    const { node, depth } = walkTool.current()
+    stateTracker.updateDepth(depth)
+    const localState = stateTracker.current()
+    callback(node, localState)
+    const repeater = isRepeater(node)
+    if (repeater) {
+      applyRepeater(repeater)
+      stateTracker.applyRepeater(repeater)
+    }
+  }
+}
+
+// Return every element in the shadowDom while tracking the depth for repeaters
+function getWalkTool (selector) {
+  let depth
+  let node
+  return {
+    next: () => {
+      return null
+    },
+    current: () => {
+      return { node, depth }
+    }
+  }
+}
+
+// Keep track of bound state as it is altered by nested repeaters
+function getStateTracker (initial) {
+  let layers = { 1: initial }
+  let previousDepth
+  return {
+    updateDepth: (depth) => {},
+    current: () => initial,
+    applyRepeater: () => {}
+  }
 }
 
 function walkAttributes (element, callback) {
@@ -47,6 +87,10 @@ function walkAttributes (element, callback) {
     callback(attribute)
   }
 }
+
+function isRepeater (node) {}
+
+function applyRepeater (repeater) {}
 
 function parseAttribute (attr) {
   let param = null
@@ -104,8 +148,6 @@ function applyBind (node, bindings, bindAction) {
       break
   }
 }
-
-function applyRepeater () {}
 
 function domKeyGenerator () {
   let internalCounter = 0
