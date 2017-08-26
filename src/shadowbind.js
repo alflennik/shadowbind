@@ -29,10 +29,10 @@ export function publish (state) {
 
 // Apply the state to the element's shadowDom
 function walk (selector, bindings) {
-  walkDom(selector.root, bindings, (node, localBindings) => {
-    walkAttributes(node, attribute => {
+  walkDom(selector.root, bindings, (element, localBindings) => {
+    walkAttributes(element, attribute => {
       const bindAction = parseAttribute(attribute)
-      if (bindAction) applyBind(node, localBindings, bindAction)
+      if (bindAction) applyBind(element, localBindings, bindAction)
     })
   })
 }
@@ -43,40 +43,55 @@ function walkDom (selector, bindings, callback) {
   const stateTracker = getStateTracker(bindings)
 
   while (walkTool.next()) {
-    const { node, depth } = walkTool.current()
+    const { element, depth } = walkTool.current()
     stateTracker.updateDepth(depth)
     const localState = stateTracker.current()
-    callback(node, localState)
-    const repeater = parseRepeater(node)
+    const repeater = parseRepeater(element)
     if (repeater) {
-      applyRepeater(repeater)
       stateTracker.applyRepeater(repeater)
+      applyRepeater(repeater)
     }
+    callback(element, localState)
   }
 }
 
 // Return every element in the shadowDom while tracking the depth for repeaters
 function getWalkTool (selector) {
-  let depth
-  let node
+  let depth = 0
+  let element = selector
+
   return {
     next: () => {
-      return null
+      if (element.childNodes) {
+        depth++
+        element = element.firstChild
+      } else if (element.nextSibling) {
+        element = element.nextSibling
+      } else if (element.parentNode()) {
+        depth--
+        element = element.parentNode()
+      } else {
+        return false
+      }
+
+      if (depth < 0) return false
+      return true
     },
     current: () => {
-      return { node, depth }
+      return { element, depth }
     }
   }
 }
 
 // Keep track of bound state as it is altered by nested repeaters
 function getStateTracker (initial) {
-  let layers = { 1: initial }
-  let previousDepth
+  // let layers = { 1: initial }
+  // let previousDepth
+  // let depth
   return {
-    updateDepth: (depth) => {},
+    updateDepth: depth => {},
     current: () => initial,
-    applyRepeater: () => {}
+    applyRepeater: repeater => {}
   }
 }
 
@@ -90,14 +105,16 @@ function walkAttributes (element, callback) {
 }
 
 // Parse a repeater element and return salient features
-function parseRepeater (node) {}
+function parseRepeater (element) {
+  return false
+}
 
 // Convert attributes into data-binding instructions
 function parseAttribute (attr) {
   let param = null
   let type
   const key = attr.value
-  let matches = /^:(text|html|for|key|show|css)$/.exec(attr.name)
+  let matches = /^:(text|html|show|css)$/.exec(attr.name)
   if (matches) {
     type = matches[1]
   } else {
@@ -115,40 +132,40 @@ function parseAttribute (attr) {
 function applyRepeater (repeater) {}
 
 // Apply data-binding to a particular element
-function applyBind (node, bindings, bindAction) {
+function applyBind (element, bindings, bindAction) {
   const { type, param, key } = bindAction
   const value = bindings[key]
   switch (type) {
     case 'attr':
-      if (value !== null) node.setAttribute(param, value)
-      else node.removeAttribute(param)
+      if (value !== null) element.setAttribute(param, value)
+      else element.removeAttribute(param)
       break
     case 'text':
       if (value !== undefined || value !== null) {
-        node.innerHTML = escapeHtml(value)
+        element.innerHTML = escapeHtml(value)
       }
       break
     case 'html':
       if (value !== undefined || value !== null) {
-        node.innerHTML = value
+        element.innerHTML = value
       }
       break
     case 'on':
-      let domKey = getDomKey(node)
-      if (!domKey) domKey = setDomKey(node)
+      let domKey = getDomKey(element)
+      if (!domKey) domKey = setDomKey(element)
       if (!eventStorage[domKey]) eventStorage[domKey] = {}
       if (!eventStorage[domKey][param] && eventStorage[domKey][param] !== key) {
-        node.addEventListener(param, value)
+        element.addEventListener(param, value)
         eventStorage[domKey][param] = key
       }
       break
     case 'show':
-      if (!value) node.style.display = 'none'
-      else node.style.display = ''
+      if (!value) element.style.display = 'none'
+      else element.style.display = ''
       break
     case 'css':
       for (const cssProp of Object.keys(value)) {
-        node.style.setProperty(`--${cssProp}`, value[cssProp])
+        element.style.setProperty(`--${cssProp}`, value[cssProp])
       }
       break
   }
@@ -157,9 +174,9 @@ function applyBind (node, bindings, bindAction) {
 // Attach identifiers for elements that otherwise cannot be uniquely identified
 function domKeyGenerator () {
   let internalCounter = 0
-  return node => {
+  return element => {
     const newDomKey = `dom${internalCounter}`
-    node.setAttribute(newDomKey, '')
+    element.setAttribute(newDomKey, '')
     internalCounter++
     return newDomKey
   }
@@ -167,8 +184,8 @@ function domKeyGenerator () {
 
 const setDomKey = domKeyGenerator()
 
-function getDomKey (node) {
-  for (let attr of node.attributes) {
+function getDomKey (element) {
+  for (let attr of element.attributes) {
     if (!attr.name) continue
     const match = /^(dom\d+)$/.exec(attr.name)
     if (match) return match[1]
