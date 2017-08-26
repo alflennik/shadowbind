@@ -1,7 +1,9 @@
 {
-  "name": "domino",
+  "name": "shadowbind",
+  "author": "Alexander Flenniken",
   "version": "0.1.0",
-  "description": "",
+  "repository": "Soon...",
+  "description": "Declarative web components in an insanely lightweight package",
   "main": "index.js",
   "devDependencies": {
     "ava": "^0.22.0",
@@ -13,9 +15,8 @@
     "webpack": "^3.5.5"
   },
   "scripts": {
-    "test": "ava",
-    "spec": "ava **/*.spec.js"
+    "dev": "webpack -d --watch",
+    "test": "ava"
   },
-  "author": "Alex",
   "license": "MIT"
 }

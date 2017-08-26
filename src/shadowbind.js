@@ -1,11 +1,3 @@
-import walkDom from 'dom-walk'
-
-/**
- * TODO:
- * Loops needed
- * Add headless browser tests
- */
-
 let subscribedComponents = []
 let eventStorage = {}
 let previousState = null
