@@ -9,6 +9,7 @@
   },
   "devDependencies": {
     "eslint": "^4.4.1",
+    "live-server": "^1.2.0",
     "standard": "^10.0.3",
     "webpack": "^3.5.5"
   },
