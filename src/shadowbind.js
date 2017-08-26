@@ -27,7 +27,7 @@ export function publish (state) {
   previousState = state
 }
 
-// Apply your bindings to the element's shadowDom
+// Apply the state to the element's shadowDom
 function walk (selector, bindings) {
   walkDom(selector.root, bindings, (node, localBindings) => {
     walkAttributes(node, attribute => {
@@ -47,7 +47,7 @@ function walkDom (selector, bindings, callback) {
     stateTracker.updateDepth(depth)
     const localState = stateTracker.current()
     callback(node, localState)
-    const repeater = isRepeater(node)
+    const repeater = parseRepeater(node)
     if (repeater) {
       applyRepeater(repeater)
       stateTracker.applyRepeater(repeater)
@@ -80,6 +80,7 @@ function getStateTracker (initial) {
   }
 }
 
+// Run callback on every attribute of a dom element
 function walkAttributes (element, callback) {
   if (!element.attributes) return
   for (const attribute of element.attributes) {
@@ -88,10 +89,10 @@ function walkAttributes (element, callback) {
   }
 }
 
-function isRepeater (node) {}
+// Parse a repeater element and return salient features
+function parseRepeater (node) {}
 
-function applyRepeater (repeater) {}
-
+// Convert attributes into data-binding instructions
 function parseAttribute (attr) {
   let param = null
   let type
@@ -110,6 +111,10 @@ function parseAttribute (attr) {
   return { type, param, key }
 }
 
+// Create, move and remove elements within a repeater
+function applyRepeater (repeater) {}
+
+// Apply data-binding to a particular element
 function applyBind (node, bindings, bindAction) {
   const { type, param, key } = bindAction
   const value = bindings[key]
@@ -149,6 +154,7 @@ function applyBind (node, bindings, bindAction) {
   }
 }
 
+// Attach identifiers for elements that otherwise cannot be uniquely identified
 function domKeyGenerator () {
   let internalCounter = 0
   return node => {
@@ -169,6 +175,7 @@ function getDomKey (node) {
   }
 }
 
+// The :text data-binding attribute should not allow unescaped html within it
 function escapeHtml (input) {
   input += ''
   return input
