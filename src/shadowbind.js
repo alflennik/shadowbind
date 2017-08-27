@@ -29,7 +29,7 @@ export function publish (state) {
 
 // Apply the state to the element's shadowDom
 function bindComponent (component, bindings) {
-  shadowWalk(component.root, bindings, (element, localBindings) => {
+  shadowWalk(component, bindings, (element, localBindings) => {
     attributeWalk(element, attribute => {
       const bindAction = parseAttribute(attribute)
       if (bindAction) bindElement(element, localBindings, bindAction)
@@ -39,69 +39,42 @@ function bindComponent (component, bindings) {
 
 // Run callback on every element in the shadowDom, applying repeaters as needed
 function shadowWalk (component, bindings, callback) {
-  const walkTool = getWalkTool(component)
-  const stateTracker = getStateTracker(bindings)
+  const bindingTracker = getBindingTracker(bindings)
+  let domDepth = 0
 
-  while (walkTool.next()) {
-    const { element, depth } = walkTool.current()
-    stateTracker.updateDepth(depth)
-    const localState = stateTracker.current()
-    const repeater = parseRepeater(element)
-    if (repeater) {
-      stateTracker.applyRepeater(repeater)
-      applyRepeater(repeater)
-    }
-    callback(element, localState)
-    debugger
-  }
-}
-
-function walkDom (node, callback) {
-  if (callback(node) !== false) {
+  function recursiveWalk (node, respondToElement) {
+    respondToElement(node, domDepth)
     node = node.firstChild
+    domDepth++
     while (node) {
-      walkDom(node, callback)
+      recursiveWalk(node, respondToElement)
       node = node.nextSibling
     }
-  }
-}
-
-  function getNextNode (node) {
-    if (node.firstChild) return node.firstChild
-    if (node.nextSibling) return node.nextSibling
+    domDepth--
   }
 
-  function isElement (node) {
-    return node && node.nodeType === 1
-  }
-
-  return {
-    next: () => {
-      let node = element
-      do node = getNextNode((node || element))
-      while (!isElement(node) || node !== false)
-
-      if (node === false || depth < 0) return false
-
-      debugger
-      element = node
-      return true
-    },
-    current: () => {
-      return { element, depth }
+  function respondToElement (element, domDepth) {
+    if (element.nodeType !== 1) return // not an element
+    const localBindings = bindingTracker.current()
+    const repeater = parseRepeater(element)
+    if (repeater) {
+      bindingTracker.update(repeater, domDepth)
+      applyRepeater(repeater)
     }
+    callback(element, localBindings)
   }
+
+  recursiveWalk(component.root)
 }
 
 // Keep track of bound state as it is altered by nested repeaters
-function getStateTracker (initial) {
+function getBindingTracker (bindings) {
   // let layers = { 1: initial }
   // let previousDepth
   // let depth
   return {
-    updateDepth: depth => {},
-    current: () => initial,
-    applyRepeater: repeater => {}
+    update: (repeater, domDepth) => {},
+    current: () => bindings
   }
 }
 
