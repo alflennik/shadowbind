@@ -3,43 +3,43 @@ let eventStorage = {}
 let previousState = null
 
 // Track subscribed web components
-export function subscribe (selector, stateKey) {
-  subscribedComponents.push({ selector, stateKey })
+export function subscribe (component, stateKey) {
+  subscribedComponents.push({ component, stateKey })
 }
 
 // Apply data-binding to all affected web components when the state changes
 export function publish (state) {
   if (previousState !== null && state === previousState) return
   for (const subscribedComponent of subscribedComponents) {
-    const { selector, stateKey } = subscribedComponent
+    const { component, stateKey } = subscribedComponent
     if (
       previousState && stateKey && state[stateKey] === previousState[stateKey]
     ) continue
     let bindings
     const localState = stateKey ? state[stateKey] : state
-    if (typeof selector.bind !== 'undefined') {
-      bindings = selector.bind(localState)
+    if (typeof component.bind !== 'undefined') {
+      bindings = component.bind(localState)
     } else {
       bindings = localState
     }
-    walk(selector, bindings)
+    bindComponent(component, bindings)
   }
   previousState = state
 }
 
 // Apply the state to the element's shadowDom
-function walk (selector, bindings) {
-  walkDom(selector.root, bindings, (element, localBindings) => {
-    walkAttributes(element, attribute => {
+function bindComponent (component, bindings) {
+  shadowWalk(component.root, bindings, (element, localBindings) => {
+    attributeWalk(element, attribute => {
       const bindAction = parseAttribute(attribute)
-      if (bindAction) applyBind(element, localBindings, bindAction)
+      if (bindAction) bindElement(element, localBindings, bindAction)
     })
   })
 }
 
 // Run callback on every element in the shadowDom, applying repeaters as needed
-function walkDom (selector, bindings, callback) {
-  const walkTool = getWalkTool(selector)
+function shadowWalk (component, bindings, callback) {
+  const walkTool = getWalkTool(component)
   const stateTracker = getStateTracker(bindings)
 
   while (walkTool.next()) {
@@ -52,29 +52,39 @@ function walkDom (selector, bindings, callback) {
       applyRepeater(repeater)
     }
     callback(element, localState)
+    debugger
   }
 }
 
-// Return every element in the shadowDom while tracking the depth for repeaters
-function getWalkTool (selector) {
-  let depth = 0
-  let element = selector
+function walkDom (node, callback) {
+  if (callback(node) !== false) {
+    node = node.firstChild
+    while (node) {
+      walkDom(node, callback)
+      node = node.nextSibling
+    }
+  }
+}
+
+  function getNextNode (node) {
+    if (node.firstChild) return node.firstChild
+    if (node.nextSibling) return node.nextSibling
+  }
+
+  function isElement (node) {
+    return node && node.nodeType === 1
+  }
 
   return {
     next: () => {
-      if (element.childNodes) {
-        depth++
-        element = element.firstChild
-      } else if (element.nextSibling) {
-        element = element.nextSibling
-      } else if (element.parentNode()) {
-        depth--
-        element = element.parentNode()
-      } else {
-        return false
-      }
+      let node = element
+      do node = getNextNode((node || element))
+      while (!isElement(node) || node !== false)
 
-      if (depth < 0) return false
+      if (node === false || depth < 0) return false
+
+      debugger
+      element = node
       return true
     },
     current: () => {
@@ -96,8 +106,8 @@ function getStateTracker (initial) {
 }
 
 // Run callback on every attribute of a dom element
-function walkAttributes (element, callback) {
-  if (!element.attributes) return
+function attributeWalk (element, callback) {
+  if (!element || !element.attributes) return
   for (const attribute of element.attributes) {
     if (!attribute.name) return
     callback(attribute)
@@ -132,7 +142,7 @@ function parseAttribute (attr) {
 function applyRepeater (repeater) {}
 
 // Apply data-binding to a particular element
-function applyBind (element, bindings, bindAction) {
+function bindElement (element, bindings, bindAction) {
   const { type, param, key } = bindAction
   const value = bindings[key]
   switch (type) {
