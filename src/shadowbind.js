@@ -42,7 +42,7 @@ function shadowWalk (component, bindings, callback) {
   const bindingTracker = getBindingTracker(bindings)
   let domDepth = 0
 
-  function recursiveWalk (node, respondToElement) {
+  function recursiveWalk (node) {
     respondToElement(node, domDepth)
     node = node.firstChild
     domDepth++
@@ -80,7 +80,7 @@ function getBindingTracker (bindings) {
 
 // Run callback on every attribute of a dom element
 function attributeWalk (element, callback) {
-  if (!element || !element.attributes) return
+  // if (!element || !element.attributes) return
   for (const attribute of element.attributes) {
     if (!attribute.name) return
     callback(attribute)
