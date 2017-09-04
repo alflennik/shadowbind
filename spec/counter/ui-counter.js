@@ -11,7 +11,7 @@ class UICounter extends HTMLElement { // eslint-disable-line
     <button on:click="increase">Increase</button>
     <button on:click="decrease">Decrease</button>
     <div :show="exceeded">
-      <input type="checkbox" attr:checked="exceededCheckbox">
+      <input type="checkbox" bind:checked="exceededCheckbox">
       You have exceeded!
     </div>`
   }

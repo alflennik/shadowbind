@@ -9,18 +9,17 @@ export default class UIFriends extends HTMLElement { // eslint-disable-line
     this.root.innerHTML = /* @html */`
     <h3>My Friends</h3>
     <ul>
-      <li :for="friend of friends" :key="id" on:click="sendEmail">
+      <li :for="friend of friends" :key="id">
         <h4 :text="friend.name"></h4>
         <em :text="friend.job"></em>
         <p :html="friend.description"></p>
+        <button on:click="sendEmail"></button>
       </li>
     </ul>`
   }
 
   bind (friends) {
-    friends['sendEmail'] = e => {
-      const id = e.target.getAttribute('id')
-    }
+    friends['sendEmail'] = (event, key) => {}
     return friends
   }
 }

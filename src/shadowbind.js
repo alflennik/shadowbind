@@ -39,7 +39,7 @@ function bindComponent (component, bindings) {
 
 // Run callback on every element in the shadowDom, applying repeaters as needed
 function shadowWalk (component, bindings, callback) {
-  const bindingTracker = getBindingTracker(bindings)
+  const getLocalBindings = generateLocalBindings(bindings)
   let domDepth = 0
 
   function recursiveWalk (node) {
@@ -55,12 +55,12 @@ function shadowWalk (component, bindings, callback) {
 
   function respondToElement (element, domDepth) {
     if (element.nodeType !== 1) return // not an element
-    const localBindings = bindingTracker.current()
     const repeater = parseRepeater(element)
     if (repeater) {
-      bindingTracker.update(repeater, domDepth)
+      getLocalBindings.update(repeater, domDepth)
       applyRepeater(repeater)
     }
+    const localBindings = getLocalBindings.current()
     callback(element, localBindings)
   }
 
@@ -68,7 +68,7 @@ function shadowWalk (component, bindings, callback) {
 }
 
 // Keep track of bound state as it is altered by nested repeaters
-function getBindingTracker (bindings) {
+function generateLocalBindings (bindings) {
   // let layers = { 1: initial }
   // let previousDepth
   // let depth
@@ -78,18 +78,19 @@ function getBindingTracker (bindings) {
   }
 }
 
-// Run callback on every attribute of a dom element
-function attributeWalk (element, callback) {
-  // if (!element || !element.attributes) return
-  for (const attribute of element.attributes) {
-    if (!attribute.name) return
-    callback(attribute)
-  }
-}
+// Create, move and remove elements within a repeater
+function applyRepeater (repeater) {}
+
+window.applyRepeater = applyRepeater
 
 // Parse a repeater element and return salient features
 function parseRepeater (element) {
-  return false
+  const loop = element.getAttribute(':for')
+  if (!loop) return false
+  const uniqueId = element.getAttribute(':key')
+  const previousDomKey = getDomKey('for', element)
+  // get bindingKey, newKeyName
+  return { bindingKey, newKeyName, uniqueId, previousDomKey }
 }
 
 // Convert attributes into data-binding instructions
@@ -101,7 +102,7 @@ function parseAttribute (attr) {
   if (matches) {
     type = matches[1]
   } else {
-    matches = /^(attr|prop|on):(.{1,})$/.exec(attr.name)
+    matches = /^(bind|attr|prop|on):(.{1,})$/.exec(attr.name)
     if (matches) {
       type = matches[1]
       param = matches[2]
@@ -111,8 +112,14 @@ function parseAttribute (attr) {
   return { type, param, key }
 }
 
-// Create, move and remove elements within a repeater
-function applyRepeater (repeater) {}
+// Run callback on every attribute of a dom element
+function attributeWalk (element, callback) {
+  // if (!element || !element.attributes) return
+  for (const attribute of element.attributes) {
+    if (!attribute.name) return
+    callback(attribute)
+  }
+}
 
 // Apply data-binding to a particular element
 function bindElement (element, bindings, bindAction) {
@@ -124,12 +131,12 @@ function bindElement (element, bindings, bindAction) {
       else element.removeAttribute(param)
       break
     case 'text':
-      if (value !== undefined || value !== null) {
+      if (value !== undefined && value !== null) {
         element.innerHTML = escapeHtml(value)
       }
       break
     case 'html':
-      if (value !== undefined || value !== null) {
+      if (value !== undefined && value !== null) {
         element.innerHTML = value
       }
       break
@@ -157,8 +164,10 @@ function bindElement (element, bindings, bindAction) {
 // Attach identifiers for elements that otherwise cannot be uniquely identified
 function domKeyGenerator () {
   let internalCounter = 0
-  return element => {
-    const newDomKey = `dom${internalCounter}`
+  return (type, element) => {
+    let newDomKey
+    if (type === 'event') newDomKey = `sb{internalCounter}`
+    if (type === 'for') newDomKey = `sbfor{internalCounter}`
     element.setAttribute(newDomKey, '')
     internalCounter++
     return newDomKey
@@ -167,12 +176,15 @@ function domKeyGenerator () {
 
 const setDomKey = domKeyGenerator()
 
-function getDomKey (element) {
+function getDomKey (type, element) {
   for (let attr of element.attributes) {
     if (!attr.name) continue
-    const match = /^(dom\d+)$/.exec(attr.name)
+    let match
+    if (type === 'event') match = /^(sb\d+)$/.exec(attr.name)
+    if (type === 'for') match = /^(sbfor\d+)$/.exec(attr.name)
     if (match) return match[1]
   }
+  return false
 }
 
 // The :text data-binding attribute should not allow unescaped html within it

@@ -5,11 +5,11 @@
   <title>Walk Test</title>
 </head>
 <body>
-  <shadow-walk></shadow-walk>
+  <shadow-repeat></shadow-repeat>
   <script type="module">
     import { subscribe, publish } from '../src/shadowbind.js'
 
-    window.customElements.define('shadow-walk', class extends HTMLElement { // eslint-disable-line
+    window.customElements.define('shadow-repeat', class extends HTMLElement { // eslint-disable-line
       constructor () {
         super()
         subscribe(this)
