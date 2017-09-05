@@ -47,9 +47,14 @@ function applyRepeat (repeatId, prependElement, localBindings) {
     setRepeatId(element)
   }
 
-  if (repeatId) els(`[${repeatId}]`).map(item => parent.removeChild(item))
-
   const newRepeatId = setRepeatId(example)
+  if (repeatId) els(`[${repeatId}]`).map(item => parent.removeChild(item))
+  if (els(`[${newRepeatId}]`).length === 0) {
+    let placeholder = document.createElement('span')
+    placeholder.setAttribute('sb:repeat', '')
+    setRepeatId(placeholder)
+    parent.insertBefore(placeholder, prependElement)
+  }
   currentRepeaters[newRepeatId] = currentRepeaters[repeatId]
   delete currentRepeaters[repeatId]
 }
@@ -113,12 +118,17 @@ let compassData2 = {
   ]
 }
 
-const el = (selector, context) => (context || document).querySelector(selector)
-const els = (selector, context) => {
+function el (selector, context = document) {
+  selector = selector.replace(':', '\\:') // eslint-disable-line
+  return context.querySelector(selector)
+}
+
+const els = (selector, context = document) => {
   return Array.prototype.slice.call(
-    (context || document).querySelectorAll(selector)
+    context.querySelectorAll(selector)
   )
 }
+
 const simpsons = initializeRepeat(el('[simpsons]'))
 const compass = initializeRepeat(el('[compass]'))
 applyRepeat(simpsons, el('[compass-header]'), data)
@@ -153,5 +163,10 @@ el('[randomize]').addEventListener('click', () => {
 })
 
 el('[update]').addEventListener('click', () => {
-  applyRepeat(getRepeatId(el('[compass]')), null, compassData2)
+  const idElement = el('[compass]') || el('[sb:repeat]')
+  applyRepeat(getRepeatId(idElement), null, compassData2)
+})
+
+el('[empty]').addEventListener('click', () => {
+  applyRepeat(getRepeatId(el('[compass]')), null, { compass: [] })
 })
