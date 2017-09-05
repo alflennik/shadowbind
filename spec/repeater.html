@@ -16,19 +16,23 @@
         this.root = this.attachShadow({ mode: 'open' })
         this.root.innerHTML = /* @html */`
         <ul>
-          <li :for="location of locations">
-            <h1 :text="location.name"></h1>
+          <h1 :text="headline"></h1>
+          <li :for="location of locations" :key="name">
+            <h2 :text="location"></h2>
           </li>
         </ul>
         `
       }
     })
 
-    publish({ locations: [
-      { name: 'Seattle' },
-      { name: 'Tacoma' },
-      { name: 'Port Orchard' }
-    ]})
+    publish({
+      locations: [
+        { name: 'Seattle' },
+        { name: 'Tacoma' },
+        { name: 'Port Orchard' }
+      ],
+      headline: 'Repeater Test'
+    })
 </script>
 </body>
 </html>

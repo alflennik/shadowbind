@@ -1,6 +1,8 @@
 let subscribedComponents = []
 let eventStorage = {}
 let previousState = null
+let currentRepeaterKey = 0
+let currentRepeaters = {}
 
 // Track subscribed web components
 export function subscribe (component, stateKey) {
@@ -45,22 +47,27 @@ function shadowWalk (component, bindings, callback) {
   function recursiveWalk (node) {
     respondToElement(node, domDepth)
     node = node.firstChild
-    domDepth++
+    // domDepth++
     while (node) {
       recursiveWalk(node, respondToElement)
       node = node.nextSibling
     }
-    domDepth--
+    // domDepth--
   }
 
   function respondToElement (element, domDepth) {
+    let repeatId
     if (element.nodeType !== 1) return // not an element
-    const repeater = parseRepeater(element)
-    if (repeater) {
-      getLocalBindings.update(repeater, domDepth)
-      applyRepeater(repeater)
-    }
     const localBindings = getLocalBindings.current()
+    let as
+    let loopKey
+    if (element.getAttribute(':for')) {
+      repeatId = initializeRepeat(element)
+      as = currentRepeaters[repeatId].as
+      loopKey = currentRepeaters[repeatId].loopKey
+      localBindings[as] = localBindings[loopKey][0].name
+      applyRepeat(component, repeatId, null, localBindings)
+    }
     callback(element, localBindings)
   }
 
@@ -69,28 +76,10 @@ function shadowWalk (component, bindings, callback) {
 
 // Keep track of bound state as it is altered by nested repeaters
 function generateLocalBindings (bindings) {
-  // let layers = { 1: initial }
-  // let previousDepth
-  // let depth
   return {
     update: (repeater, domDepth) => {},
     current: () => bindings
   }
-}
-
-// Create, move and remove elements within a repeater
-function applyRepeater (repeater) {}
-
-window.applyRepeater = applyRepeater
-
-// Parse a repeater element and return salient features
-function parseRepeater (element) {
-  const loop = element.getAttribute(':for')
-  if (!loop) return false
-  const uniqueId = element.getAttribute(':key')
-  const previousDomKey = getDomKey('for', element)
-  // get bindingKey, newKeyName
-  return { bindingKey, newKeyName, uniqueId, previousDomKey }
 }
 
 // Convert attributes into data-binding instructions
@@ -127,6 +116,7 @@ function bindElement (element, bindings, bindAction) {
   const value = bindings[key]
   switch (type) {
     case 'attr':
+    case 'bind':
       if (value !== null) element.setAttribute(param, value)
       else element.removeAttribute(param)
       break
@@ -161,13 +151,94 @@ function bindElement (element, bindings, bindAction) {
   }
 }
 
+function initializeRepeat (example) {
+  currentRepeaterKey++
+  const parent = example.parentNode
+  const repeatId = setRepeatId(example)
+  const matches = /^([^ ]{1,}) of ([^ ]{1,})$/.exec(example.getAttribute(':for'))
+
+  currentRepeaters[repeatId] = {
+    parent,
+    as: matches[1],
+    loopKey: matches[2],
+    uniqueId: example.getAttribute(':key'),
+    example: (() => {
+      parent.removeChild(example)
+      example.removeAttribute(`:for`)
+      example.removeAttribute(`:key`)
+      return example
+    })()
+  }
+  return repeatId
+}
+
+function applyRepeat (component, repeatId, prependElement, localBindings) {
+  currentRepeaterKey++
+  const { loopKey, uniqueId, parent, example } = currentRepeaters[repeatId]
+
+  let currentItems
+  if (repeatId) {
+    currentItems = elAll(`[${repeatId}]`, parent).reduce((acc, el) => {
+      return acc.concat(el.getAttribute('key'))
+    }, [])
+  } else {
+    currentItems = []
+  }
+
+  for (const item of localBindings[loopKey]) {
+    let element
+    if (currentItems.includes(item[uniqueId] + '')) {
+      element = el(`[key="${item[uniqueId]}"][${repeatId}]`)
+    } else {
+      element = example.cloneNode(true)
+    }
+
+    parent.insertBefore(element, prependElement)
+    element.setAttribute('key', item[uniqueId])
+    setRepeatId(element)
+  }
+
+  const newRepeatId = setRepeatId(example)
+  if (repeatId) {
+    elAll(`[${repeatId}]`, component.shadowRoot).map(item => parent.removeChild(item))
+  }
+
+  debugger
+  if (elAll(`[${newRepeatId}]`, component.shadowRoot).length === 0) {
+    let placeholder = document.createElement('span')
+    placeholder.setAttribute('sb:repeat', '')
+    setRepeatId(placeholder)
+    parent.insertBefore(placeholder, prependElement)
+  }
+  currentRepeaters[newRepeatId] = currentRepeaters[repeatId]
+  delete currentRepeaters[repeatId]
+}
+
+function setRepeatId (element, type) {
+  let repeaterKey = `r${currentRepeaterKey}`
+  for (let attr of element.attributes) {
+    if (!attr.name) continue
+    let match = /^(r\d+)$/.exec(attr.name)
+    if (match) element.removeAttribute(attr.name)
+  }
+  element.setAttribute(repeaterKey, '')
+  return repeaterKey
+}
+
+function getRepeatId (element) {
+  for (let attr of element.attributes) {
+    if (!attr.name) continue
+    let match = /^(r\d+)$/.exec(attr.name)
+    if (match) return attr.name
+  }
+}
+
 // Attach identifiers for elements that otherwise cannot be uniquely identified
 function domKeyGenerator () {
   let internalCounter = 0
   return (type, element) => {
     let newDomKey
-    if (type === 'event') newDomKey = `sb{internalCounter}`
-    if (type === 'for') newDomKey = `sbfor{internalCounter}`
+    if (type === 'event') newDomKey = `sb:${internalCounter}`
     element.setAttribute(newDomKey, '')
     internalCounter++
     return newDomKey
@@ -180,8 +251,7 @@ function getDomKey (type, element) {
   for (let attr of element.attributes) {
     if (!attr.name) continue
     let match
-    if (type === 'event') match = /^(sb\d+)$/.exec(attr.name)
-    if (type === 'for') match = /^(sbfor\d+)$/.exec(attr.name)
+    if (type === 'event') match = /^(sb:\d+)$/.exec(attr.name)
     if (match) return match[1]
   }
   return false
@@ -196,4 +266,15 @@ function escapeHtml (input) {
    .replace(/>/g, '&gt;')
    .replace(/"/g, '&quot;')
    .replace(/'/g, '&#039;')
+}
+
+function el (selector, context = document) {
+  selector = selector.replace(':', '\\:') // eslint-disable-line
+  return context.querySelector(selector)
+}
+
+function elAll (selector, context = document) {
+  return Array.prototype.slice.call(
+    context.querySelectorAll(selector)
+  )
 }
