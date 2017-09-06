@@ -41,11 +41,11 @@ function bindComponent (component, bindings) {
 
 // Run callback on every element in the shadowDom, applying repeaters as needed
 function shadowWalk (component, bindings, callback) {
-  const getLocalBindings = generateLocalBindings(bindings)
-  let domDepth = 0
+  const getLocalBindings = GetLocalBindings(bindings)
+  // let domDepth = 0
 
   function recursiveWalk (node) {
-    respondToElement(node, domDepth)
+    respondToElement(node/*, domDepth*/)
     node = node.firstChild
     // domDepth++
     while (node) {
@@ -68,14 +68,15 @@ function shadowWalk (component, bindings, callback) {
       localBindings[as] = localBindings[loopKey][0].name
       applyRepeat(component, repeatId, null, localBindings)
     }
+
     callback(element, localBindings)
   }
 
-  recursiveWalk(component.root)
+  recursiveWalk(component.shadowRoot)
 }
 
 // Keep track of bound state as it is altered by nested repeaters
-function generateLocalBindings (bindings) {
+function GetLocalBindings (bindings) {
   return {
     update: (repeater, domDepth) => {},
     current: () => bindings
@@ -111,24 +112,21 @@ function attributeWalk (element, callback) {
 }
 
 // Apply data-binding to a particular element
-function bindElement (element, bindings, bindAction) {
+function bindElement (element, localBindings, bindAction) {
   const { type, param, key } = bindAction
-  const value = bindings[key]
+  const value = localBindings[key]
   switch (type) {
-    case 'attr':
     case 'bind':
       if (value !== null) element.setAttribute(param, value)
       else element.removeAttribute(param)
       break
+    case 'prop':
+      throw new Error('not implemented')
     case 'text':
-      if (value !== undefined && value !== null) {
-        element.innerHTML = escapeHtml(value)
-      }
+      if (value != null) element.innerText = value
       break
     case 'html':
-      if (value !== undefined && value !== null) {
-        element.innerHTML = value
-      }
+      if (value != null) element.innerHTML = value
       break
     case 'on':
       let domKey = getDomKey(element)
@@ -151,6 +149,7 @@ function bindElement (element, bindings, bindAction) {
   }
 }
 
+// Remove the user's repeater element and store the instructions for later
 function initializeRepeat (example) {
   currentRepeaterKey++
   const parent = example.parentNode
@@ -172,6 +171,7 @@ function initializeRepeat (example) {
   return repeatId
 }
 
+// Create, move, remove and modify a repeater (does not apply data-binding)
 function applyRepeat (component, repeatId, prependElement, localBindings) {
   currentRepeaterKey++
   const { loopKey, uniqueId, parent, example } = currentRepeaters[repeatId]
@@ -203,7 +203,6 @@ function applyRepeat (component, repeatId, prependElement, localBindings) {
     elAll(`[${repeatId}]`, component.shadowRoot).map(item => parent.removeChild(item))
   }
 
-  debugger
   if (elAll(`[${newRepeatId}]`, component.shadowRoot).length === 0) {
     let placeholder = document.createElement('span')
     placeholder.setAttribute('sb:repeat', '')
@@ -257,24 +256,45 @@ function getDomKey (type, element) {
   return false
 }
 
-// The :text data-binding attribute should not allow unescaped html within it
-function escapeHtml (input) {
-  input += ''
-  return input
-   .replace(/&/g, '&amp;')
-   .replace(/</g, '&lt;')
-   .replace(/>/g, '&gt;')
-   .replace(/"/g, '&quot;')
-   .replace(/'/g, '&#039;')
-}
-
 function el (selector, context = document) {
-  selector = selector.replace(':', '\\:') // eslint-disable-line
+  selector = selector.replace(':', '\\:')
   return context.querySelector(selector)
 }
 
 function elAll (selector, context = document) {
+  selector = selector.replace(':', '\\:')
   return Array.prototype.slice.call(
     context.querySelectorAll(selector)
   )
+}
+
+window.throwCssChars = function (
+  propertyName,
+  disallowedCharacters,
+  attemptingToBind,
+  affectedElement,
+  documentOrComponent,
+  bindReturned,
+  subscribedState,
+  publishedState
+) {
+  console.error(...[
+    `Could not create the CSS custom property "${propertyName}" because it ` +
+    `contains disallowed characters "${disallowedCharacters}" ` +
+    `(SHADOWBIND_CSS_CHARS)\n`,
+    '\n    attempting to bind', attemptingToBind,
+    '\n    affected element', affectedElement,
+    ...errorAffectedScope(documentOrComponent),
+    ...(() => bindReturned ? [ '\n    bind method returned', bindReturned ] : [])(),
+    '\n    subscribed state', subscribedState,
+    '\n    published state', publishedState,
+    '\n\nAdditional information at ' +
+    'https://stackoverflow.com/questions/7505623/colors-in-javascript-console'
+  ])
+  throw new Error()
+}
+
+function errorAffectedScope (documentOrComponent) {
+  if (documentOrComponent === document) return [ '\n    context', document ]
+  return [ '\n    affected web component', documentOrComponent ]
 }

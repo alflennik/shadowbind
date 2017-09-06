@@ -8,9 +8,8 @@
 </head>
 <body>
   <h1>This is the headline</h1>
-  <main>Main Content</main>
-  <script>
-    document.getElementsByTagName('main')[0].innerHTML = 'Test value'
+  <main :css="myCss">Main Content</main>
+  <script type="module" src="../src/shadowbind.js">
   </script>
 </body>
 </html>
