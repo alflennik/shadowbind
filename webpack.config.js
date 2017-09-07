@@ -1,8 +1,8 @@
 const path = require('path')
 
 module.exports = {
-  entry: './spec/src/index.js',
+  entry: './spec/src/components.js',
   output: {
-    filename: 'index.js', path: path.resolve(__dirname, 'spec', 'dist')
+    filename: 'components.js', path: path.resolve(__dirname, 'spec', 'dist')
   }
 }

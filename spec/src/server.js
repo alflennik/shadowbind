@@ -20,7 +20,7 @@ const server = {
   },
   test: async componentName => {
     const page = await browser.newPage()
-    await page.goto(`http://localhost:1122/spec/tests.html#${componentName}`)
+    await page.goto(`http://localhost:1122/spec/#${componentName}`)
     return page.evaluate(async () => {
       return [ await getActual(), await getExpected() ] // eslint-disable-line
     })

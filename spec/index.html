@@ -50,12 +50,13 @@
 </head>
 <body>
   <h1>Shadowbind Tests</h1>
-  <main id="test-wrap">
-    Go to <a href="#test-bind">/spec/tests.html#test-bind</a> (where
-    <strong>bind</strong> is the name of a component in
+  <aside id="message">
+    Go to <a href="/spec/#test-bind">/spec/#test-bind</a> (where
+    <strong>test-bind</strong> is the name of a component in
     <a href="components">/spec/components</a>) to view the results of a
     test.
-  </main>
+  </aside>
+  <main id="test-wrap"></main>
   <div class="line"></div>
   <p>
     Expected: <br>
@@ -66,6 +67,7 @@
     <strong id="actual">No test</strong>
   </p>
   <button id="start-test">Start Test</button>
-  <script src="index.js"></script>
+  <script src="src/index.js"></script>
+  <script src="dist/components.js"></script>
 </body>
 </html>

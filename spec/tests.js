@@ -1,9 +1,9 @@
 import test from 'ava'
-import server from './server'
+import server from './src/server'
 
 test.before(() => server.start())
 test.after(() => server.end())
 
-test('Hello world component test', async t => {
-  t.deepEqual(...(await server.test('hello-world')))
+test('should bind single elements', async t => {
+  t.deepEqual(...(await server.test('test-bind')))
 })

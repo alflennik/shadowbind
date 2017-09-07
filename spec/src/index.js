@@ -1,31 +1,43 @@
-// Import all components that we want to test
-import './components/test-bind'
-
 // Send the component's getActual() and getExpected() results to tests.js
 let component
-const testWrap = document.querySelector('#test-wrap')
-const currentComponent = window.location.hash.substr(1)
-const button = document.querySelector('#start-test')
+const componentName = window.location.hash.substr(1)
+const message = document.querySelector('#message')
+const expected = document.querySelector('#expected')
+const actual = document.querySelector('#actual')
+if (componentName) message.innerHTML = ''
 
 async function getActual () {
-  if (!currentComponent) return
-  component = document.createElement(currentComponent)
-  component.setAttribute('id', 'test')
-  component.style.display = 'none'
-  testWrap.insertBefore(component, null)
+  if (!componentName) return
+  const testWrap = document.querySelector('#test-wrap')
+  testWrap.innerHTML = `<${componentName} id="test"></${componentName}>`
+  component = document.querySelector(componentName)
 
   if (typeof component.getActual !== 'function') {
-    testWrap.innerHTML = 'Did you remember to import the component?'
+    message.innerHTML = 'Did you remember to import the component?'
     throw new Error('Did you remember to import the component?')
   }
   return component.getActual()
 }
+
 async function getExpected () {
-  if (!currentComponent) return
+  if (!componentName) return
   return component.getExpected()
 }
 
-button.addEventListener('click', async () => {
-  await getActual()
-  await getExpected()
+document.querySelector('#start-test').addEventListener('click', async () => {
+  const actualJson = JSON.stringify(await getActual())
+  const expectedJson = JSON.stringify(await getExpected())
+  actual.innerHTML = actualJson
+  expected.innerHTML = expectedJson
+  if (actualJson === expectedJson) applyPassed()
+  else applyFailed()
 })
+
+function applyPassed () {
+  expected.style.border = '3px solid #9dff50'
+  actual.style.border = '3px solid #9dff50'
+}
+function applyFailed () {
+  expected.style.border = '3px solid #ff5050'
+  actual.style.border = '3px solid #ff5050'
+}
