@@ -1,9 +1,8 @@
 const path = require('path')
 
 module.exports = {
-  entry: './src/index.js',
+  entry: './spec/src/index.js',
   output: {
-    filename: 'shadowbind.js',
-    path: path.resolve(__dirname, 'dist')
+    filename: 'index.js', path: path.resolve(__dirname, 'spec', 'dist')
   }
 }

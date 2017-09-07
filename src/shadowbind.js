@@ -1,18 +1,19 @@
-let subscribedComponents = []
-let eventStorage = {}
+let components = []
+let events = {}
 let previousState = null
-let currentRepeaterKey = 0
-let currentRepeaters = {}
+let repeaterCount = 0
+let repeaters = {}
+let currentRepeaters = []
 
 // Track subscribed web components
 export function subscribe (component, stateKey) {
-  subscribedComponents.push({ component, stateKey })
+  components.push({ component, stateKey })
 }
 
 // Apply data-binding to all affected web components when the state changes
 export function publish (state) {
   if (previousState !== null && state === previousState) return
-  for (const subscribedComponent of subscribedComponents) {
+  for (const subscribedComponent of components) {
     const { component, stateKey } = subscribedComponent
     if (
       previousState && stateKey && state[stateKey] === previousState[stateKey]
@@ -55,7 +56,7 @@ function shadowWalk (component, bindings, callback) {
     // domDepth--
   }
 
-  function respondToElement (element, domDepth) {
+  function respondToElement (element/*, domDepth*/) {
     let repeatId
     if (element.nodeType !== 1) return // not an element
     const localBindings = getLocalBindings.current()
@@ -63,8 +64,8 @@ function shadowWalk (component, bindings, callback) {
     let loopKey
     if (element.getAttribute(':for')) {
       repeatId = initializeRepeat(element)
-      as = currentRepeaters[repeatId].as
-      loopKey = currentRepeaters[repeatId].loopKey
+      as = repeaters[repeatId].as
+      loopKey = repeaters[repeatId].loopKey
       localBindings[as] = localBindings[loopKey][0].name
       applyRepeat(component, repeatId, null, localBindings)
     }
@@ -131,10 +132,10 @@ function bindElement (element, localBindings, bindAction) {
     case 'on':
       let domKey = getDomKey(element)
       if (!domKey) domKey = setDomKey(element)
-      if (!eventStorage[domKey]) eventStorage[domKey] = {}
-      if (!eventStorage[domKey][param] && eventStorage[domKey][param] !== key) {
+      if (!events[domKey]) events[domKey] = {}
+      if (!events[domKey][param] && events[domKey][param] !== key) {
         element.addEventListener(param, value)
-        eventStorage[domKey][param] = key
+        events[domKey][param] = key
       }
       break
     case 'show':
@@ -151,12 +152,12 @@ function bindElement (element, localBindings, bindAction) {
 
 // Remove the user's repeater element and store the instructions for later
 function initializeRepeat (example) {
-  currentRepeaterKey++
+  repeaterCount++
   const parent = example.parentNode
   const repeatId = setRepeatId(example)
   const matches = /^([^ ]{1,}) of ([^ ]{1,})$/.exec(example.getAttribute(':for'))
 
-  currentRepeaters[repeatId] = {
+  repeaters[repeatId] = {
     parent,
     as: matches[1],
     loopKey: matches[2],
@@ -173,8 +174,8 @@ function initializeRepeat (example) {
 
 // Create, move, remove and modify a repeater (does not apply data-binding)
 function applyRepeat (component, repeatId, prependElement, localBindings) {
-  currentRepeaterKey++
-  const { loopKey, uniqueId, parent, example } = currentRepeaters[repeatId]
+  repeaterCount++
+  const { loopKey, uniqueId, parent, example } = repeaters[repeatId]
 
   let currentItems
   if (repeatId) {
@@ -209,19 +210,19 @@ function applyRepeat (component, repeatId, prependElement, localBindings) {
     setRepeatId(placeholder)
     parent.insertBefore(placeholder, prependElement)
   }
-  currentRepeaters[newRepeatId] = currentRepeaters[repeatId]
-  delete currentRepeaters[repeatId]
+  repeaters[newRepeatId] = repeaters[repeatId]
+  delete repeaters[repeatId]
 }
 
 function setRepeatId (element, type) {
-  let repeaterKey = `r${currentRepeaterKey}`
+  let repeaterCount = `r${repeaterCount}`
   for (let attr of element.attributes) {
     if (!attr.name) continue
     let match = /^(r\d+)$/.exec(attr.name)
     if (match) element.removeAttribute(attr.name)
   }
-  element.setAttribute(repeaterKey, '')
-  return repeaterKey
+  element.setAttribute(repeaterCount, '')
+  return repeaterCount
 }
 
 function getRepeatId (element) {

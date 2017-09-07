@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Tests</title>
+  <style>
+    body {
+      font-family: sans-serif;
+      color: #3d3531;
+    }
+    #expected, #actual {
+      font-family: monospace;
+      background: #eee;
+      max-width: 805px;
+      border-radius: 3px;
+      padding: 20px;
+      margin: 10px 0;
+      display: block;
+    }
+    a {
+      color: coral;
+    }
+    h1 {
+      margin-bottom: 12px;
+    }
+    #start-test {
+      background: white;
+      padding: 10px;
+      border-radius: 3px;
+      border: 3px solid #eeeeee;
+      color: #3d3531;
+      margin-top: 6px;
+      font-size: 13px;
+    }
+    #start-test:hover {
+      background: #50ceff;
+      border: 3px solid #50ceff;
+      color: white;
+      cursor: pointer;
+    }
+    #start-test:active {
+      background: #58bde4;
+    }
+    #start-test:focus {
+      outline: none;
+    }
+  </style>
+</head>
+<body>
+  <h1>Shadowbind Tests</h1>
+  <main id="test-wrap">
+    Go to <a href="#test-bind">/spec/tests.html#test-bind</a> (where
+    <strong>bind</strong> is the name of a component in
+    <a href="components">/spec/components</a>) to view the results of a
+    test.
+  </main>
+  <div class="line"></div>
+  <p>
+    Expected: <br>
+    <strong id="expected">No test</strong>
+  </p>
+  <p>
+    Actual: <br>
+    <strong id="actual">No test</strong>
+  </p>
+  <button id="start-test">Start Test</button>
+  <script src="index.js"></script>
+</body>
+</html>

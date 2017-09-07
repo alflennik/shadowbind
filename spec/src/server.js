@@ -18,10 +18,12 @@ const server = {
     browser.close()
     liveServer.shutdown()
   },
-  goto: async url => {
+  test: async componentName => {
     const page = await browser.newPage()
-    await page.goto(`http://localhost:1122${url}`)
-    return page
+    await page.goto(`http://localhost:1122/spec/tests.html#${componentName}`)
+    return page.evaluate(async () => {
+      return [ await getActual(), await getExpected() ] // eslint-disable-line
+    })
   }
 }
 

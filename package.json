@@ -16,7 +16,7 @@
   },
   "scripts": {
     "dev": "webpack -d --watch",
-    "test": "ava"
+    "test": "ava spec/tests.js --no-color"
   },
   "license": "MIT"
 }
