@@ -1,3 +1,7 @@
+const STACK_START = '\n\n    '
+const STACK_LINE = '\n    '
+const STACK_END = '\n\n'
+
 let components = []
 let events = {}
 let previousState = null
@@ -16,6 +20,30 @@ export function subscribe (component, stateKey) {
     console.error(message)
     throw { code: 'shadowbind_subscribe_without_arguments' }
   }
+
+  if (component && !component.classList) { // is dom element eslint-disable-line
+    const actual = typeof component
+    const message =
+      'The first argument of subscribe() should be a web component, not ' +
+      `${actual}. Call subscribe(this) in the constructor method of a web ` +
+      'component'
+    console.error(message)
+    throw { code: 'shadowbind_subscribe_type' }
+  }
+
+  // const isHTMLElement = component instanceof HTMLElement // eslint-disable-line
+  // const isAttached = component.parentElement !== null
+  // if (isHTMLElement && isAttached) {
+  //   const message = 'Subscribed element is not a web component'
+  //   console.error(
+  //     message,
+  //     STACK_START,
+  //     'affected element: ', component,
+  //     STACK_END
+  //   )
+  //   throw { code: 'shadowbind_not_web_component' }
+  // }
+
   components.push({ component, stateKey })
 }
 
@@ -82,6 +110,19 @@ function shadowWalk (component, bindings, callback) {
     callback(element, localBindings)
   }
 
+  if (!component.shadowRoot) {
+    debugger
+    const message =
+      'Subscribed web component has no shadowRoot. Be sure to call ' +
+      "this.attachShadow({ mode: open }) in the component's constructor"
+    console.error(
+      message,
+      STACK_START,
+      'affected web component: ', component,
+      STACK_END
+    )
+    throw { code: 'shadowbind_no_shadow_root' }
+  }
   recursiveWalk(component.shadowRoot)
 }
 
@@ -164,7 +205,8 @@ function initializeRepeat (example) {
   repeaterCount++
   const parent = example.parentNode
   const repeatId = setRepeatId(example)
-  const matches = /^([^ ]{1,}) of ([^ ]{1,})$/.exec(example.getAttribute(':for'))
+  const matches = /^([^ ]{1,}) of ([^ ]{1,})$/.exec(
+    example.getAttribute(':for'))
 
   repeaters[repeatId] = {
     parent,
@@ -210,7 +252,8 @@ function applyRepeat (component, repeatId, prependElement, localBindings) {
 
   const newRepeatId = setRepeatId(example)
   if (repeatId) {
-    elAll(`[${repeatId}]`, component.shadowRoot).map(item => parent.removeChild(item))
+    elAll(`[${repeatId}]`, component.shadowRoot)
+      .map(item => parent.removeChild(item))
   }
 
   if (elAll(`[${newRepeatId}]`, component.shadowRoot).length === 0) {
@@ -297,7 +340,8 @@ window.throwCssChars = function (
     '\n    attempting to bind', attemptingToBind,
     '\n    affected element', affectedElement,
     ...errorAffectedScope(documentOrComponent),
-    ...(() => bindReturned ? [ '\n    bind method returned', bindReturned ] : [])(),
+    ...(() => bindReturned
+      ? [ '\n    bind method returned', bindReturned ] : [])(),
     '\n    subscribed state', subscribedState,
     '\n    published state', publishedState,
     '\n\nAdditional information at ' +

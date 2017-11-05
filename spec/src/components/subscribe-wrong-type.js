@@ -1,11 +1,11 @@
 import { subscribe } from '../../../src/shadowbind.js'
 
-class SubscribeWithoutArgs extends HTMLElement { // eslint-disable-line
+class SubscribeWrongType extends HTMLElement { // eslint-disable-line
   constructor () {
     super()
     this.errorCode = 'no_error'
     try {
-      subscribe()
+      subscribe('wrong type given')
     } catch (err) {
       this.errorCode = err.code || err
     }
@@ -16,8 +16,8 @@ class SubscribeWithoutArgs extends HTMLElement { // eslint-disable-line
   }
 
   getExpected () {
-    return 'shadowbind_subscribe_without_arguments'
+    return 'shadowbind_subscribe_type'
   }
 }
 
-window.customElements.define('subscribe-without-args', SubscribeWithoutArgs)
+window.customElements.define('subscribe-wrong-type', SubscribeWrongType)

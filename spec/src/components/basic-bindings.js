@@ -2,6 +2,7 @@ import { subscribe, publish } from '../../../src/shadowbind.js'
 
 class BasicBindings extends HTMLElement { // eslint-disable-line
   constructor () {
+    console.log('constructed')
     super()
     subscribe(this)
     this.root = this.attachShadow({ mode: 'open' })
