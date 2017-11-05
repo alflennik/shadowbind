@@ -13,8 +13,11 @@ async function getActual () {
   component = document.querySelector(componentName)
 
   if (typeof component.getActual !== 'function') {
-    message.innerHTML = 'Did you remember to import the component?'
-    throw new Error('Did you remember to import the component?')
+    const errorMessage =
+      'Component not found. Did you remember to import it in components.js? ' +
+      'Is webpack running? Do the url and component names match?'
+    message.innerHTML = errorMessage
+    throw new Error(errorMessage)
   }
   return component.getActual()
 }

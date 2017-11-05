@@ -7,6 +7,15 @@ let currentRepeaters = []
 
 // Track subscribed web components
 export function subscribe (component, stateKey) {
+  if (!arguments.length) {
+    const message =
+      'The first argument of subscribe() should be a web component, but no ' +
+      'arguments were given. Call subscribe(this) in the constructor method ' +
+      'of a web component\n\n' +
+      'https://stackoverflow.com/questions/7505623/colors-in-javascript-console'
+    console.error(message)
+    throw { code: 'shadowbind_subscribe_without_arguments' }
+  }
   components.push({ component, stateKey })
 }
 
@@ -268,6 +277,8 @@ function elAll (selector, context = document) {
     context.querySelectorAll(selector)
   )
 }
+
+
 
 window.throwCssChars = function (
   propertyName,

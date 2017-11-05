@@ -1,6 +1,6 @@
 import { subscribe, publish } from '../../../src/shadowbind.js'
 
-class TestBind extends HTMLElement { // eslint-disable-line
+class BasicBindings extends HTMLElement { // eslint-disable-line
   constructor () {
     super()
     subscribe(this)
@@ -50,4 +50,4 @@ class TestBind extends HTMLElement { // eslint-disable-line
   }
 }
 
-window.customElements.define('test-bind', TestBind)
+window.customElements.define('basic-bindings', BasicBindings)
