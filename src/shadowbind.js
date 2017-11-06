@@ -237,8 +237,7 @@ function bindElement (element, localBindings, bindAction) {
         : 'the subscribed state'
       shadowError(
         'shadowbind_key_not_found',
-        `The key "${key}" could not be found in ${searchSource}`,
-        trace
+        `The key "${key}" could not be found in ${searchSource}`
       )
     }
     value = localBindings[key]
@@ -249,6 +248,24 @@ function bindElement (element, localBindings, bindAction) {
       bindMethodUsed ? 'localState' : 'subscribedState',
       bindMethodUsed ? 'local state' : 'subscribed state',
       'shadowbind_key_not_found'
+    )
+  }
+  trace.attributeState = value
+  let valueType = typeof value
+  if (Array.isArray(value)) valueType = 'array'
+  if (value === null) valueType = 'null'
+  if (
+    (valueType === 'object' || valueType === 'array') &&
+    (type === 'bind' || type === 'text' || type === 'html')
+  ) {
+    const bindSubnote = type === 'bind'
+      ? ` or use prop:${param} to bind the data as a property instead of an ` +
+        'attribute'
+      : ''
+    shadowError(
+      'shadowbind_binding_array_or_object',
+      `Objects and arrays cannot be bound with "${type}" directly. Try ` +
+        `calling JSON.stringify on the ${valueType} first${bindSubnote}.`
     )
   }
   switch (type) {
@@ -265,6 +282,12 @@ function bindElement (element, localBindings, bindAction) {
       if (value != null) element.innerHTML = value
       break
     case 'on':
+      if (typeof value !== 'function') {
+        shadowError(
+          'shadowbind_event_type',
+          `"${key}" must be a function, but it was "${typeof value}"`
+        )
+      }
       let domKey = getDomKey(element)
       if (!domKey) domKey = setDomKey(element)
       if (!events[domKey]) events[domKey] = {}
@@ -413,6 +436,7 @@ function shadowError (code, errorMessage, notes) {
   let message = [errorMessage]
   const traceOrder = [
     ...(trace.search ? trace.search : []),
+    ['attribute state:', trace.attributeState],
     ['bind returned:', trace.bindReturned],
     ['subscribed state:', trace.subscribedState],
     ['published state:', trace.publishedState],

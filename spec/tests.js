@@ -55,3 +55,11 @@ test('should throw if key not found in localBindings', async t => {
 test('should throw if key not found in nested localBindings', async t => {
   t.deepEqual(...(await server.test('bind-key-not-found-deep')))
 })
+
+test('should throw if array or object bound to attribute or html', async t => {
+  t.deepEqual(...(await server.test('bind-array')))
+})
+
+test('should throw if non function used as event handler', async t => {
+  t.deepEqual(...(await server.test('event-type')))
+})
