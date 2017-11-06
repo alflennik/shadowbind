@@ -5,6 +5,7 @@ let repeaterCount = 0
 let repeaters = {}
 let currentRepeaters = []
 let trace
+let bindMethodUsed
 
 // Track subscribed web components
 export function subscribe (component, stateKey) {
@@ -49,6 +50,7 @@ export function publish (state) {
     if (typeof component.bind !== 'undefined') {
       bindings = component.bind(localState)
       trace.bindReturned = bindings
+      bindMethodUsed = true
       if (typeof bindings !== 'object') {
         shadowError(
           'shadowbind_bind_method_return_type',
@@ -58,6 +60,7 @@ export function publish (state) {
         )
       }
     } else {
+      bindMethodUsed = false
       bindings = localState
     }
     bindComponent(component, bindings)
@@ -93,25 +96,36 @@ function applyStateKey (state, stateKey) {
       )
     }
   }
-  trace.stateSearch = [['state: ', state]]
-  let stateSearch = state
-  let stateKeySearch = 'state'
-  for (const stateKeyPart of stateKey.split('.')) {
-    stateKeySearch = `${stateKeySearch}.${stateKeyPart}`
-    if (!Object.keys(stateSearch).includes(stateKeyPart)) {
-      trace.stateSearch.push([`${stateKeySearch}:`, 'not found'])
+  return applyDots(
+    state,
+    stateKey,
+    'state',
+    'published state',
+    'shadowbind_subscribe_key_not_found'
+  )
+}
+
+function applyDots (baseData, key, baseName, errorSource, errorCode) {
+  trace.search = [[`${baseName}:`, baseData]]
+  let search = baseData
+  let keySearch = baseName
+  for (const keyPart of key.split('.')) {
+    keySearch = `${keySearch}.${keyPart}`
+    if (!Object.keys(search).includes(keyPart)) {
+      trace.search.push([`${keySearch}:`, 'not found'])
       delete trace.publishedState
       shadowError(
-        'shadowbind_subscribe_key_not_found',
-        `The key "${stateKey}" could not be found in the published state`,
+        errorCode,
+        `The key "${keyPart}" in "${key}" could not be found in the ` +
+          errorSource,
         trace
       )
     }
-    stateSearch = stateSearch[stateKeyPart]
-    trace.stateSearch.push([`${stateKeySearch}:`, stateSearch])
+    search = search[keyPart]
+    trace.search.push([`${keySearch}:`, search])
   }
-  delete trace.stateSearch
-  return stateSearch
+  delete trace.search
+  return search
 }
 
 // Apply the state to the element's shadowDom
@@ -119,8 +133,11 @@ function bindComponent (component, bindings) {
   shadowWalk(component, bindings, (element, localBindings) => {
     attributeWalk(element, attribute => {
       const bindAction = parseAttribute(attribute)
+      trace.element = element
       if (bindAction) bindElement(element, localBindings, bindAction)
     })
+    delete trace.element
+    delete trace.attribute
   })
 }
 
@@ -210,14 +227,37 @@ function attributeWalk (element, callback) {
   // if (!element || !element.attributes) return
   for (const attribute of element.attributes) {
     if (!attribute.name) return
+    trace.attribute = attribute
     callback(attribute)
   }
+  delete trace.attribute
 }
 
 // Apply data-binding to a particular element
 function bindElement (element, localBindings, bindAction) {
   const { type, param, key } = bindAction
-  const value = localBindings[key]
+  let value
+  if (key.indexOf('.') === -1) {
+    if (!Object.keys(localBindings).includes(key)) {
+      const searchSource = trace.bindReturned
+        ? 'the object returned by bind()'
+        : 'the subscribed state'
+      shadowError(
+        'shadowbind_key_not_found',
+        `The key "${key}" could not be found in ${searchSource}`,
+        trace
+      )
+    }
+    value = localBindings[key]
+  } else {
+    value = applyDots(
+      localBindings,
+      key,
+      bindMethodUsed ? 'localState' : 'subscribedState',
+      bindMethodUsed ? 'local state' : 'subscribed state',
+      'shadowbind_key_not_found'
+    )
+  }
   switch (type) {
     case 'bind':
       if (value !== null) element.setAttribute(param, value)
@@ -378,13 +418,14 @@ function shadowError (code, errorMessage, trace, notes = '') {
   const TRACE_LINE = '\n    '
 
   let message = [errorMessage]
-
   const traceOrder = [
-    ...(trace.stateSearch ? trace.stateSearch : []),
-    ['bind() returned: ', trace.bindReturned],
-    ['published state: ', trace.publishedState],
-    ['subscribed state: ', trace.subscribedState],
-    ['affected web component: ', trace.component]
+    ...(trace.search ? trace.search : []),
+    ['bind returned:', trace.bindReturned],
+    ['subscribed state:', trace.subscribedState],
+    ['published state:', trace.publishedState],
+    ['affected attribute:', trace.attribute],
+    ['affected element:', trace.element],
+    ['affected web component:', trace.component]
   ]
 
   if (Object.keys(trace).length) {

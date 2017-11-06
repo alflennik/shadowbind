@@ -47,3 +47,11 @@ test('should throw if state key not found in state', async t => {
 test('should throw if state key not found in nested state', async t => {
   t.deepEqual(...(await server.test('state-key-not-found-deep')))
 })
+
+test('should throw if key not found in localBindings', async t => {
+  t.deepEqual(...(await server.test('bind-key-not-found')))
+})
+
+test('should throw if key not found in nested localBindings', async t => {
+  t.deepEqual(...(await server.test('bind-key-not-found-deep')))
+})
