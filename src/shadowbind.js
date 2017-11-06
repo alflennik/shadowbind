@@ -1,64 +1,62 @@
-const STACK_START = '\n\n    '
-const STACK_LINE = '\n    '
-const STACK_END = '\n\n'
-
 let components = []
 let events = {}
 let previousState = null
 let repeaterCount = 0
 let repeaters = {}
 let currentRepeaters = []
+let trace
 
 // Track subscribed web components
 export function subscribe (component, stateKey) {
+  trace = {}
   if (!arguments.length) {
-    const message =
+    shadowError(
+      'shadowbind_subscribe_without_arguments',
       'The first argument of subscribe() should be a web component, but no ' +
-      'arguments were given. Call subscribe(this) in the constructor method ' +
-      'of a web component\n\n' +
+        'arguments were given. Call subscribe(this) in the constructor ' +
+        'method of a web component',
+      trace,
       'https://stackoverflow.com/questions/7505623/colors-in-javascript-console'
-    console.error(message)
-    throw { code: 'shadowbind_subscribe_without_arguments' }
+    )
   }
 
   if (component && !component.classList) { // is dom element eslint-disable-line
-    const actual = typeof component
-    const message =
+    shadowError(
+      'shadowbind_subscribe_type',
       'The first argument of subscribe() should be a web component, not ' +
-      `${actual}. Call subscribe(this) in the constructor method of a web ` +
-      'component'
-    console.error(message)
-    throw { code: 'shadowbind_subscribe_type' }
+        `${typeof component}. Call subscribe(this) in the constructor method ` +
+        'of a web component',
+      trace
+    )
   }
-
-  // const isHTMLElement = component instanceof HTMLElement // eslint-disable-line
-  // const isAttached = component.parentElement !== null
-  // if (isHTMLElement && isAttached) {
-  //   const message = 'Subscribed element is not a web component'
-  //   console.error(
-  //     message,
-  //     STACK_START,
-  //     'affected element: ', component,
-  //     STACK_END
-  //   )
-  //   throw { code: 'shadowbind_not_web_component' }
-  // }
-
   components.push({ component, stateKey })
 }
 
 // Apply data-binding to all affected web components when the state changes
 export function publish (state) {
+  trace = {}
+  trace.publishedState = state
   if (previousState !== null && state === previousState) return
   for (const subscribedComponent of components) {
     const { component, stateKey } = subscribedComponent
+    trace.component = component
     if (
       previousState && stateKey && state[stateKey] === previousState[stateKey]
     ) continue
     let bindings
     const localState = stateKey ? state[stateKey] : state
+    trace.subscribedState = localState
     if (typeof component.bind !== 'undefined') {
       bindings = component.bind(localState)
+      trace.bindReturned = bindings
+      if (typeof bindings !== 'object') {
+        shadowError(
+          'shadowbind_bind_method_return_type',
+          'The bind method must return an object, but it returned ' +
+            `"${typeof bindings}"`,
+          trace
+        )
+      }
     } else {
       bindings = localState
     }
@@ -111,17 +109,22 @@ function shadowWalk (component, bindings, callback) {
   }
 
   if (!component.shadowRoot) {
-    debugger
-    const message =
+    try {
+      component.attachShadow({ mode: 'open' })
+    } catch (err) {
+      shadowError(
+        'shadowbind_closed_shadow_root',
+        'Subscribed element has a closed shadowRoot, but only open ' +
+          'shadowRoots are supported',
+        { component: trace.component }
+      )
+    }
+    shadowError(
+      'shadowbind_no_shadow_root',
       'Subscribed web component has no shadowRoot. Be sure to call ' +
-      "this.attachShadow({ mode: open }) in the component's constructor"
-    console.error(
-      message,
-      STACK_START,
-      'affected web component: ', component,
-      STACK_END
+        "this.attachShadow({ mode: open }) in the component's constructor",
+      { component: trace.component }
     )
-    throw { code: 'shadowbind_no_shadow_root' }
   }
   recursiveWalk(component.shadowRoot)
 }
@@ -321,36 +324,60 @@ function elAll (selector, context = document) {
   )
 }
 
-
-
-window.throwCssChars = function (
-  propertyName,
-  disallowedCharacters,
-  attemptingToBind,
-  affectedElement,
-  documentOrComponent,
-  bindReturned,
-  subscribedState,
-  publishedState
-) {
-  console.error(...[
-    `Could not create the CSS custom property "${propertyName}" because it ` +
-    `contains disallowed characters "${disallowedCharacters}" ` +
-    `(SHADOWBIND_CSS_CHARS)\n`,
-    '\n    attempting to bind', attemptingToBind,
-    '\n    affected element', affectedElement,
-    ...errorAffectedScope(documentOrComponent),
-    ...(() => bindReturned
-      ? [ '\n    bind method returned', bindReturned ] : [])(),
-    '\n    subscribed state', subscribedState,
-    '\n    published state', publishedState,
-    '\n\nAdditional information at ' +
-    'https://stackoverflow.com/questions/7505623/colors-in-javascript-console'
-  ])
-  throw new Error()
-}
+// window.throwCssChars = function (
+//   propertyName,
+//   disallowedCharacters,
+//   attemptingToBind,
+//   affectedElement,
+//   documentOrComponent,
+//   bindReturned,
+//   subscribedState,
+//   publishedState
+// ) {
+//   console.error(...[
+//     `Could not create the CSS custom property "${propertyName}" because it ` +
+//     `contains disallowed characters "${disallowedCharacters}" ` +
+//     `(SHADOWBIND_CSS_CHARS)\n`,
+//     '\n    attempting to bind', attemptingToBind,
+//     '\n    affected element', affectedElement,
+//     ...errorAffectedScope(documentOrComponent),
+//     ...(() => bindReturned
+//       ? [ '\n    bind method returned', bindReturned ] : [])(),
+//     '\n    subscribed state', subscribedState,
+//     '\n    published state', publishedState,
+//     '\n\nAdditional information at ' +
+//     'https://stackoverflow.com/questions/7505623/colors-in-javascript-console'
+//   ])
+//   throw new Error()
+// }
 
 function errorAffectedScope (documentOrComponent) {
   if (documentOrComponent === document) return [ '\n    context', document ]
   return [ '\n    affected web component', documentOrComponent ]
+}
+
+function shadowError (code, errorMessage, trace, notes = '') {
+  const TRACE_START = '\n\n    '
+  const TRACE_LINE = '\n    '
+
+  let message = [errorMessage]
+
+  const traceOrder = [
+    ['bind() returned: ', trace.bindReturned],
+    ['published state: ', trace.publishedState],
+    ['subscribed state: ', trace.subscribedState],
+    ['affected web component: ', trace.component]
+  ]
+
+  if (Object.keys(trace).length) {
+    message.push(TRACE_START)
+    for (const [traceIntro, traceData] of traceOrder) {
+      if (traceData) message.push(traceIntro, traceData, TRACE_LINE)
+    }
+  }
+
+  if (notes) message.push('\n\n' + notes)
+
+  console.error(...message)
+  throw { code }
 }
