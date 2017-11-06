@@ -27,3 +27,23 @@ test('should throw when no shadowRoot is present in component', async t => {
 test('should throw when closed shadowRoot is used', async t => {
   t.deepEqual(...(await server.test('closed-shadow-root')))
 })
+
+test('should throw if bind does not return an object', async t => {
+  t.deepEqual(...(await server.test('bind-type')))
+})
+
+test('should throw if state key begins or ends with dot', async t => {
+  t.deepEqual(...(await server.test('state-key-invalid')))
+})
+
+test('should throw if state key is not a string', async t => {
+  t.deepEqual(...(await server.test('state-key-type')))
+})
+
+test('should throw if state key not found in state', async t => {
+  t.deepEqual(...(await server.test('state-key-not-found')))
+})
+
+test('should throw if state key not found in nested state', async t => {
+  t.deepEqual(...(await server.test('state-key-not-found-deep')))
+})

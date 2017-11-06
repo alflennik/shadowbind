@@ -44,7 +44,7 @@ export function publish (state) {
       previousState && stateKey && state[stateKey] === previousState[stateKey]
     ) continue
     let bindings
-    const localState = stateKey ? state[stateKey] : state
+    const localState = applyStateKey(state, stateKey)
     trace.subscribedState = localState
     if (typeof component.bind !== 'undefined') {
       bindings = component.bind(localState)
@@ -61,8 +61,57 @@ export function publish (state) {
       bindings = localState
     }
     bindComponent(component, bindings)
+    delete trace.subscribedState
+    delete trace.bindReturned
   }
   previousState = state
+}
+
+function applyStateKey (state, stateKey) {
+  if (stateKey === undefined) return state
+  if (typeof stateKey !== 'string') {
+    shadowError(
+      'shadowbind_subscribe_key_type',
+      `The key ${JSON.stringify(stateKey)} must be a string, but it was ` +
+      `"${typeof stateKey}"`,
+      trace
+    )
+  }
+  if (!/^[^.].+[^.]$/.test(stateKey)) { // cannot begin or end with dot
+    shadowError(
+      'shadowbind_subscribe_key_invalid',
+      `The key "${stateKey}" could not be parsed`,
+      trace
+    )
+  }
+  if (stateKey.indexOf('.') === -1) {
+    if (!Object.keys(state).includes(stateKey)) {
+      shadowError(
+        'shadowbind_subscribe_key_not_found',
+        `The key "${stateKey}" could not be found in the published state`,
+        trace
+      )
+    }
+  }
+  trace.stateSearch = [['state: ', state]]
+  let stateSearch = state
+  let stateKeySearch = 'state'
+  for (const stateKeyPart of stateKey.split('.')) {
+    stateKeySearch = `${stateKeySearch}.${stateKeyPart}`
+    if (!Object.keys(stateSearch).includes(stateKeyPart)) {
+      trace.stateSearch.push([`${stateKeySearch}:`, 'not found'])
+      delete trace.publishedState
+      shadowError(
+        'shadowbind_subscribe_key_not_found',
+        `The key "${stateKey}" could not be found in the published state`,
+        trace
+      )
+    }
+    stateSearch = stateSearch[stateKeyPart]
+    trace.stateSearch.push([`${stateKeySearch}:`, stateSearch])
+  }
+  delete trace.stateSearch
+  return stateSearch
 }
 
 // Apply the state to the element's shadowDom
@@ -324,38 +373,6 @@ function elAll (selector, context = document) {
   )
 }
 
-// window.throwCssChars = function (
-//   propertyName,
-//   disallowedCharacters,
-//   attemptingToBind,
-//   affectedElement,
-//   documentOrComponent,
-//   bindReturned,
-//   subscribedState,
-//   publishedState
-// ) {
-//   console.error(...[
-//     `Could not create the CSS custom property "${propertyName}" because it ` +
-//     `contains disallowed characters "${disallowedCharacters}" ` +
-//     `(SHADOWBIND_CSS_CHARS)\n`,
-//     '\n    attempting to bind', attemptingToBind,
-//     '\n    affected element', affectedElement,
-//     ...errorAffectedScope(documentOrComponent),
-//     ...(() => bindReturned
-//       ? [ '\n    bind method returned', bindReturned ] : [])(),
-//     '\n    subscribed state', subscribedState,
-//     '\n    published state', publishedState,
-//     '\n\nAdditional information at ' +
-//     'https://stackoverflow.com/questions/7505623/colors-in-javascript-console'
-//   ])
-//   throw new Error()
-// }
-
-function errorAffectedScope (documentOrComponent) {
-  if (documentOrComponent === document) return [ '\n    context', document ]
-  return [ '\n    affected web component', documentOrComponent ]
-}
-
 function shadowError (code, errorMessage, trace, notes = '') {
   const TRACE_START = '\n\n    '
   const TRACE_LINE = '\n    '
@@ -363,6 +380,7 @@ function shadowError (code, errorMessage, trace, notes = '') {
   let message = [errorMessage]
 
   const traceOrder = [
+    ...(trace.stateSearch ? trace.stateSearch : []),
     ['bind() returned: ', trace.bindReturned],
     ['published state: ', trace.publishedState],
     ['subscribed state: ', trace.subscribedState],
