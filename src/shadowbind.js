@@ -16,7 +16,6 @@ export function subscribe (component, stateKey) {
       'The first argument of subscribe() should be a web component, but no ' +
         'arguments were given. Call subscribe(this) in the constructor ' +
         'method of a web component',
-      trace,
       'https://stackoverflow.com/questions/7505623/colors-in-javascript-console'
     )
   }
@@ -26,8 +25,7 @@ export function subscribe (component, stateKey) {
       'shadowbind_subscribe_type',
       'The first argument of subscribe() should be a web component, not ' +
         `${typeof component}. Call subscribe(this) in the constructor method ` +
-        'of a web component',
-      trace
+        'of a web component'
     )
   }
   components.push({ component, stateKey })
@@ -55,8 +53,7 @@ export function publish (state) {
         shadowError(
           'shadowbind_bind_method_return_type',
           'The bind method must return an object, but it returned ' +
-            `"${typeof bindings}"`,
-          trace
+            `"${typeof bindings}"`
         )
       }
     } else {
@@ -76,23 +73,20 @@ function applyStateKey (state, stateKey) {
     shadowError(
       'shadowbind_subscribe_key_type',
       `The key ${JSON.stringify(stateKey)} must be a string, but it was ` +
-      `"${typeof stateKey}"`,
-      trace
+      `"${typeof stateKey}"`
     )
   }
   if (!/^[^.].+[^.]$/.test(stateKey)) { // cannot begin or end with dot
     shadowError(
       'shadowbind_subscribe_key_invalid',
-      `The key "${stateKey}" could not be parsed`,
-      trace
+      `The key "${stateKey}" could not be parsed`
     )
   }
   if (stateKey.indexOf('.') === -1) {
     if (!Object.keys(state).includes(stateKey)) {
       shadowError(
         'shadowbind_subscribe_key_not_found',
-        `The key "${stateKey}" could not be found in the published state`,
-        trace
+        `The key "${stateKey}" could not be found in the published state`
       )
     }
   }
@@ -117,8 +111,7 @@ function applyDots (baseData, key, baseName, errorSource, errorCode) {
       shadowError(
         errorCode,
         `The key "${keyPart}" in "${key}" could not be found in the ` +
-          errorSource,
-        trace
+          errorSource
       )
     }
     search = search[keyPart]
@@ -178,18 +171,18 @@ function shadowWalk (component, bindings, callback) {
     try {
       component.attachShadow({ mode: 'open' })
     } catch (err) {
+      trace = { component: trace.component }
       shadowError(
         'shadowbind_closed_shadow_root',
         'Subscribed element has a closed shadowRoot, but only open ' +
-          'shadowRoots are supported',
-        { component: trace.component }
+          'shadowRoots are supported'
       )
     }
+    trace = { component: trace.component }
     shadowError(
       'shadowbind_no_shadow_root',
       'Subscribed web component has no shadowRoot. Be sure to call ' +
-        "this.attachShadow({ mode: open }) in the component's constructor",
-      { component: trace.component }
+        "this.attachShadow({ mode: open }) in the component's constructor"
     )
   }
   recursiveWalk(component.shadowRoot)
@@ -413,7 +406,7 @@ function elAll (selector, context = document) {
   )
 }
 
-function shadowError (code, errorMessage, trace, notes = '') {
+function shadowError (code, errorMessage, notes) {
   const TRACE_START = '\n\n    '
   const TRACE_LINE = '\n    '
 
