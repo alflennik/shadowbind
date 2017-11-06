@@ -3,7 +3,7 @@ let events = {}
 let previousState = null
 let repeaterCount = 0
 let repeaters = {}
-let currentRepeaters = []
+// let currentRepeaters = []
 let trace
 let bindMethodUsed
 
@@ -140,7 +140,7 @@ function shadowWalk (component, bindings, callback) {
   // let domDepth = 0
 
   function recursiveWalk (node) {
-    respondToElement(node/*, domDepth*/)
+    respondToElement(node/* , domDepth */)
     node = node.firstChild
     // domDepth++
     while (node) {
@@ -150,7 +150,7 @@ function shadowWalk (component, bindings, callback) {
     // domDepth--
   }
 
-  function respondToElement (element/*, domDepth*/) {
+  function respondToElement (element /* , domDepth */) {
     let repeatId
     if (element.nodeType !== 1) return // not an element
     const localBindings = getLocalBindings.current()
@@ -375,23 +375,23 @@ function applyRepeat (component, repeatId, prependElement, localBindings) {
 }
 
 function setRepeatId (element, type) {
-  let repeaterCount = `r${repeaterCount}`
+  let repeaterCounter = `r${repeaterCount}`
   for (let attr of element.attributes) {
     if (!attr.name) continue
     let match = /^(r\d+)$/.exec(attr.name)
     if (match) element.removeAttribute(attr.name)
   }
-  element.setAttribute(repeaterCount, '')
-  return repeaterCount
+  element.setAttribute(repeaterCounter, '')
+  return repeaterCounter
 }
 
-function getRepeatId (element) {
-  for (let attr of element.attributes) {
-    if (!attr.name) continue
-    let match = /^(r\d+)$/.exec(attr.name)
-    if (match) return attr.name
-  }
-}
+// function getRepeatId (element) {
+//   for (let attr of element.attributes) {
+//     if (!attr.name) continue
+//     let match = /^(r\d+)$/.exec(attr.name)
+//     if (match) return attr.name
+//   }
+// }
 
 // Attach identifiers for elements that otherwise cannot be uniquely identified
 function domKeyGenerator () {
