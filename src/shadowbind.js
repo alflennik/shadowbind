@@ -14,9 +14,8 @@ export function subscribe (component, stateKey) {
     shadowError(
       'shadowbind_subscribe_without_arguments',
       'The first argument of subscribe() should be a web component, but no ' +
-        'arguments were given. Call subscribe(this) in the constructor ' +
-        'method of a web component',
-      'https://stackoverflow.com/questions/7505623/colors-in-javascript-console'
+        'arguments were given. Call subscribe(this) in the ' +
+        'connectedCallback method of a web component'
     )
   }
 
@@ -24,8 +23,8 @@ export function subscribe (component, stateKey) {
     shadowError(
       'shadowbind_subscribe_type',
       'The first argument of subscribe() should be a web component, not ' +
-        `${typeof component}. Call subscribe(this) in the constructor method ` +
-        'of a web component'
+        `${getType(component)}. Call subscribe(this) in the ` +
+        'connectedCallback method of a web component'
     )
   }
   components.push({ component, stateKey })
@@ -45,15 +44,15 @@ export function publish (state) {
     let bindings
     const localState = applyStateKey(state, stateKey)
     trace.subscribedState = localState
-    if (typeof component.bind !== 'undefined') {
+    if (getType(component.bind) !== 'undefined') {
       bindings = component.bind(localState)
       trace.bindReturned = bindings
       bindMethodUsed = true
-      if (typeof bindings !== 'object') {
+      if (getType(bindings) !== 'object') {
         shadowError(
           'shadowbind_bind_method_return_type',
           'The bind method must return an object, but it returned ' +
-            `"${typeof bindings}"`
+            `"${getType(bindings)}"`
         )
       }
     } else {
@@ -69,19 +68,22 @@ export function publish (state) {
 
 function applyStateKey (state, stateKey) {
   if (stateKey === undefined) return state
-  if (typeof stateKey !== 'string') {
+
+  if (getType(stateKey) !== 'string') {
     shadowError(
       'shadowbind_subscribe_key_type',
       `The key ${JSON.stringify(stateKey)} must be a string, but it was ` +
-      `"${typeof stateKey}"`
+        `"${getType(stateKey)}"`
     )
   }
+
   if (!/^[^.].+[^.]$/.test(stateKey)) { // cannot begin or end with dot
     shadowError(
       'shadowbind_subscribe_key_invalid',
       `The key "${stateKey}" could not be parsed`
     )
   }
+
   if (stateKey.indexOf('.') === -1) {
     if (!Object.keys(state).includes(stateKey)) {
       shadowError(
@@ -90,6 +92,7 @@ function applyStateKey (state, stateKey) {
       )
     }
   }
+
   return applyDots(
     state,
     stateKey,
@@ -103,6 +106,7 @@ function applyDots (baseData, key, baseName, errorSource, errorCode) {
   trace.search = [[`${baseName}:`, baseData]]
   let search = baseData
   let keySearch = baseName
+
   for (const keyPart of key.split('.')) {
     keySearch = `${keySearch}.${keyPart}`
     if (!Object.keys(search).includes(keyPart)) {
@@ -117,6 +121,7 @@ function applyDots (baseData, key, baseName, errorSource, errorCode) {
     search = search[keyPart]
     trace.search.push([`${keySearch}:`, search])
   }
+
   delete trace.search
   return search
 }
@@ -174,7 +179,7 @@ function shadowWalk (component, bindings, callback) {
       trace = { component: trace.component }
       shadowError(
         'shadowbind_closed_shadow_root',
-        'Subscribed element has a closed shadowRoot, but only open ' +
+        'Subscribed component has a closed shadowRoot, but only open ' +
           'shadowRoots are supported'
       )
     }
@@ -185,6 +190,7 @@ function shadowWalk (component, bindings, callback) {
         "this.attachShadow({ mode: open }) in the component's constructor"
     )
   }
+
   recursiveWalk(component.shadowRoot)
 }
 
@@ -227,19 +233,21 @@ function attributeWalk (element, callback) {
 }
 
 // Apply data-binding to a particular element
-function bindElement (element, localBindings, bindAction) {
-  const { type, param, key } = bindAction
+function bindElement (element, localBindings, { type, param, key } = {}) {
   let value
+
   if (key.indexOf('.') === -1) {
     if (!Object.keys(localBindings).includes(key)) {
       const searchSource = trace.bindReturned
         ? 'the object returned by bind()'
         : 'the subscribed state'
+
       shadowError(
         'shadowbind_key_not_found',
         `The key "${key}" could not be found in ${searchSource}`
       )
     }
+
     value = localBindings[key]
   } else {
     value = applyDots(
@@ -250,10 +258,10 @@ function bindElement (element, localBindings, bindAction) {
       'shadowbind_key_not_found'
     )
   }
+
   trace.attributeState = value
-  let valueType = typeof value
-  if (Array.isArray(value)) valueType = 'array'
-  if (value === null) valueType = 'null'
+  let valueType = getType(value)
+
   if (
     (valueType === 'object' || valueType === 'array') &&
     (type === 'bind' || type === 'text' || type === 'html')
@@ -268,26 +276,32 @@ function bindElement (element, localBindings, bindAction) {
         `calling JSON.stringify on the ${valueType} first${bindSubnote}.`
     )
   }
+
   switch (type) {
     case 'bind':
       if (value !== null) element.setAttribute(param, value)
       else element.removeAttribute(param)
       break
+
     case 'prop':
       throw new Error('not implemented')
+
     case 'text':
       if (value != null) element.innerText = value
       break
+
     case 'html':
       if (value != null) element.innerHTML = value
       break
+
     case 'on':
-      if (typeof value !== 'function') {
+      if (getType(value) !== 'function') {
         shadowError(
           'shadowbind_event_type',
-          `"${key}" must be a function, but it was "${typeof value}"`
+          `"${key}" must be a function, but it was "${getType(value)}"`
         )
       }
+
       let domKey = getDomKey(element)
       if (!domKey) domKey = setDomKey(element)
       if (!events[domKey]) events[domKey] = {}
@@ -296,14 +310,32 @@ function bindElement (element, localBindings, bindAction) {
         events[domKey][param] = key
       }
       break
+
     case 'show':
       if (!value) element.style.display = 'none'
       else element.style.display = ''
       break
+
     case 'css':
+      if (getType(value) !== 'object') {
+        shadowError(
+          'shadowbind_css_type',
+          `"${key}" must be an object when binding to css, but it was ` +
+            `"${getType(value)}"`
+        )
+      }
+
       for (const cssProp of Object.keys(value)) {
+        trace.cssProp = cssProp
+        shadowError(
+          'shadowbind_css_prop_type',
+          `"${cssProp}" must be a string, but it was ` +
+            `"${getType(value[cssProp])}"`
+        )
         element.style.setProperty(`--${cssProp}`, value[cssProp])
       }
+
+      delete trace.cssProp
       break
   }
 }
@@ -314,7 +346,8 @@ function initializeRepeat (example) {
   const parent = example.parentNode
   const repeatId = setRepeatId(example)
   const matches = /^([^ ]{1,}) of ([^ ]{1,})$/.exec(
-    example.getAttribute(':for'))
+    example.getAttribute(':for')
+  )
 
   repeaters[repeatId] = {
     parent,
@@ -328,6 +361,7 @@ function initializeRepeat (example) {
       return example
     })()
   }
+
   return repeatId
 }
 
@@ -347,6 +381,7 @@ function applyRepeat (component, repeatId, prependElement, localBindings) {
 
   for (const item of localBindings[loopKey]) {
     let element
+
     if (currentItems.includes(item[uniqueId] + '')) {
       element = el(`[key="${item[uniqueId]}"][${repeatId}]`)
     } else {
@@ -359,6 +394,7 @@ function applyRepeat (component, repeatId, prependElement, localBindings) {
   }
 
   const newRepeatId = setRepeatId(example)
+
   if (repeatId) {
     elAll(`[${repeatId}]`, component.shadowRoot)
       .map(item => parent.removeChild(item))
@@ -370,6 +406,7 @@ function applyRepeat (component, repeatId, prependElement, localBindings) {
     setRepeatId(placeholder)
     parent.insertBefore(placeholder, prependElement)
   }
+
   repeaters[newRepeatId] = repeaters[repeatId]
   delete repeaters[repeatId]
 }
@@ -429,6 +466,14 @@ function elAll (selector, context = document) {
   )
 }
 
+function getType (item) {
+  const jsType = typeof item
+  if (jsType !== 'object') return typeof item
+  if (item === null) return 'null'
+  if (Array.isArray(item)) return 'array'
+  return 'object'
+}
+
 function shadowError (code, errorMessage, notes) {
   const TRACE_START = '\n\n    '
   const TRACE_LINE = '\n    '
@@ -436,6 +481,7 @@ function shadowError (code, errorMessage, notes) {
   let message = [errorMessage]
   const traceOrder = [
     ...(trace.search ? trace.search : []),
+    ['css property:', trace.cssProp],
     ['attribute state:', trace.attributeState],
     ['bind returned:', trace.bindReturned],
     ['subscribed state:', trace.subscribedState],

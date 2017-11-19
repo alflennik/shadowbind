@@ -63,3 +63,7 @@ test('should throw if array or object bound to attribute or html', async t => {
 test('should throw if non function used as event handler', async t => {
   t.deepEqual(...(await server.test('event-type')))
 })
+
+test('should throw if css binding not an object', async t => {
+  t.deepEqual(...(await server.test('css-wrong-type')))
+})
