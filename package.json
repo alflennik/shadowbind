@@ -12,11 +12,12 @@
     "puppeteer": "^0.10.1",
     "redux": "^3.7.2",
     "standard": "^10.0.3",
-    "webpack": "^3.5.5"
+    "webpack": "^3.8.1"
   },
   "scripts": {
     "dev": "webpack -d --watch",
-    "test": "ava spec/tests.js --no-color"
+    "test": "ava spec/tests.js --no-color",
+    "inspect": "live-server --open=/spec"
   },
   "license": "MIT"
 }

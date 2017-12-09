@@ -27,6 +27,7 @@ export function subscribe (component, stateKey) {
         'connectedCallback method of a web component'
     )
   }
+
   components.push({ component, stateKey })
 }
 
@@ -141,35 +142,49 @@ function bindComponent (component, bindings) {
 
 // Run callback on every element in the shadowDom, applying repeaters as needed
 function shadowWalk (component, bindings, callback) {
-  const getLocalBindings = GetLocalBindings(bindings)
-  // let domDepth = 0
+  const repeaterState = TrackRepeaterState(bindings)
+  let previousNode
 
   function recursiveWalk (node) {
-    respondToElement(node/* , domDepth */)
+    const isRepeater = node.getAttribute && node.getAttribute(':for')
+    respondToElement(node)
+    if (isRepeater) return true
     node = node.firstChild
-    // domDepth++
+
     while (node) {
-      recursiveWalk(node, respondToElement)
-      node = node.nextSibling
+      previousNode = node.parentNode
+      const isRepeater = recursiveWalk(node)
+      if (isRepeater) {
+        node = previousNode
+      } else {
+        node = node.nextSibling
+      }
     }
-    // domDepth--
   }
 
-  function respondToElement (element /* , domDepth */) {
-    let repeatId
+  function respondToElement (element) {
     if (element.nodeType !== 1) return // not an element
-    const localBindings = getLocalBindings.current()
-    let as
+
+    let repeatId
     let loopKey
+    let as
+
     if (element.getAttribute(':for')) {
+      const prependElement = element.nextSibling
       repeatId = initializeRepeat(element)
       as = repeaters[repeatId].as
       loopKey = repeaters[repeatId].loopKey
-      localBindings[as] = localBindings[loopKey][0].name
-      applyRepeat(component, repeatId, null, localBindings)
+
+      return applyRepeat({
+        component,
+        repeatId,
+        prependElement,
+        bindings,
+        callback
+      })
     }
 
-    callback(element, localBindings)
+    callback(element, repeaterState.current())
   }
 
   if (!component.shadowRoot) {
@@ -195,10 +210,28 @@ function shadowWalk (component, bindings, callback) {
 }
 
 // Keep track of bound state as it is altered by nested repeaters
-function GetLocalBindings (bindings) {
+function TrackRepeaterState (bindings) {
+  let repeaters = []
+  let repeaterCounts = []
+
   return {
-    update: (repeater, domDepth) => {},
-    current: () => bindings
+    current: () => {
+      let localBindings = Object.assign({}, bindings)
+      for (let i = 0; i < repeaters.length; i++) {
+        const repeater = repeaters[i][repeaterCounts[i]]
+        localBindings = Object.assign(localBindings, repeater)
+      }
+      return localBindings
+    },
+    startRepeater: (bindings) => {
+      repeaters.push(bindings)
+      repeaterCounts.push(0)
+    },
+    incrementRepeater: () => repeaterCounts[repeaterCounts.length - 1]++,
+    endRepeater: () => {
+      repeaters.splice(-1)
+      repeaterCounts.splice(-1)
+    }
   }
 }
 
@@ -287,11 +320,18 @@ function bindElement (element, localBindings, { type, param, key } = {}) {
       throw new Error('not implemented')
 
     case 'text':
-      if (value != null) element.innerText = value
-      break
-
     case 'html':
-      if (value != null) element.innerHTML = value
+      if (!(getType(value) === 'string' || getType(value) === 'null')) {
+        shadowError(
+          'shadowbind_inner_content_type',
+          `"${key}" must be a string (or null) when binding to inner ` +
+            `${type}, but it was "${getType(value)}"`
+        )
+      }
+
+      if (value != null) {
+        type === 'text' ? element.innerText = value : element.innerHTML = value
+      }
       break
 
     case 'on':
@@ -366,11 +406,17 @@ function initializeRepeat (example) {
 }
 
 // Create, move, remove and modify a repeater (does not apply data-binding)
-function applyRepeat (component, repeatId, prependElement, localBindings) {
+function applyRepeat ({
+  component,
+  repeatId,
+  prependElement,
+  bindings,
+  callback
+} = {}) {
   repeaterCount++
   const { loopKey, uniqueId, parent, example } = repeaters[repeatId]
-
   let currentItems
+
   if (repeatId) {
     currentItems = elAll(`[${repeatId}]`, parent).reduce((acc, el) => {
       return acc.concat(el.getAttribute('key'))
@@ -379,7 +425,7 @@ function applyRepeat (component, repeatId, prependElement, localBindings) {
     currentItems = []
   }
 
-  for (const item of localBindings[loopKey]) {
+  for (const item of bindings[loopKey]) {
     let element
 
     if (currentItems.includes(item[uniqueId] + '')) {
@@ -391,6 +437,7 @@ function applyRepeat (component, repeatId, prependElement, localBindings) {
     parent.insertBefore(element, prependElement)
     element.setAttribute('key', item[uniqueId])
     setRepeatId(element)
+    callback(element)
   }
 
   const newRepeatId = setRepeatId(example)
