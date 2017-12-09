@@ -143,22 +143,14 @@ function bindComponent (component, bindings) {
 // Run callback on every element in the shadowDom, applying repeaters as needed
 function shadowWalk (component, bindings, callback) {
   const repeaterState = TrackRepeaterState(bindings)
-  let previousNode
 
   function recursiveWalk (node) {
-    const isRepeater = node.getAttribute && node.getAttribute(':for')
+    const isRepeater = node.nodeType === 1 && node.getAttribute(':for') !== null
     respondToElement(node)
-    if (isRepeater) return true
     node = node.firstChild
-
     while (node) {
-      previousNode = node.parentNode
-      const isRepeater = recursiveWalk(node)
-      if (isRepeater) {
-        node = previousNode
-      } else {
-        node = node.nextSibling
-      }
+      if (!isRepeater) recursiveWalk(node, respondToElement)
+      node = node.nextSibling
     }
   }
 
@@ -170,6 +162,7 @@ function shadowWalk (component, bindings, callback) {
     let as
 
     if (element.getAttribute(':for')) {
+      return
       const prependElement = element.nextSibling
       repeatId = initializeRepeat(element)
       as = repeaters[repeatId].as
@@ -179,6 +172,7 @@ function shadowWalk (component, bindings, callback) {
         component,
         repeatId,
         prependElement,
+        repeaterState,
         bindings,
         callback
       })
@@ -405,11 +399,12 @@ function initializeRepeat (example) {
   return repeatId
 }
 
-// Create, move, remove and modify a repeater (does not apply data-binding)
+// Create, move, remove, modify and databind a repeater
 function applyRepeat ({
   component,
   repeatId,
   prependElement,
+  repeaterState,
   bindings,
   callback
 } = {}) {
@@ -425,7 +420,9 @@ function applyRepeat ({
     currentItems = []
   }
 
-  for (const item of bindings[loopKey]) {
+  repeaterState.startRepeater(bindings[loopKey])
+  console.log(bindings)
+  for (const item of repeaterState.current()[loopKey]) {
     let element
 
     if (currentItems.includes(item[uniqueId] + '')) {
@@ -437,8 +434,10 @@ function applyRepeat ({
     parent.insertBefore(element, prependElement)
     element.setAttribute('key', item[uniqueId])
     setRepeatId(element)
-    callback(element)
+    callback(element, repeaterState.current())
+    repeaterState.incrementRepeater()
   }
+  repeaterState.endRepeater()
 
   const newRepeatId = setRepeatId(example)
 
