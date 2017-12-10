@@ -1,4 +1,4 @@
-import { subscribe, publish } from '../../../src/shadowbind.js'
+import { subscribe, publish } from '../../../dist/shadowbind.js'
 
 class EventType extends HTMLElement { // eslint-disable-line
   constructor () {

@@ -1,6 +1,6 @@
 import error from './error'
 import applyDots from './applyDots'
-import getType from './getType'
+import getType from '../util/getType'
 
 export default function applyStateKey (state, stateKey) {
   if (stateKey === undefined) return state

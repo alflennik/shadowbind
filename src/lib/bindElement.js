@@ -1,7 +1,7 @@
 import { trace, bindMethodUsed, events } from '../globals'
 import error from './error'
 import applyDots from './applyDots'
-import getType from './getType'
+import getType from '../util/getType'
 import { getDomKey, setDomKey } from './domKey'
 
 // Apply data-binding to a particular element

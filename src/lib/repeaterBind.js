@@ -1,4 +1,4 @@
-import { repeaters, repeaterCount } from '../' // eslint-disable-line
+import { repeaters, repeaterCount } from '../globals' // eslint-disable-line
 import { el, elAll } from '../util/selectors'
 import repeaterId from './repeaterId'
 

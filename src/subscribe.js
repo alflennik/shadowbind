@@ -1,7 +1,7 @@
 // eslint-disable-next-line
 import { trace, components } from './globals'
 import error from './lib/error'
-import getType from './lib/getType'
+import getType from './util/getType'
 
 // Track subscribed web components
 export default function subscribe (component, stateKey) {

@@ -5,7 +5,7 @@ import walkElement from '../util/walkElement'
 import parseAttribute from './parseAttribute'
 import bindElement from './bindElement'
 import repeaterBind from './repeaterBind'
-import initializeRepeat from './initializeRepeat'
+import repeaterInitialize from './repeaterInitialize'
 import error from './error'
 
 // Apply the state to the element's shadowDom
@@ -17,7 +17,7 @@ export default function bindComponent (component, bindings) {
 
     if (element.getAttribute(':for')) {
       const prependElement = element.nextSibling
-      repeatId = initializeRepeat(element)
+      repeatId = repeaterInitialize(element)
 
       return repeaterBind({
         component,

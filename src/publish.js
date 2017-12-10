@@ -2,7 +2,7 @@
 import { components, previousState, trace, bindMethodUsed } from './globals'
 import error from './lib/error'
 import applyStateKey from './lib/applyStateKey'
-import getType from './lib/getType'
+import getType from './util/getType'
 import bindComponent from './lib/bindComponent'
 
 // Apply data-binding to all affected web components when the state changes

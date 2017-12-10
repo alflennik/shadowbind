@@ -2,7 +2,7 @@ import { repeaters, repeaterCount } from '../globals' // eslint-disable-line
 import repeaterId from './repeaterId'
 
 // Remove the user's repeater element and store the instructions for later
-export default function initializeRepeat (example) {
+export default function repeaterInitialize (example) {
   repeaterCount++
   const parent = example.parentNode
   const repeatId = repeaterId(example)

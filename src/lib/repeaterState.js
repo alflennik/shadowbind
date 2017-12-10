@@ -5,14 +5,14 @@ let repeaterCounts = []
 let bindings
 
 export function newBindings (theNewBindings) {
-  bindings = { ...theNewBindings }
+  bindings = Object.assign({}, theNewBindings)
 }
 
 export function current () {
-  let localBindings = { ...bindings }
+  let localBindings = Object.assign({}, bindings)
   for (let i = 0; i < repeaters.length; i++) {
     const repeater = repeaters[i][repeaterCounts[i]]
-    localBindings = { ...localBindings, ...repeater }
+    localBindings = Object.assign(localBindings, repeater)
   }
   return localBindings
 }
