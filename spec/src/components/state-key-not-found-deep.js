@@ -11,7 +11,7 @@ class StateKeyNotFoundDeep extends HTMLElement { // eslint-disable-line
     try {
       publish({ found: { level2: {} } })
     } catch (err) {
-      return err.code || err
+      return err.code || console.log(err)
     }
   }
 

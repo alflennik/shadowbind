@@ -29,5 +29,5 @@ export default function error (code, errorMessage, notes) {
   if (notes) message.push('\n\n' + notes)
 
   console.error(...message)
-  throw new Error({ code })
+  throw { code } // eslint-disable-line
 }

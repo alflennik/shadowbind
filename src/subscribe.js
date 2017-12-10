@@ -22,7 +22,7 @@ export default function subscribe (component, stateKey) {
     error(
       'shadowbind_subscribe_type',
       'The first argument of subscribe() should be a web component, not ' +
-        `${getType(component)}. Call subscribe(this) in the ` +
+        `"${getType(component)}". Call subscribe(this) in the ` +
         'connectedCallback method of a web component'
     )
   }
