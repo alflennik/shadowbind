@@ -1,18 +1,17 @@
-import { trace } from '../globals'
-import * as repeaterState from '../lib/repeaterState'
-import walkFragment from '../util/walkFragment'
-import walkElement from '../util/walkElement'
-import parseAttribute from './parseAttribute'
-import bindElement from './bindElement'
-import repeaterBind from './repeaterBind'
-import repeaterInitialize from './repeaterInitialize'
-import error from './error'
+import { trace } from '../globals.js'
+import * as repeaterState from '../lib/repeaterState.js'
+import walkFragment from '../util/walkFragment.js'
+import walkElement from '../util/walkElement.js'
+import parseAttribute from './parseAttribute.js'
+import bindElement from './bindElement.js'
+import repeaterBind from './repeaterBind.js'
+import repeaterInitialize from './repeaterInitialize.js'
 
 // Apply the state to the element's shadowDom
 export default function bindComponent (component, bindings) {
   repeaterState.newBindings(bindings)
 
-  walkFragment(component, bindings, (element, localBindings) => {
+  walkFragment(component, element => {
     let repeatId
 
     if (element.getAttribute(':for')) {
@@ -27,31 +26,13 @@ export default function bindComponent (component, bindings) {
       })
     }
 
-    if (!component.shadowRoot) {
-      try {
-        component.attachShadow({ mode: 'open' })
-      } catch (err) {
-        trace = { component: trace.component }
-        error(
-          'shadowbind_closed_shadow_root',
-          'Subscribed component has a closed shadowRoot, but only open ' +
-            'shadowRoots are supported'
-        )
-      }
-      trace = { component: trace.component }
-      error(
-        'shadowbind_no_shadow_root',
-        'Subscribed web component has no shadowRoot. Be sure to call ' +
-          "this.attachShadow({ mode: open }) in the component's constructor"
-      )
-    }
-
     walkElement(element, attribute => {
       const bindAction = parseAttribute(attribute)
-      trace.element = element
-      if (bindAction) bindElement(element, localBindings, bindAction)
+      trace.add('element', element)
+      if (bindAction) bindElement(element, repeaterState.current(), bindAction)
     })
-    delete trace.element
-    delete trace.attribute
+
+    trace.remove('element')
+    trace.remove('attribute')
   })
 }

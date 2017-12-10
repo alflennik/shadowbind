@@ -1,4 +1,4 @@
-import { subscribe } from '../../../dist/shadowbind.js'
+import { subscribe } from '../../../src/index.js'
 
 class SubscribeUnattached extends HTMLElement { // eslint-disable-line
   constructor () {

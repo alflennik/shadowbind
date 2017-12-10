@@ -1,11 +1,14 @@
 // eslint-disable-next-line
-import { trace, components } from './globals'
-import error from './lib/error'
-import getType from './util/getType'
+import { trace } from './globals.js'
+import error from './lib/error.js'
+import getType from './util/getType.js'
+
+let components = []
+export { components }
 
 // Track subscribed web components
 export default function subscribe (component, stateKey) {
-  trace = {}
+  trace.reset()
   if (!arguments.length) {
     error(
       'shadowbind_subscribe_without_arguments',

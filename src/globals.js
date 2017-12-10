@@ -1,17 +1,31 @@
-let components = []
 let events = {}
-let previousState = null
 let repeaterCount = 0
 let repeaters = {}
-let trace
-let bindMethodUsed
+
+function Trace () {
+  let stackTrace = {}
+  return {
+    get: () => stackTrace,
+    add: (name, value) => {
+      stackTrace[name] = value
+    },
+    set: (newTrace) => {
+      stackTrace = newTrace
+    },
+    remove: (name) => {
+      delete stackTrace[name]
+    },
+    reset: () => {
+      stackTrace = {}
+    }
+  }
+}
+
+const trace = Trace()
 
 export {
-  components,
   events,
-  previousState,
   repeaterCount,
   repeaters,
-  trace,
-  bindMethodUsed
+  trace
 }

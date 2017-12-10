@@ -1,6 +1,6 @@
-import { repeaters, repeaterCount } from '../globals' // eslint-disable-line
-import { el, elAll } from '../util/selectors'
-import repeaterId from './repeaterId'
+import { repeaters, repeaterCount } from '../globals.js' // eslint-disable-line
+import { el, elAll } from '../util/selectors.js'
+import repeaterId from './repeaterId.js'
 
 // Create, move, remove, modify and databind a repeater
 export default function repeaterBind ({

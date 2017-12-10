@@ -1,5 +1,5 @@
-import { repeaters, repeaterCount } from '../globals' // eslint-disable-line
-import repeaterId from './repeaterId'
+import { repeaters, repeaterCount } from '../globals.js' // eslint-disable-line
+import repeaterId from './repeaterId.js'
 
 // Remove the user's repeater element and store the instructions for later
 export default function repeaterInitialize (example) {

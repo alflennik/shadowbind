@@ -1,6 +1,8 @@
-import { trace } from '../globals'
+import { trace as getTrace } from '../globals.js'
 
 export default function error (code, errorMessage, notes) {
+  const trace = getTrace.get()
+
   const TRACE_START = '\n\n    '
   const TRACE_LINE = '\n    '
 

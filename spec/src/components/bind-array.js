@@ -1,4 +1,4 @@
-import { subscribe, publish } from '../../../dist/shadowbind.js'
+import { subscribe, publish } from '../../../src/index.js'
 
 class BindArray extends HTMLElement { // eslint-disable-line
   constructor () {

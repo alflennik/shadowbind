@@ -1,8 +1,9 @@
-import { trace, bindMethodUsed, events } from '../globals'
-import error from './error'
-import applyDots from './applyDots'
-import getType from '../util/getType'
-import { getDomKey, setDomKey } from './domKey'
+import { trace, events } from '../globals.js'
+import { bindMethodUsed } from '../publish.js'
+import error from './error.js'
+import applyDots from './applyDots.js'
+import getType from '../util/getType.js'
+import { getDomKey, setDomKey } from './domKey.js'
 
 // Apply data-binding to a particular element
 export default function bindElement (element, localBindings, parsedAttribute) {
@@ -11,7 +12,7 @@ export default function bindElement (element, localBindings, parsedAttribute) {
 
   if (key.indexOf('.') === -1) {
     if (!Object.keys(localBindings).includes(key)) {
-      const searchSource = trace.bindReturned
+      const searchSource = trace.get().bindReturned
         ? 'the object returned by bind()'
         : 'the subscribed state'
 
@@ -32,7 +33,7 @@ export default function bindElement (element, localBindings, parsedAttribute) {
     )
   }
 
-  trace.attributeState = value
+  trace.add('attributeState', value)
   let valueType = getType(value)
 
   if (
@@ -106,7 +107,7 @@ export default function bindElement (element, localBindings, parsedAttribute) {
       }
 
       for (const cssProp of Object.keys(value)) {
-        trace.cssProp = cssProp
+        trace.add('cssProp', cssProp)
         error(
           'shadowbind_css_prop_type',
           `"${cssProp}" must be a string, but it was ` +
@@ -115,7 +116,7 @@ export default function bindElement (element, localBindings, parsedAttribute) {
         element.style.setProperty(`--${cssProp}`, value[cssProp])
       }
 
-      delete trace.cssProp
+      trace.remove('cssProp')
       break
   }
 }

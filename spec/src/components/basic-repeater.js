@@ -1,4 +1,4 @@
-import { subscribe, publish } from '../../../dist/shadowbind.js'
+import { subscribe, publish } from '../../../src/index.js'
 
 const template = document.createElement('template')
 template.innerHTML = /* @html */`

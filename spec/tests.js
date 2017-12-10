@@ -1,5 +1,5 @@
-import test from 'ava'
-import server from './src/server'
+import test from 'ava.js'
+import server from './src/server.js'
 
 test.before(() => server.start())
 test.after(() => server.end())

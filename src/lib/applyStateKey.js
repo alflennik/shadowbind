@@ -1,6 +1,6 @@
-import error from './error'
-import applyDots from './applyDots'
-import getType from '../util/getType'
+import error from './error.js'
+import applyDots from './applyDots.js'
+import getType from '../util/getType.js'
 
 export default function applyStateKey (state, stateKey) {
   if (stateKey === undefined) return state

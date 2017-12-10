@@ -1,4 +1,4 @@
-import { repeaterCount } from '../globals'
+import { repeaterCount } from '../globals.js'
 
 export default function repeaterId (element, type) {
   let repeaterCounter = `r${repeaterCount}`
