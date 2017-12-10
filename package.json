@@ -12,10 +12,11 @@
     "puppeteer": "^0.10.1",
     "redux": "^3.7.2",
     "standard": "^10.0.3",
+    "uglifyjs-webpack-plugin": "^1.1.2",
     "webpack": "^3.8.1"
   },
   "scripts": {
-    "dev": "webpack -d --watch",
+    "build": "webpack",
     "test": "ava spec/tests.js --no-color",
     "inspect": "live-server --open=/spec"
   },

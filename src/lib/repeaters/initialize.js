@@ -1,14 +1,13 @@
-import getId from './getId.js'
+import { setId, nextId } from './setId.js'
 
-let repeaterCount = 0
 let repeaters = {}
-export { repeaterCount, repeaters }
+export { repeaters }
 
 // Remove the user's repeater element and store the instructions for later
 export default function repeaterInitialize (example) {
-  repeaterCount++
+  nextId()
   const parent = example.parentNode
-  const repeatId = getId(example)
+  const repeatId = setId(example)
   const matches = /^([^ ]{1,}) of ([^ ]{1,})$/.exec(
     example.getAttribute(':for')
   )

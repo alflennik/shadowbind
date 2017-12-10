@@ -1,11 +1,12 @@
 const path = require('path')
+const UglifyJSPlugin = require('uglifyjs-webpack-plugin')
 
 module.exports = {
-  entry: {
-    tests: './spec/src/components.js',
-    shadowbind: './src/index.js'
-  },
+  entry: './src/index.js',
   output: {
-    filename: '[name].js', path: path.resolve(__dirname, 'dist')
-  }
+    filename: 'shadowbind.js', path: path.resolve(__dirname, 'dist')
+  },
+  plugins: [
+    new UglifyJSPlugin()
+  ]
 }

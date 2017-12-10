@@ -1,10 +1,10 @@
 import trace from './trace.js'
-import * as repeaterState from '../lib/repeaters/repeaterState.js'
 import walkFragment from '../util/walkFragment.js'
 import walkElement from '../util/walkElement.js'
 import parseAttribute from './parseAttribute.js'
 import bindElement from './bindElement.js'
-import repeaterBind from './repeaters/bind.js'
+import * as repeaterState from '../lib/repeaters/repeaterState.js'
+import applyRepeater from './repeaters/apply.js'
 import repeaterInitialize from './repeaters/initialize.js'
 
 // Apply the state to the element's shadowDom
@@ -18,11 +18,11 @@ export default function bindComponent (component, bindings) {
       const prependElement = element.nextSibling
       repeatId = repeaterInitialize(element)
 
-      return repeaterBind({
+      return applyRepeater({
         component,
         repeatId,
         prependElement,
-        bindings
+        localBindings: repeaterState.current()
       })
     }
 

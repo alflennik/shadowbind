@@ -1,6 +1,10 @@
-import { repeaterCount } from './initialize.js'
+let repeaterCount = 0
 
-export default function repeaterId (element, type) {
+export function nextId () {
+  repeaterCount++
+}
+
+export function setId (element) {
   let repeaterCounter = `r${repeaterCount}`
   for (let attr of element.attributes) {
     if (!attr.name) continue

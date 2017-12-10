@@ -1,17 +1,15 @@
-import { repeaters, repeaterCount } from './initialize.js'
-import getId from './getId.js'
+import { repeaters } from './initialize.js'
+import { setId, nextId } from './setId.js'
 import { el, elAll } from '../../util/selectors.js'
 
-// Create, move, remove, modify and databind a repeater
-export default function repeaterBind ({
+// Create, move, remove and modify a repeater
+export default function applyRepeater ({
   component,
   repeatId,
   prependElement,
-  repeaterState,
-  bindings,
-  callback
+  localBindings
 } = {}) {
-  repeaterCount++
+  nextId()
   const { loopKey, uniqueId, parent, example } = repeaters[repeatId]
   let currentItems
 
@@ -23,9 +21,7 @@ export default function repeaterBind ({
     currentItems = []
   }
 
-  repeaterState.startRepeater(bindings[loopKey])
-  console.log(bindings)
-  for (const item of repeaterState.current()[loopKey]) {
+  for (const item of localBindings[loopKey]) {
     let element
 
     if (currentItems.includes(item[uniqueId] + '')) {
@@ -36,13 +32,10 @@ export default function repeaterBind ({
 
     parent.insertBefore(element, prependElement)
     element.setAttribute('key', item[uniqueId])
-    getId(element)
-    callback(element, repeaterState.current())
-    repeaterState.incrementRepeater()
+    setId(element)
   }
-  repeaterState.endRepeater()
 
-  const newRepeatId = getId(example)
+  const newRepeatId = setId(example)
 
   if (repeatId) {
     elAll(`[${repeatId}]`, component.shadowRoot)
@@ -52,7 +45,7 @@ export default function repeaterBind ({
   if (elAll(`[${newRepeatId}]`, component.shadowRoot).length === 0) {
     let placeholder = document.createElement('span')
     placeholder.setAttribute('sb:repeat', '')
-    getId(placeholder)
+    setId(placeholder)
     parent.insertBefore(placeholder, prependElement)
   }
 
