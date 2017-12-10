@@ -1,4 +1,4 @@
-import { trace as getTrace } from '../globals.js'
+import getTrace from './trace.js'
 
 export default function error (code, errorMessage, notes) {
   const trace = getTrace.get()

@@ -1,4 +1,4 @@
-import { trace } from '../globals.js'
+import trace from '../lib/trace.js'
 import error from '../lib/error.js'
 
 // Run callback on every element in the shadowDom, applying repeaters as needed

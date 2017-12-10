@@ -1,9 +1,11 @@
-import { trace, events } from '../globals.js'
 import { bindMethodUsed } from '../publish.js'
+import trace from './trace.js'
 import error from './error.js'
 import applyDots from './applyDots.js'
 import getType from '../util/getType.js'
 import { getDomKey, setDomKey } from './domKey.js'
+
+let events = {}
 
 // Apply data-binding to a particular element
 export default function bindElement (element, localBindings, parsedAttribute) {

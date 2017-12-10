@@ -1,11 +1,14 @@
-import { repeaters, repeaterCount } from '../globals.js' // eslint-disable-line
-import repeaterId from './repeaterId.js'
+import getId from './getId.js'
+
+let repeaterCount = 0
+let repeaters = {}
+export { repeaterCount, repeaters }
 
 // Remove the user's repeater element and store the instructions for later
 export default function repeaterInitialize (example) {
   repeaterCount++
   const parent = example.parentNode
-  const repeatId = repeaterId(example)
+  const repeatId = getId(example)
   const matches = /^([^ ]{1,}) of ([^ ]{1,})$/.exec(
     example.getAttribute(':for')
   )

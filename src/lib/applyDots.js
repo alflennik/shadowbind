@@ -1,4 +1,4 @@
-import { trace } from '../globals.js' // eslint-disable-line
+import trace from './trace.js'
 import error from './error.js'
 
 export default function applyDots (

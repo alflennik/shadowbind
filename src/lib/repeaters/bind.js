@@ -1,6 +1,6 @@
-import { repeaters, repeaterCount } from '../globals.js' // eslint-disable-line
-import { el, elAll } from '../util/selectors.js'
-import repeaterId from './repeaterId.js'
+import { repeaters, repeaterCount } from './initialize.js'
+import getId from './getId.js'
+import { el, elAll } from '../../util/selectors.js'
 
 // Create, move, remove, modify and databind a repeater
 export default function repeaterBind ({
@@ -36,13 +36,13 @@ export default function repeaterBind ({
 
     parent.insertBefore(element, prependElement)
     element.setAttribute('key', item[uniqueId])
-    repeaterId(element)
+    getId(element)
     callback(element, repeaterState.current())
     repeaterState.incrementRepeater()
   }
   repeaterState.endRepeater()
 
-  const newRepeatId = repeaterId(example)
+  const newRepeatId = getId(example)
 
   if (repeatId) {
     elAll(`[${repeatId}]`, component.shadowRoot)
@@ -52,7 +52,7 @@ export default function repeaterBind ({
   if (elAll(`[${newRepeatId}]`, component.shadowRoot).length === 0) {
     let placeholder = document.createElement('span')
     placeholder.setAttribute('sb:repeat', '')
-    repeaterId(placeholder)
+    getId(placeholder)
     parent.insertBefore(placeholder, prependElement)
   }
 

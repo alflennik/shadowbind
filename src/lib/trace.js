@@ -1,7 +1,3 @@
-let events = {}
-let repeaterCount = 0
-let repeaters = {}
-
 function Trace () {
   let stackTrace = {}
   return {
@@ -23,9 +19,4 @@ function Trace () {
 
 const trace = Trace()
 
-export {
-  events,
-  repeaterCount,
-  repeaters,
-  trace
-}
+export default trace

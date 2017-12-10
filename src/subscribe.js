@@ -1,5 +1,4 @@
-// eslint-disable-next-line
-import { trace } from './globals.js'
+import trace from './lib/trace.js'
 import error from './lib/error.js'
 import getType from './util/getType.js'
 

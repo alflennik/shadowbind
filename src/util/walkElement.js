@@ -1,4 +1,4 @@
-import { trace } from '../globals.js'
+import trace from '../lib/trace.js'
 
 // Run callback on every attribute of a dom element
 export default function walkElement (element, callback) {

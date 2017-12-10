@@ -1,11 +1,11 @@
-import { trace } from '../globals.js'
-import * as repeaterState from '../lib/repeaterState.js'
+import trace from './trace.js'
+import * as repeaterState from '../lib/repeaters/repeaterState.js'
 import walkFragment from '../util/walkFragment.js'
 import walkElement from '../util/walkElement.js'
 import parseAttribute from './parseAttribute.js'
 import bindElement from './bindElement.js'
-import repeaterBind from './repeaterBind.js'
-import repeaterInitialize from './repeaterInitialize.js'
+import repeaterBind from './repeaters/bind.js'
+import repeaterInitialize from './repeaters/initialize.js'
 
 // Apply the state to the element's shadowDom
 export default function bindComponent (component, bindings) {
