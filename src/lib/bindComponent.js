@@ -19,7 +19,7 @@ export default function bindComponent (component, bindings) {
       return
     }
 
-    trackRepeaters(element)
+    const newRepeater = trackRepeaters(component, element)
     trace.add('element', element)
 
     walkElement(element, attribute => {
@@ -37,6 +37,7 @@ export default function bindComponent (component, bindings) {
 
 function firstAppearanceOfRepeater (component, element) {
   const prependElement = element.nextSibling
+  console.log('first appearance')
   const repeatId = repeaterInitialize(element)
 
   return applyRepeater({
@@ -47,8 +48,8 @@ function firstAppearanceOfRepeater (component, element) {
   })
 }
 
-function trackRepeaters (element) {
-  const repeaterId = (() => {
+function trackRepeaters (component, element) {
+  const repeatId = (() => {
     for (let attr of element.attributes) {
       const matches = /^(sb:r\d+)$/.exec(attr.name)
       if (matches) return matches[1]
@@ -56,7 +57,7 @@ function trackRepeaters (element) {
   })()
 
   if (
-    !repeaterId &&
+    !repeatId &&
     currentRepeater &&
     element.previousElementSibling &&
     element.previousElementSibling.getAttribute(currentRepeater) !== null
@@ -66,15 +67,23 @@ function trackRepeaters (element) {
     return
   }
 
-  if (!repeaterId) return
+  if (!repeatId) return
 
-  if (repeaterId === currentRepeater) {
+  if (repeatId === currentRepeater) {
     repeaterState.incrementRepeater()
     return
   }
 
-  const repeater = repeaters[repeaterId]
-  currentRepeater = repeaterId
+  const repeater = repeaters[repeatId]
+  currentRepeater = repeatId
   if (currentRepeater) repeaterState.endRepeater()
   repeaterState.startRepeater(repeater.as, repeater.loopKey)
+
+  applyRepeater({
+    component,
+    repeatId,
+    prependElement: element.nextSibling,
+    localBindings: repeaterState.current()
+  })
+  return true
 }

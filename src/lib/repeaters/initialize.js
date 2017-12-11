@@ -5,6 +5,7 @@ export { repeaters }
 
 // Remove the user's repeater element and store the instructions for later
 export default function repeaterInitialize (example) {
+  console.log('next (initialize)')
   nextId()
   const parent = example.parentNode
   const repeatId = setId(example)

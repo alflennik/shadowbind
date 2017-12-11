@@ -9,6 +9,7 @@ export default function applyRepeater ({
   prependElement,
   localBindings
 } = {}) {
+  console.log('next (apply)')
   nextId()
   const { loopKey, uniqueId, parent, example } = repeaters[repeatId]
   let currentItems
@@ -30,6 +31,7 @@ export default function applyRepeater ({
       element = example.cloneNode(true)
     }
 
+    debugger
     parent.insertBefore(element, prependElement)
     element.setAttribute('key', item[uniqueId])
     setId(element)
