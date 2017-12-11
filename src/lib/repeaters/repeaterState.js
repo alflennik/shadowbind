@@ -1,6 +1,7 @@
 // Keep track of bound state as it is altered by nested repeaters
 
-let repeaters = []
+let repeaterData = []
+let repeaterNames = []
 let repeaterCounts = []
 let bindings
 
@@ -10,15 +11,19 @@ export function newBindings (theNewBindings) {
 
 export function current () {
   let localBindings = Object.assign({}, bindings)
-  for (let i = 0; i < repeaters.length; i++) {
-    const repeater = repeaters[i][repeaterCounts[i]]
-    localBindings = Object.assign(localBindings, repeater)
+  for (let i = 0; i < repeaterData.length; i++) {
+    const data = repeaterData[i][repeaterCounts[i]]
+    const name = repeaterNames[i]
+    let newBindings = {}
+    newBindings[name] = data
+    localBindings = Object.assign(localBindings, newBindings)
   }
   return localBindings
 }
 
-export function startRepeater (bindings) {
-  repeaters.push(bindings)
+export function startRepeater (name, loopKey) {
+  repeaterNames.push(name)
+  repeaterData.push(bindings[loopKey])
   repeaterCounts.push(0)
 }
 
@@ -27,6 +32,7 @@ export function incrementRepeater () {
 }
 
 export function endRepeater () {
-  repeaters.splice(-1)
+  repeaterNames.splice(-1)
+  repeaterData.splice(-1)
   repeaterCounts.splice(-1)
 }

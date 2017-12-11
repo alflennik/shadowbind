@@ -5,9 +5,8 @@ template.innerHTML = /* @html */`
   <style>:host li { list-style-type: none }</style>
   <h2 :text="beforeText"></h2>
   <li :for="location of locations" :key="name">
-    <!-- <h2 :text="name"></h2> -->
-    <h2 :text="beforeText"></h2>
-    <p>Population <span :text="population"></span></p>
+    <h2 :text="location.name"></h2>
+    <p>Population <span :text="location.population"></span></p>
   </li>
   <h2 :text="afterText"></h2>
 `
