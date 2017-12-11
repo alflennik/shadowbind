@@ -5,10 +5,10 @@ export function nextId () {
 }
 
 export function setId (element) {
-  let repeaterCounter = `r${repeaterCount}`
+  let repeaterCounter = `sb:r${repeaterCount}`
   for (let attr of element.attributes) {
     if (!attr.name) continue
-    let match = /^(r\d+)$/.exec(attr.name)
+    let match = /^(sb:r\d+)$/.exec(attr.name)
     if (match) element.removeAttribute(attr.name)
   }
   element.setAttribute(repeaterCounter, '')
