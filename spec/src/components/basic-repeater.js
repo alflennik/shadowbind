@@ -34,16 +34,15 @@ class BasicRepeater extends HTMLElement { // eslint-disable-line
   }
 
   async getExpected () {
-    const root = this.shadowRoot
     return {
-      beforeText: root.querySelector('#beforeText').innerText,
-      seattleName: root.querySelector('.looped:nth-of-type(1) h2').innerText,
-      seattlePop: root.querySelector('.looped:nth-of-type(1) span').innerText,
-      tacomaName: root.querySelector('.looped:nth-of-type(2) h2').innerText,
-      tacomaPop: root.querySelector('.looped:nth-of-type(2) span').innerText,
-      orchardName: root.querySelector('.looped:nth-of-type(3) h2').innerText,
-      orchardPop: root.querySelector('.looped:nth-of-type(3) span').innerText,
-      afterText: root.querySelector('#afterText').innerText
+      beforeText: 'Before the Repeater',
+      seattleName: 'Seattle',
+      seattlePop: '1 million',
+      tacomaName: 'Tacoma',
+      tacomaPop: '400 thousand',
+      orchardName: 'Port Orchard',
+      orchardPop: '80 thousand',
+      afterText: 'After the Repeater'
     }
   }
 
@@ -58,15 +57,16 @@ class BasicRepeater extends HTMLElement { // eslint-disable-line
       afterText: 'After the Repeater'
     })
 
+    const root = this.shadowRoot
     return {
-      beforeText: 'Before the Repeater',
-      seattleName: 'Seattle',
-      seattlePop: '1 million',
-      tacomaName: 'Tacoma',
-      tacomaPop: '400 thousand',
-      orchardName: 'Port Orchard',
-      orchardPop: '80 thousand',
-      afterText: 'After the Repeater'
+      beforeText: root.querySelector('#beforeText').innerText,
+      seattleName: root.querySelector('.looped:nth-of-type(1) h2').innerText,
+      seattlePop: root.querySelector('.looped:nth-of-type(1) span').innerText,
+      tacomaName: root.querySelector('.looped:nth-of-type(2) h2').innerText,
+      tacomaPop: root.querySelector('.looped:nth-of-type(2) span').innerText,
+      orchardName: root.querySelector('.looped:nth-of-type(3) h2').innerText,
+      orchardPop: root.querySelector('.looped:nth-of-type(3) span').innerText,
+      afterText: root.querySelector('#afterText').innerText
     }
   }
 }

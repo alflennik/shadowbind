@@ -5,8 +5,8 @@ export { repeaters }
 
 // Remove the user's repeater element and store the instructions for later
 export default function repeaterInitialize (example) {
-  console.log('next (initialize)')
   nextId()
+  const prependElement = example.nextElementSibling
   const parent = example.parentNode
   const repeatId = setId(example)
   const matches = /^([^ ]{1,}) of ([^ ]{1,})$/.exec(
@@ -26,5 +26,5 @@ export default function repeaterInitialize (example) {
     })()
   }
 
-  return repeatId
+  parent.insertBefore(example.cloneNode(true), prependElement)
 }

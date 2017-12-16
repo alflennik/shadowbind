@@ -15,11 +15,11 @@ export default function bindComponent (component, bindings) {
 
   walkFragment(component, element => {
     if (element.getAttribute(':for')) {
-      firstAppearanceOfRepeater(component, element)
-      return
+      return repeaterInitialize(element)
+    } else {
+      trackRepeaters(component, element)
     }
 
-    const newRepeater = trackRepeaters(component, element)
     trace.add('element', element)
 
     walkElement(element, attribute => {
@@ -35,23 +35,10 @@ export default function bindComponent (component, bindings) {
   })
 }
 
-function firstAppearanceOfRepeater (component, element) {
-  const prependElement = element.nextSibling
-  console.log('first appearance')
-  const repeatId = repeaterInitialize(element)
-
-  return applyRepeater({
-    component,
-    repeatId,
-    prependElement,
-    localBindings: repeaterState.current()
-  })
-}
-
 function trackRepeaters (component, element) {
   const repeatId = (() => {
     for (let attr of element.attributes) {
-      const matches = /^(sb:r\d+)$/.exec(attr.name)
+      const matches = /^(r\d+)$/.exec(attr.name)
       if (matches) return matches[1]
     }
   })()
@@ -75,15 +62,13 @@ function trackRepeaters (component, element) {
   }
 
   const repeater = repeaters[repeatId]
-  currentRepeater = repeatId
   if (currentRepeater) repeaterState.endRepeater()
   repeaterState.startRepeater(repeater.as, repeater.loopKey)
 
-  applyRepeater({
+  currentRepeater = applyRepeater({
     component,
     repeatId,
     prependElement: element.nextSibling,
     localBindings: repeaterState.current()
   })
-  return true
 }

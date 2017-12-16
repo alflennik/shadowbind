@@ -9,7 +9,6 @@ export default function applyRepeater ({
   prependElement,
   localBindings
 } = {}) {
-  console.log('next (apply)')
   nextId()
   const { loopKey, uniqueId, parent, example } = repeaters[repeatId]
   let currentItems
@@ -26,12 +25,13 @@ export default function applyRepeater ({
     let element
 
     if (currentItems.includes(item[uniqueId] + '')) {
-      element = el(`[key="${item[uniqueId]}"][${repeatId}]`)
+      element = component.shadowRoot.querySelector(
+        `[key="${item[uniqueId]}"][${repeatId}]`
+      )
     } else {
       element = example.cloneNode(true)
     }
 
-    debugger
     parent.insertBefore(element, prependElement)
     element.setAttribute('key', item[uniqueId])
     setId(element)
@@ -53,4 +53,5 @@ export default function applyRepeater ({
 
   repeaters[newRepeatId] = repeaters[repeatId]
   delete repeaters[repeatId]
+  return newRepeatId
 }

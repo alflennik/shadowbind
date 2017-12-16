@@ -24,7 +24,7 @@ export function current () {
 export function startRepeater (name, loopKey) {
   repeaterNames.push(name)
   repeaterData.push(bindings[loopKey])
-  repeaterCounts.push(0)
+  repeaterCounts.push(-1) // increment called once before the first element
 }
 
 export function incrementRepeater () {
