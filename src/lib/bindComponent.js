@@ -1,5 +1,3 @@
-// import repeaterBind from './repeaters/bindElement.js'
-// import * as repeaterState from './repeaters/repeaterState.js'
 import walkFragment from '../util/walkFragment.js'
 import bindElement from './bindElement.js'
 import trace from './trace.js'

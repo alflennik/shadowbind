@@ -1,6 +1,7 @@
 import { bindMethodUsed } from '../publish.js'
 import trace from './trace.js'
 import error from './error.js'
+import bindComponent from './bindComponent.js'
 import applyDots from './applyDots.js'
 import getType from '../util/getType.js'
 import { getDomKey, setDomKey } from './domKey.js'
@@ -121,6 +122,28 @@ export default function bindAttribute (
       }
 
       trace.remove('cssProp')
+      break
+
+    case 'for':
+      if (getType(value) !== 'array') {
+        error(
+          'shadowbind_for_type',
+          `"${key}" must be an array when using ":for", but it was ` +
+            `"${getType(value)}"`
+        )
+      }
+
+      if (!element.shadowRoot) {
+        error(
+          'shadowbind_for_without_shadow_root',
+          `":for" must be used on an element with a shadowRoot`
+        )
+      }
+      debugger
+
+      let newBindings = value[0]
+      if (element.bind) newBindings = element.bind(value[0])
+      bindComponent(element, newBindings)
       break
   }
 }

@@ -7,13 +7,22 @@ class BasicRepeater extends HTMLElement { // eslint-disable-line
     this.attachShadow({ mode: 'open' })
     this.shadowRoot.innerHTML = /* @html */`
     <h2 :text="beforeText" id="beforeText"></h2>
-    <repeat-element :for="locations"></repeat-element>
+    <repeat-element :for="locations" class="loop"></repeat-element>
     <h2 :text="afterText" id="afterText"></h2>
     `
   }
 
   async getExpected () {
-    return true
+    return {
+      seattle: 'Seattle',
+      seattlePop: '1,000,000',
+      portland: 'Portland',
+      portlandPop: '900,000',
+      tokyo: 'Tokyo',
+      tokyoPop: '24,000,000',
+      beforeText: 'Before the Locations',
+      afterText: 'After the Locations'
+    }
   }
 
   async getActual () {
@@ -26,7 +35,18 @@ class BasicRepeater extends HTMLElement { // eslint-disable-line
       ],
       afterText: 'After the Locations'
     })
-    return false
+
+    const r = this.shadowRoot
+    const r1 = this.shadowRoot.querySelector('.loop:nth-of-type(1)').shadowRoot
+    // const r2 = this.shadowRoot.querySelector('.loop:nth-of-type(2)').shadowRoot
+    // const r3 = this.shadowRoot.querySelector('.loop:nth-of-type(3)').shadowRoot
+
+    return {
+      seattle: r1.querySelector('h2').innerText,
+      seattlePop: r1.querySelector('span').innerText,
+      beforeText: r.querySelector('#beforeText').innerText,
+      afterText: r.querySelector('#afterText').innerText
+    }
   }
 }
 
@@ -34,10 +54,9 @@ class RepeatElement extends HTMLElement { // eslint-disable-line
   constructor () {
     super()
     this.attachShadow({ mode: 'open' })
-    this.innerHTML = /* @html */`
+    this.shadowRoot.innerHTML = /* @html */`
     <h2 :text="name"></h2>
-    <p>Population: <span :text="population"></span></p>
-    `
+    <p>Population: <span :text="population"></span></p>`
   }
 }
 

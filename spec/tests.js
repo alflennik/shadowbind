@@ -32,6 +32,10 @@ test('error if bind does not return an object', async t => {
   t.deepEqual(...(await server.test('bind-type')))
 })
 
+test('bind a nested web component', async t => {
+  t.deepEqual(...(await server.test('bind-nested')))
+})
+
 test('error if state key begins or ends with dot', async t => {
   t.deepEqual(...(await server.test('state-key-invalid')))
 })
@@ -70,4 +74,8 @@ test('error if css binding not an object', async t => {
 
 test('successfully bind a basic repeater', async t => {
   t.deepEqual(...(await server.test('basic-repeater')))
+})
+
+test('successfully bind a basic repeater', async t => {
+  t.deepEqual(...(await server.test('repeater-type')))
 })

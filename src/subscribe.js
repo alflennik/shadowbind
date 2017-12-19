@@ -1,5 +1,6 @@
 import trace from './lib/trace.js'
 import error from './lib/error.js'
+import attachPublish from './lib/attachPublish.js'
 import getType from './util/getType.js'
 
 let components = []
@@ -25,6 +26,8 @@ export default function subscribe (component, stateKey) {
         'connectedCallback method of a web component'
     )
   }
+
+  attachPublish(component)
 
   components.push({ component, stateKey })
 }

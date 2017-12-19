@@ -17,6 +17,7 @@ export default function walkFragment (component, callback) {
     }
 
     previousNode = node
+    if (node.shadowRoot) return // do not walk into shadowRoots
     node = node.firstChild
 
     while (node) {
@@ -32,7 +33,6 @@ export default function walkFragment (component, callback) {
   }
 
   if (!component.shadowRoot) shadowRootError(component)
-
   recursiveWalk(component.shadowRoot)
 }
 
