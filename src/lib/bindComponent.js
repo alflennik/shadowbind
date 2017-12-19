@@ -1,74 +1,25 @@
-import trace from './trace.js'
+import repeaterBind from './repeaters/bindElement.js'
+import * as repeaterState from './repeaters/repeaterState.js'
 import walkFragment from '../util/walkFragment.js'
-import walkElement from '../util/walkElement.js'
-import parseAttribute from './parseAttribute.js'
-import bindElement from './bindElement.js'
-import * as repeaterState from '../lib/repeaters/repeaterState.js'
-import applyRepeater from './repeaters/apply.js'
-import repeaterInitialize, { repeaters } from './repeaters/initialize.js'
+import bindElement from '../util/bindElement.js'
+import trace from './trace.js'
 
-let currentRepeater
+let bindNextElement
 
-// Apply the state to the element's shadowDom
 export default function bindComponent (component, bindings) {
   repeaterState.newBindings(bindings)
 
   walkFragment(component, element => {
-    if (element.getAttribute(':for')) {
-      return repeaterInitialize(element)
-    } else {
-      trackRepeaters(component, element)
-    }
-
     trace.add('element', element)
+    // Apply repeaters one element in advance
+    const nextElement = element.nextElementSibling
+    const doNotBind = nextElement
+      ? repeaterBind(component, nextElement).doNotBind
+      : false
 
-    walkElement(element, attribute => {
-      trace.add('attribute', attribute)
-      const parsedAttribute = parseAttribute(attribute)
-      if (parsedAttribute) {
-        bindElement(element, repeaterState.current(), parsedAttribute)
-      }
-    })
-
-    trace.remove('attribute')
-    trace.remove('element')
+    if (bindNextElement) bindElement(element)
+    bindNextElement = !doNotBind
   })
-}
 
-function trackRepeaters (component, element) {
-  const repeatId = (() => {
-    for (let attr of element.attributes) {
-      const matches = /^(r\d+)$/.exec(attr.name)
-      if (matches) return matches[1]
-    }
-  })()
-
-  if (
-    !repeatId &&
-    currentRepeater &&
-    element.previousElementSibling &&
-    element.previousElementSibling.getAttribute(currentRepeater) !== null
-  ) {
-    currentRepeater = null
-    repeaterState.endRepeater()
-    return
-  }
-
-  if (!repeatId) return
-
-  if (repeatId === currentRepeater) {
-    repeaterState.incrementRepeater()
-    return
-  }
-
-  const repeater = repeaters[repeatId]
-  if (currentRepeater) repeaterState.endRepeater()
-  repeaterState.startRepeater(repeater.as, repeater.loopKey)
-
-  currentRepeater = applyRepeater({
-    component,
-    repeatId,
-    prependElement: element.nextSibling,
-    localBindings: repeaterState.current()
-  })
+  trace.remove('element')
 }

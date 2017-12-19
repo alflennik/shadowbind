@@ -22,17 +22,6 @@ class BasicRepeater extends HTMLElement { // eslint-disable-line
     subscribe(this)
   }
 
-  test (testText) {
-    publish({
-      beforeText: 'Before the Repeater',
-      locations: [
-        { name: 'Tacoma', population: '400 thousand' },
-        { name: 'Port Orchard', population: testText }
-      ],
-      afterText: 'After the Repeater'
-    })
-  }
-
   async getExpected () {
     return {
       beforeText: 'Before the Repeater',
