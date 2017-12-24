@@ -67,12 +67,10 @@ function PartOfRepeat (element) {
 function currentRepeaterElements (element) {
   const partOfRepeat = PartOfRepeat(element)
   let elements = []
-  let deadManSwitch = 0
   do {
-    deadManSwitch++
     elements.push(element)
     element = element.nextElementSibling
-  } while (partOfRepeat(element) || deadManSwitch === 500)
+  } while (partOfRepeat(element))
 
   return elements
 }
