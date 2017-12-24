@@ -52,6 +52,7 @@ export default function bindRepeater (element, key, value) {
 
 function firstElementInRepeat (element) {
   const partOfRepeat = PartOfRepeat(element)
+  if (element.previousElementSibling === null) return true
   return !partOfRepeat(element.previousElementSibling)
 }
 
