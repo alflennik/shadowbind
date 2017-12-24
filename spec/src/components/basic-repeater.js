@@ -38,12 +38,16 @@ class BasicRepeater extends HTMLElement { // eslint-disable-line
 
     const r = this.shadowRoot
     const r1 = this.shadowRoot.querySelector('.loop:nth-of-type(1)').shadowRoot
-    // const r2 = this.shadowRoot.querySelector('.loop:nth-of-type(2)').shadowRoot
-    // const r3 = this.shadowRoot.querySelector('.loop:nth-of-type(3)').shadowRoot
+    const r2 = this.shadowRoot.querySelector('.loop:nth-of-type(2)').shadowRoot
+    const r3 = this.shadowRoot.querySelector('.loop:nth-of-type(3)').shadowRoot
 
     return {
       seattle: r1.querySelector('h2').innerText,
       seattlePop: r1.querySelector('span').innerText,
+      portland: r2.querySelector('h2').innerText,
+      portlandPop: r2.querySelector('span').innerText,
+      tokyo: r3.querySelector('h2').innerText,
+      tokyoPop: r3.querySelector('span').innerText,
       beforeText: r.querySelector('#beforeText').innerText,
       afterText: r.querySelector('#afterText').innerText
     }
