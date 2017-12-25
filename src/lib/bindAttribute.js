@@ -66,11 +66,11 @@ export default function bindAttribute (
 
     case 'text':
     case 'html':
-      if (!(getType(value) === 'string' || getType(value) === 'null')) {
+      if (!['string', 'number', 'null'].includes(getType(value))) {
         error(
           'shadowbind_inner_content_type',
-          `"${key}" must be a string (or null) when binding to inner ` +
-            `${type}, but it was "${getType(value)}"`
+          `"${key}" must be a string or number (or null) when binding to ` +
+            `inner ${type}, but it was "${getType(value)}"`
         )
       }
 
