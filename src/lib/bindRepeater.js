@@ -5,9 +5,11 @@ import bindComponent from './bindComponent.js'
 let emptyExamples = {}
 let placeholderId = 0
 
-export default function bindRepeater (element, key, value) {
+export default function bindRepeater (element, bindings) {
   const emptyRepeaterId = getEmptyRepeaterId(element)
   if (!firstElementInRepeat(element) && !emptyRepeaterId) return
+
+  const { key, value } = loadKeyValue(element, emptyRepeaterId, bindings)
 
   if (getType(value) !== 'array') {
     error(
@@ -22,20 +24,16 @@ export default function bindRepeater (element, key, value) {
   const expectedCount = value.length
 
   if (currentCount < expectedCount) {
-    const example = (() => {
-      if (emptyRepeaterId) return emptyExamples[emptyRepeaterId]
-      return element
-    })()
-
-    const prependElement = element.nextElementSibling
     const count = expectedCount - currentCount
-
-    createElements(example, prependElement, element.parentNode, count)
+    element = createElements(element, elements, emptyRepeaterId, count)
   } else if (currentCount > expectedCount) {
-    removeElements(elements, element.parentNode, expectedCount - currentCount)
+    removeElements(elements, element.parentNode, currentCount - expectedCount)
   }
 
-  if (expectedCount > 0 && !element.shadowRoot) {
+  if (expectedCount === 0) return
+
+  if (!element.shadowRoot) {
+    debugger
     error(
       'shadowbind_for_without_shadow_root',
       `":for" must be used on an element with a shadowRoot`
@@ -51,6 +49,7 @@ export default function bindRepeater (element, key, value) {
 }
 
 function firstElementInRepeat (element) {
+  if (!element.getAttribute(':for')) return false
   const partOfRepeat = PartOfRepeat(element)
   if (element.previousElementSibling === null) return true
   return !partOfRepeat(element.previousElementSibling)
@@ -59,9 +58,19 @@ function firstElementInRepeat (element) {
 function PartOfRepeat (element) {
   const elementKey = element.getAttribute(':for')
   return compare => {
+    if (compare === null) return false
     const key = compare.getAttribute(':for')
     return elementKey === key
   }
+}
+
+function loadKeyValue (element, emptyRepeaterId, bindings) {
+  const key = (() => {
+    if (!emptyRepeaterId) return element.getAttribute(':for')
+    return emptyExamples[emptyRepeaterId].getAttribute(':for')
+  })()
+  const value = bindings[key]
+  return { key, value }
 }
 
 function currentRepeaterElements (element) {
@@ -79,11 +88,31 @@ function getEmptyRepeaterId (element) {
   return element.getAttribute('sb:r')
 }
 
-function createElements (example, prependElement, parent, count) {
+function createElements (element, elements, emptyRepeaterId, count) {
+  const example = (() => {
+    if (emptyRepeaterId) return emptyExamples[emptyRepeaterId]
+    return element
+  })()
+
+  const prependElement = (() => {
+    if (emptyRepeaterId) return element.nextElementSibling
+    return elements[elements.length - 1].nextElementSibling
+  })()
+
+  const previousElement = element.previousElementSibling
+  const parent = previousElement ? null : element.parentNode
+
   for (let i = 0; i < count; i++) {
     const newElement = example.cloneNode(true)
     parent.insertBefore(newElement, prependElement)
   }
+
+  if (emptyRepeaterId) {
+    parent.removeChild(element)
+    if (!previousElement) return parent.firstElementChild
+    return previousElement.nextElementSibling
+  }
+  return element
 }
 
 function removeElements (elements, parent, count) {
