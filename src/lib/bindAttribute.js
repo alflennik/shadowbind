@@ -3,6 +3,7 @@ import trace from './trace.js'
 import error from './error.js'
 import applyDots from './applyDots.js'
 import getType from '../util/getType.js'
+import toCamelCase from '../util/toCamelCase.js'
 import { getDomKey, setDomKey } from './domKey.js'
 
 let events = {}
@@ -62,7 +63,25 @@ export default function bindAttribute (
       break
 
     case 'prop':
-      throw new Error('not implemented')
+      const camelCaseParam = toCamelCase(param)
+      const methodType = getType(element[camelCaseParam])
+
+      if (methodType !== 'function') {
+        if (methodType === 'undefined') {
+          error(
+            'shadowbind_prop_undefined',
+            `Cannot call prop "${camelCaseParam}" because it is undefined`
+          )
+        }
+        error(
+          'shadowbind_prop_type',
+          `Prop "${camelCaseParam}" must be a function, but it is type ` +
+            `${methodType}`
+        )
+      }
+
+      element[camelCaseParam](value)
+      break
 
     case 'text':
     case 'html':
