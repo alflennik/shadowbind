@@ -25,10 +25,17 @@ export default function publish (state) {
 
     let bindings
     const localState = applyStateKey(state, stateKey)
-    trace.add('subscribedState', localState)
 
-    if (getType(component.bind) !== 'undefined') {
+    if (component.bind) {
+      if (getType(component.bind) !== 'function') {
+        error(
+          'shadowbind_bind_property_type',
+          'A bind property was set on the component, but it was ' +
+            `"${getType(component.bind)}" instead of type "function"`
+        )
+      }
       bindings = component.bind(localState)
+      trace.add('subscribedState', localState)
       trace.add('bindReturned', bindings)
       bindMethodUsed = true
       if (getType(bindings) !== 'object') {
@@ -44,8 +51,8 @@ export default function publish (state) {
     }
 
     bindComponent(component, bindings)
-    trace.remove('subscribedState')
     trace.remove('bindReturned')
+    trace.remove('subscribedState')
   }
   previousState = state
 }

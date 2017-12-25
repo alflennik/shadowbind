@@ -33,7 +33,6 @@ export default function bindRepeater (element, bindings) {
   if (expectedCount === 0) return
 
   if (!element.shadowRoot) {
-    debugger
     error(
       'shadowbind_for_without_shadow_root',
       `":for" must be used on an element with a shadowRoot`
@@ -42,7 +41,16 @@ export default function bindRepeater (element, bindings) {
 
   for (let i = 0; i < expectedCount; i++) {
     let newBindings = value[i]
-    if (element.bind) newBindings = element.bind(value[i])
+    if (element.bind) {
+      if (getType(element.bind) !== 'function') {
+        error(
+          'shadowbind_for_bind_type',
+          'The component bind method was defined as ' +
+            `"${getType(element.bind)}" but it must be a function`
+        )
+      }
+      newBindings = element.bind(value[i])
+    }
     bindComponent(element, newBindings)
     element = element.nextElementSibling
   }
@@ -100,7 +108,7 @@ function createElements (element, elements, emptyRepeaterId, count) {
   })()
 
   const previousElement = element.previousElementSibling
-  const parent = previousElement ? null : element.parentNode
+  const parent = element.parentNode
 
   for (let i = 0; i < count; i++) {
     const newElement = example.cloneNode(true)
