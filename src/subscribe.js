@@ -7,7 +7,7 @@ let components = []
 export { components }
 
 // Track subscribed web components
-export default function subscribe (component, stateKey) {
+export function subscribe (component, stateKey) {
   trace.reset()
   if (!arguments.length) {
     error(
@@ -30,4 +30,8 @@ export default function subscribe (component, stateKey) {
   attachPublish(component)
 
   components.push({ component, stateKey })
+}
+
+export function unsubscribe (component) {
+  components = components.filter(prev => !prev.component.isSameNode(component))
 }

@@ -1,4 +1,4 @@
 import publish from './publish.js'
-import subscribe from './subscribe.js'
+import { subscribe, unsubscribe } from './subscribe.js'
 
-export { publish, subscribe }
+export { publish, subscribe, unsubscribe }
