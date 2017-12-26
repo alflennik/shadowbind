@@ -10,7 +10,6 @@ export default function bindElement (element, bindings) {
     if (parsedAttribute) {
       bindAttribute(element, bindings, parsedAttribute)
     }
+    trace.remove('attribute')
   })
-
-  trace.remove('attribute')
 }

@@ -30,7 +30,7 @@ class RepeaterBindType extends HTMLElement { // eslint-disable-line
   }
 
   getExpected () {
-    return 'shadowbind_for_bind_type'
+    return 'shadowbind_bind_property_type'
   }
 }
 
