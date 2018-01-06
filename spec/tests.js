@@ -16,6 +16,14 @@ test('error if array or object bound to attribute or html', async t => {
   t.deepEqual(...(await server.test('bind-array')))
 })
 
+test('binds events with on:click', async t => {
+  t.deepEqual(...(await server.test('bind-events')))
+})
+
+test('binds multiple events with on:click,touchstart', async t => {
+  t.deepEqual(...(await server.test('bind-events-advanced')))
+})
+
 test('error if key not found in nested localBindings', async t => {
   t.deepEqual(...(await server.test('bind-key-not-found-deep')))
 })

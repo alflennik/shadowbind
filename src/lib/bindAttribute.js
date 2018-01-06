@@ -103,15 +103,15 @@ export default function bindAttribute (
         )
       }
 
-      param.split(',').forEach(trigger => {
-        if (
-          !(element.shadowbindData && element.shadowbindData.eventsAlreadyBound)
-        ) {
+      if (
+        !(element.shadowbindData && element.shadowbindData.eventsAlreadyBound)
+      ) {
+        param.split(',').forEach(trigger => {
           element.addEventListener(trigger, value)
           if (!element.shadowbindData) element.shadowbindData = {}
           element.shadowbindData.eventsAlreadyBound = true
-        }
-      })
+        })
+      }
       break
 
     case 'show':
