@@ -1,4 +1,4 @@
-import { bindMethodUsed } from './bindComponent.js'
+import bindComponent, { bindMethodUsed } from './bindComponent.js'
 import trace from './trace.js'
 import error from './error.js'
 import applyDots from './applyDots.js'
@@ -140,6 +140,10 @@ export default function bindAttribute (
       }
 
       trace.remove('cssProp')
+      break
+
+    case 'publish':
+      bindComponent(element, value)
       break
   }
 

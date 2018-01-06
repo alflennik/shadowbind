@@ -52,6 +52,10 @@ test('error if no shadowRoot is present in component', async t => {
   t.deepEqual(...(await server.test('no-shadow-root')))
 })
 
+test('component uses :publish value instead of subscribed value', async t => {
+  t.deepEqual(...(await server.test('publish-method')))
+})
+
 test('can bind custom element properties', async t => {
   t.deepEqual(...(await server.test('prop-binding')))
 })

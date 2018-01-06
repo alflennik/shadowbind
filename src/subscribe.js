@@ -1,6 +1,5 @@
 import trace from './lib/trace.js'
 import error from './lib/error.js'
-import attachPublish from './lib/attachPublish.js'
 import getType from './util/getType.js'
 
 let components = []
@@ -27,7 +26,9 @@ export function subscribe (component, stateKey) {
     )
   }
 
-  attachPublish(component)
+  if (component.getAttribute(':publish') || component.getAttribute(':for')) {
+    return // in these cases the state will be bound manually by the user
+  }
 
   components.push({ component, stateKey })
 }
