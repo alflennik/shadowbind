@@ -4,9 +4,6 @@ import error from './error.js'
 import applyDots from './applyDots.js'
 import getType from '../util/getType.js'
 import toCamelCase from '../util/toCamelCase.js'
-import { getDomKey, setDomKey } from './domKey.js'
-
-let events = {}
 
 export default function bindAttribute (
   element,
@@ -106,13 +103,15 @@ export default function bindAttribute (
         )
       }
 
-      let domKey = getDomKey(element)
-      if (!domKey) domKey = setDomKey(element)
-      if (!events[domKey]) events[domKey] = {}
-      if (!events[domKey][param] && events[domKey][param] !== key) {
-        element.addEventListener(param, value)
-        events[domKey][param] = key
-      }
+      param.split(',').forEach(trigger => {
+        if (
+          !(element.shadowbindData && element.shadowbindData.eventsAlreadyBound)
+        ) {
+          element.addEventListener(trigger, value)
+          if (!element.shadowbindData) element.shadowbindData = {}
+          element.shadowbindData.eventsAlreadyBound = true
+        }
+      })
       break
 
     case 'show':
