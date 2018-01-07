@@ -147,6 +147,19 @@ export default function bindAttribute (
       break
 
     case 'tag':
+      const validTagName = (() => {
+        if (getType(value) !== 'string') return false
+        value = value.toLowerCase()
+        return /^[a-z][a-z0-9_-]+$/.test(value)
+      })()
+
+      if (!validTagName) {
+        error(
+          'shadowbind_tag_name',
+          `The value given for :tag must be a valid element name`
+        )
+      }
+
       if (element.tagName.toLowerCase() === value.toLowerCase()) return
       const replacement = document.createElement(value)
       replacement.innerHTML = element.innerHTML
