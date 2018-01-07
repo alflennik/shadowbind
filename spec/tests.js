@@ -40,6 +40,10 @@ test('can bind to nested web components', async t => {
   t.deepEqual(...(await server.test('bind-nested')))
 })
 
+test(':tag binding is fully functional', async t => {
+  t.deepEqual(...(await server.test('bind-tag')))
+})
+
 test('error if bind does not return an object', async t => {
   t.deepEqual(...(await server.test('bind-type')))
 })

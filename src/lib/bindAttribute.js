@@ -4,6 +4,7 @@ import error from './error.js'
 import applyDots from './applyDots.js'
 import getType from '../util/getType.js'
 import toCamelCase from '../util/toCamelCase.js'
+import walkElement from '../util/walkElement.js'
 
 export default function bindAttribute (
   element,
@@ -143,6 +144,20 @@ export default function bindAttribute (
 
     case 'publish':
       bindComponent(element, value)
+      break
+
+    case 'tag':
+      if (element.tagName.toLowerCase() === value.toLowerCase()) return
+      const replacement = document.createElement(value)
+      replacement.innerHTML = element.innerHTML
+      walkElement(element, attribute => {
+        replacement.setAttribute(attribute.name, attribute.value)
+      })
+
+      const parent = element.parentNode
+      const sibling = element.nextElementSibling
+      parent.removeChild(element)
+      parent.insertBefore(replacement, sibling)
       break
   }
 
