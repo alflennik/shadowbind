@@ -12,12 +12,11 @@ export default function walkFragment (component, callback) {
     const stillAttachedAfterCallback = node.parentNode
 
     if (wasAttachedToDom && !stillAttachedAfterCallback) {
-      // Repeaters are removed by the callback, which would mess up the walk
+      // Some elements get removed by the callback, which would mess up the walk
       return true
     }
 
     previousNode = node
-    if (node.shadowRoot) return // do not walk into shadowRoots
     node = node.firstChild
 
     while (node) {

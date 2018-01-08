@@ -96,6 +96,10 @@ test('can bind nested repeaters', async t => {
   t.deepEqual(...(await server.test('repeater-nested')))
 })
 
+test('slots still work in repeaters', async t => {
+  t.deepEqual(...(await server.test('repeater-slots')))
+})
+
 test('error if not binding an array to a repeater', async t => {
   t.deepEqual(...(await server.test('repeater-type')))
 })

@@ -8,8 +8,7 @@ class BasicRepeater extends HTMLElement { // eslint-disable-line
     this.shadowRoot.innerHTML = /* @html */`
     <h2 :text="beforeText" id="beforeText"></h2>
     <repeat-element :for="locations" class="loop"></repeat-element>
-    <h2 :text="afterText" id="afterText"></h2>
-    `
+    <h2 :text="afterText" id="afterText"></h2>`
   }
 
   async getExpected () {
