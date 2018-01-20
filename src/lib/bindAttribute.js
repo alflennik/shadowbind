@@ -5,11 +5,12 @@ import applyDots from './applyDots.js'
 import getType from '../util/getType.js'
 import toCamelCase from '../util/toCamelCase.js'
 import walkElement from '../util/walkElement.js'
+import { replaceElement, replacePlaceholder } from './bindIf.js'
 
 export default function bindAttribute (
   element,
   localBindings,
-  { type, param, key } = {}
+  { type, subtype, key } = {}
 ) {
   let value
 
@@ -44,8 +45,8 @@ export default function bindAttribute (
     (type === 'bind' || type === 'text' || type === 'html')
   ) {
     const bindSubnote = type === 'bind'
-      ? ` or use prop:${param} to bind the data as a property instead of an ` +
-        'attribute'
+      ? ` or use prop:${subtype} to bind the data as a property instead of ` +
+        'an attribute'
       : ''
     error(
       'shadowbind_binding_array_or_object',
@@ -56,29 +57,29 @@ export default function bindAttribute (
 
   switch (type) {
     case 'bind':
-      if (value !== null) element.setAttribute(param, value)
-      else element.removeAttribute(param)
+      if (value !== null) element.setAttribute(subtype, value)
+      else element.removeAttribute(subtype)
       break
 
     case 'prop':
-      const camelCaseParam = toCamelCase(param)
-      const methodType = getType(element[camelCaseParam])
+      const camelCaseSubtype = toCamelCase(subtype)
+      const methodType = getType(element[camelCaseSubtype])
 
       if (methodType !== 'function') {
         if (methodType === 'undefined') {
           error(
             'shadowbind_prop_undefined',
-            `Cannot call prop "${camelCaseParam}" because it is undefined`
+            `Cannot call prop "${camelCaseSubtype}" because it is undefined`
           )
         }
         error(
           'shadowbind_prop_type',
-          `Prop "${camelCaseParam}" must be a function, but it is type ` +
+          `Prop "${camelCaseSubtype}" must be a function, but it is type ` +
             `${methodType}`
         )
       }
 
-      element[camelCaseParam](value)
+      element[camelCaseSubtype](value)
       break
 
     case 'text':
@@ -105,12 +106,17 @@ export default function bindAttribute (
       }
 
       if (
-        !(element.shadowbindData && element.shadowbindData.eventsAlreadyBound)
+        !(element.sbPrivate && element.sbPrivate.eventsAlreadyBound)
       ) {
-        param.split(',').forEach(trigger => {
-          element.addEventListener(trigger, value)
-          if (!element.shadowbindData) element.shadowbindData = {}
-          element.shadowbindData.eventsAlreadyBound = true
+        subtype.split(',').forEach(trigger => {
+          element.addEventListener(trigger, event => {
+            const shouldPropagate = value(event)
+            if (shouldPropagate) return
+            event.preventDefault()
+            event.stopPropagation()
+          })
+          if (!element.sbPrivate) element.sbPrivate = {}
+          element.sbPrivate.eventsAlreadyBound = true
         })
       }
       break
@@ -120,26 +126,31 @@ export default function bindAttribute (
       else element.style.display = ''
       break
 
+    case 'if':
+      const placeholderId = element.getAttribute('sb:i')
+      if (value) {
+        if (!placeholderId) return
+        replaceElement(element)
+      } else {
+        if (placeholderId) return
+        replacePlaceholder(element)
+      }
+      break
+
     case 'css':
-      if (getType(value) !== 'object') {
-        error(
-          'shadowbind_css_type',
-          `"${key}" must be an object when binding to css, but it was ` +
-            `"${getType(value)}"`
-        )
+      if (value != null) {
+        element.style.setProperty(`--${subtype}`, value)
+      } else {
+        element.style.removeProperty(`--${subtype}`)
       }
+      break
 
-      for (const cssProp of Object.keys(value)) {
-        trace.add('cssProp', cssProp)
-        error(
-          'shadowbind_css_prop_type',
-          `"${cssProp}" must be a string, but it was ` +
-            `"${getType(value[cssProp])}"`
-        )
-        element.style.setProperty(`--${cssProp}`, value[cssProp])
+    case 'class':
+      if (value) {
+        element.classList.add(subtype)
+      } else {
+        element.classList.remove(subtype)
       }
-
-      trace.remove('cssProp')
       break
 
     case 'publish':
