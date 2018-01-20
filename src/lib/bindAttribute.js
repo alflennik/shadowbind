@@ -111,7 +111,7 @@ export default function bindAttribute (
         subtype.split(',').forEach(trigger => {
           element.addEventListener(trigger, event => {
             const shouldPropagate = value(event)
-            if (shouldPropagate) return
+            if (shouldPropagate !== false) return
             event.preventDefault()
             event.stopPropagation()
           })
