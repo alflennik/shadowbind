@@ -38,7 +38,7 @@ export default function bindAttribute (
   }
 
   trace.add('attributeState', value)
-  let valueType = getType(value)
+  const valueType = getType(value)
 
   if (
     (valueType === 'object' || valueType === 'array') &&
@@ -84,11 +84,11 @@ export default function bindAttribute (
 
     case 'text':
     case 'html':
-      if (!['string', 'number', 'null'].includes(getType(value))) {
+      if (!['string', 'number', 'null'].includes(valueType)) {
         error(
           'shadowbind_inner_content_type',
           `"${key}" must be a string or number (or null) when binding to ` +
-            `inner ${type}, but it was "${getType(value)}"`
+            `inner ${type}, but it was "${valueType}"`
         )
       }
 
@@ -98,10 +98,10 @@ export default function bindAttribute (
       break
 
     case 'on':
-      if (getType(value) !== 'function') {
+      if (valueType !== 'function') {
         error(
           'shadowbind_event_type',
-          `"${key}" must be a function, but it was "${getType(value)}"`
+          `"${key}" must be a function, but it was "${valueType}"`
         )
       }
 
@@ -159,7 +159,7 @@ export default function bindAttribute (
 
     case 'tag':
       const validTagName = (() => {
-        if (getType(value) !== 'string') return false
+        if (valueType !== 'string') return false
         value = value.toLowerCase()
         return /^[a-z][a-z0-9_-]+$/.test(value)
       })()
