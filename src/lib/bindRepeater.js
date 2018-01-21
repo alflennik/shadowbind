@@ -1,4 +1,5 @@
 import getType from '../util/getType.js'
+import trace from './trace.js'
 import error from './error.js'
 import bindComponent from './bindComponent.js'
 
@@ -18,6 +19,8 @@ export default function bindRepeater (element, bindings) {
         `"${getType(value)}"`
     )
   }
+
+  trace.add('repeaterState', value)
 
   const elements = emptyRepeaterId ? [] : currentRepeaterElements(element)
   const currentCount = elements.length
@@ -43,6 +46,8 @@ export default function bindRepeater (element, bindings) {
     bindComponent(element, value[i])
     element = element.nextElementSibling
   }
+
+  trace.remove('repeaterState')
 }
 
 function firstElementInRepeat (element) {

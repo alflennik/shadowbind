@@ -39,14 +39,12 @@ function shadowRootError (component) {
   try {
     component.attachShadow({ mode: 'open' })
   } catch (err) {
-    trace.set({ component: trace.get().component })
     error(
       'shadowbind_closed_shadow_root',
       'Subscribed component has a closed shadowRoot, but only open ' +
         'shadowRoots are supported'
     )
   }
-  trace.set({ component: trace.get().component })
   error(
     'shadowbind_no_shadow_root',
     'Subscribed web component has no shadowRoot. Be sure to call ' +
