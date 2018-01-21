@@ -2,7 +2,8 @@ import trace from './lib/trace.js'
 import error from './lib/error.js'
 import getType from './util/getType.js'
 
-let components = []
+let components = {}
+let componentsCount = 0
 export { components }
 
 // Track subscribed web components
@@ -30,9 +31,21 @@ export function subscribe (component, stateKey) {
     return // in these cases the state will be bound manually by the user
   }
 
-  components.push({ component, stateKey })
+  if (!component.sbPrivate) component.sbPrivate = {}
+  const currentId = component.sbPrivate.id
+  component.sbPrivate.stateKey = stateKey
+
+  if (component.sbPrivate.id && components[currentId]) return // already subbed
+
+  if (!currentId) {
+    componentsCount++
+    component.sbPrivate.id = componentsCount
+  }
+
+  components[componentsCount] = component
 }
 
 export function unsubscribe (component) {
-  components = components.filter(prev => !prev.component.isSameNode(component))
+  if (!component.sbPrivate || !component.sbPrivate.id) return
+  delete components[component.sbPrivate.id]
 }
