@@ -5,14 +5,13 @@ import assertType from './assertType.js'
 import applyDots from './applyDots.js'
 import getType from '../util/getType.js'
 import toCamelCase from '../util/toCamelCase.js'
-import { getDomKey, setDomKey } from './domKey.js'
-
-let events = {}
+import walkElement from '../util/walkElement.js'
+import { replaceElement, replacePlaceholder } from './bindIf.js'
 
 export default function bindAttribute (
   element,
   localBindings,
-  { type, param, key } = {}
+  { type, subtype, key } = {}
 ) {
   let value
 
@@ -40,15 +39,15 @@ export default function bindAttribute (
   }
 
   trace.add('attributeState', value)
-  let valueType = getType(value)
+  const valueType = getType(value)
 
   if (
     (valueType === 'object' || valueType === 'array') &&
     (type === 'attr' || type === 'text' || type === 'html')
   ) {
     const bindSubnote = type === 'attr'
-      ? ` or use prop:${param} to bind the data as a property instead of an ` +
-        'attribute'
+      ? ` or use prop:${subtype} to bind the data as a property instead of ` +
+        'an attribute'
       : ''
     error(
       'shadowbind_binding_array_or_object',
@@ -59,29 +58,29 @@ export default function bindAttribute (
 
   switch (type) {
     case 'attr':
-      if (value !== null) element.setAttribute(param, value)
-      else element.removeAttribute(param)
+      if (value !== null) element.setAttribute(subtype, value)
+      else element.removeAttribute(subtype)
       break
 
     case 'prop':
-      const camelCaseParam = toCamelCase(param)
-      const methodType = getType(element[camelCaseParam])
+      const camelCaseSubtype = toCamelCase(subtype)
+      const methodType = getType(element[camelCaseSubtype])
 
       if (methodType !== 'function') {
         if (methodType === 'undefined') {
           error(
             'shadowbind_prop_undefined',
-            `Cannot call prop "${camelCaseParam}" because it is undefined`
+            `Cannot call prop "${camelCaseSubtype}" because it is undefined`
           )
         }
         error(
           'shadowbind_prop_type',
-          `Prop "${camelCaseParam}" must be a function, but it is type ` +
+          `Prop "${camelCaseSubtype}" must be a function, but it is type ` +
             `${methodType}`
         )
       }
 
-      element[camelCaseParam](value)
+      element[camelCaseSubtype](value)
       break
 
     case 'text':
@@ -96,12 +95,19 @@ export default function bindAttribute (
     case 'on':
       assertType(value, 'function', 'event type')
 
-      let domKey = getDomKey(element)
-      if (!domKey) domKey = setDomKey(element)
-      if (!events[domKey]) events[domKey] = {}
-      if (!events[domKey][param] && events[domKey][param] !== key) {
-        element.addEventListener(param, value)
-        events[domKey][param] = key
+      if (
+        !(element.sbPrivate && element.sbPrivate.eventsAlreadyBound)
+      ) {
+        subtype.split(',').forEach(trigger => {
+          element.addEventListener(trigger, event => {
+            const shouldPropagate = value(event)
+            if (shouldPropagate !== false) return
+            event.preventDefault()
+            event.stopPropagation()
+          })
+          if (!element.sbPrivate) element.sbPrivate = {}
+          element.sbPrivate.eventsAlreadyBound = true
+        })
       }
       break
 
@@ -110,24 +116,62 @@ export default function bindAttribute (
       else element.style.display = ''
       break
 
-    case 'css':
-      assertType(value, 'object', 'css type')
-
-      for (const cssProp of Object.keys(value)) {
-        trace.add('cssProp', cssProp)
-        error(
-          'shadowbind_css_prop_type',
-          `"${cssProp}" must be a string, but it was ` +
-            `"${getType(value[cssProp])}"`
-        )
-        element.style.setProperty(`--${cssProp}`, value[cssProp])
+    case 'if':
+      const placeholderId = element.getAttribute('sb:i')
+      if (value) {
+        if (!placeholderId) return
+        replaceElement(element)
+      } else {
+        if (placeholderId) return
+        replacePlaceholder(element)
       }
+      break
 
-      trace.remove('cssProp')
+    case 'css':
+      if (value != null) {
+        element.style.setProperty(`--${subtype}`, value)
+      } else {
+        element.style.removeProperty(`--${subtype}`)
+      }
+      break
+
+    case 'class':
+      if (value) {
+        element.classList.add(subtype)
+      } else {
+        element.classList.remove(subtype)
+      }
       break
 
     case 'publish':
       bindComponent(element, value)
+      break
+
+    case 'tag':
+      const validTagName = (() => {
+        if (valueType !== 'string') return false
+        value = value.toLowerCase()
+        return /^[a-z][a-z0-9_-]+$/.test(value)
+      })()
+
+      if (!validTagName) {
+        error(
+          'shadowbind_tag_name',
+          `The value given for :tag must be a valid element name`
+        )
+      }
+
+      if (element.tagName.toLowerCase() === value.toLowerCase()) return
+      const replacement = document.createElement(value)
+      replacement.innerHTML = element.innerHTML
+      walkElement(element, attribute => {
+        replacement.setAttribute(attribute.name, attribute.value)
+      })
+
+      const parent = element.parentNode
+      const sibling = element.nextElementSibling
+      parent.removeChild(element)
+      parent.insertBefore(replacement, sibling)
       break
   }
 

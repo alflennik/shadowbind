@@ -12,12 +12,11 @@ export default function walkFragment (component, callback) {
     const stillAttachedAfterCallback = node.parentNode
 
     if (wasAttachedToDom && !stillAttachedAfterCallback) {
-      // Repeaters are removed by the callback, which would mess up the walk
+      // Some elements get removed by the callback, which would mess up the walk
       return true
     }
 
     previousNode = node
-    if (node.shadowRoot) return // do not walk into shadowRoots
     node = node.firstChild
 
     while (node) {
@@ -40,14 +39,12 @@ function shadowRootError (component) {
   try {
     component.attachShadow({ mode: 'open' })
   } catch (err) {
-    trace.set({ component: trace.get().component })
     error(
       'shadowbind_closed_shadow_root',
       'Subscribed component has a closed shadowRoot, but only open ' +
         'shadowRoots are supported'
     )
   }
-  trace.set({ component: trace.get().component })
   error(
     'shadowbind_no_shadow_root',
     'Subscribed web component has no shadowRoot. Be sure to define ' +

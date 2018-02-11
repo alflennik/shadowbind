@@ -4,6 +4,7 @@ import applyStateKey from './lib/applyStateKey.js'
 import bindComponent from './lib/bindComponent.js'
 
 let previousState = null
+export { previousState }
 
 // Apply data-binding to all affected web components when the state changes
 export default function publish (state) {
@@ -21,5 +22,6 @@ export default function publish (state) {
 
     bindComponent(component, { [stateKey]: subscribedState })
   }
+  trace.remove('publishedState', state)
   previousState = state
 }

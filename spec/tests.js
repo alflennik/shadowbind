@@ -16,6 +16,14 @@ test('error if array or object bound to attribute or html', async t => {
   t.deepEqual(...(await server.test('bind-array')))
 })
 
+test('binds events with on:click', async t => {
+  t.deepEqual(...(await server.test('bind-events')))
+})
+
+test('binds multiple events with on:click,touchstart', async t => {
+  t.deepEqual(...(await server.test('bind-events-advanced')))
+})
+
 test('error if key not found in nested localBindings', async t => {
   t.deepEqual(...(await server.test('bind-key-not-found-deep')))
 })
@@ -30,6 +38,10 @@ test('error if bind is defined but not a function', async t => {
 
 test('can bind to nested web components', async t => {
   t.deepEqual(...(await server.test('bind-nested')))
+})
+
+test(':tag binding is fully functional', async t => {
+  t.deepEqual(...(await server.test('bind-tag')))
 })
 
 test('error if bind does not return an object', async t => {
@@ -47,6 +59,10 @@ test('error if closed shadowRoot is used', async t => {
 // test('error if non function used as event handler', async t => {
 //   t.deepEqual(...(await server.test('event-type')))
 // })
+
+test('error if invalid tag name used', async t => {
+  t.deepEqual(...(await server.test('invalid-tag-name')))
+})
 
 test('error if no shadowRoot is present in component', async t => {
   t.deepEqual(...(await server.test('no-shadow-root')))
@@ -83,6 +99,10 @@ test('error if property is undefined', async t => {
 // test('error if not binding an array to a repeater', async t => {
 //   t.deepEqual(...(await server.test('repeater-type')))
 // })
+
+test('slots still work in repeaters', async t => {
+  t.deepEqual(...(await server.test('repeater-slots')))
+})
 
 // test('error if binding to an element without a shadowRoot', async t => {
 //   t.deepEqual(...(await server.test('repeater-without-shadow')))

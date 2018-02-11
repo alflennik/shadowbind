@@ -8,10 +8,10 @@ let bindMethodUsed
 export { bindMethodUsed }
 
 export default function bindComponent (component, subscribedState) {
-  if (subscribedState === null) return
-
   trace.add('component', component)
   trace.add('subscribedState', subscribedState)
+  trace.add('component', component)
+
   let bindings
 
   if (component.bind) {
