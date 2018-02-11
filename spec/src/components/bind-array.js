@@ -1,26 +1,21 @@
-import { subscribe, publish } from '../../../src/index.js'
+import define from '../../../src/index.js'
 
-class BindArray extends HTMLElement { // eslint-disable-line
-  constructor () {
-    super()
-    subscribe(this)
-    this.attachShadow({ mode: 'open' })
-    this.shadowRoot.innerHTML = /* @html */`
-    <div :text='getArray'></div>
+class BindArray extends window.HTMLElement {
+  template () {
+    return /* @html */`
+      <div :text='getArray'></div>
     `
   }
-
   async getExpected () {
     return 'shadowbind_binding_array_or_object'
   }
-
   async getActual () {
     try {
-      publish({ getArray: [1, 2, 3] })
+      this.publish({ getArray: [1, 2, 3] })
     } catch (err) {
       return err.code || err
     }
   }
 }
 
-window.customElements.define('bind-array', BindArray)
+define(BindArray)

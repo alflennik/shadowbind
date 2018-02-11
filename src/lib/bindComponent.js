@@ -10,6 +10,7 @@ export { bindMethodUsed }
 export default function bindComponent (component, subscribedState) {
   if (subscribedState === null) return
 
+  trace.add('component', component)
   trace.add('subscribedState', subscribedState)
   let bindings
 
@@ -35,4 +36,5 @@ export default function bindComponent (component, subscribedState) {
 
   trace.remove('bindReturned')
   trace.remove('subscribedState')
+  trace.remove('component')
 }

@@ -1,23 +1,18 @@
-import { subscribe, publish } from '../../../src/index.js'
+import define, { publish } from '../../../src/index.js'
 
-class BindNested extends HTMLElement { // eslint-disable-line
-  constructor () {
-    super()
-    subscribe(this)
-    this.attachShadow({ mode: 'open' })
-    this.shadowRoot.innerHTML = /* @html */`
-    <h2 :text="outer" id="outer"></h2>
-    <nested-element id="nested-element"></nested-element>
+class BindNested extends window.HTMLElement {
+  template () {
+    return /* @html */`
+      <h2 :text="outer" id="outer"></h2>
+      <nested-element id="nested-element"></nested-element>
     `
   }
-
-  async getExpected () {
-    return {
-      outer: 'test',
-      inner: 'test2'
-    }
+  subscribe () {
+    return { outer: 'state' }
   }
-
+  async getExpected () {
+    return { outer: 'test', inner: 'test2' }
+  }
   async getActual () {
     publish({ outer: 'test', inner: 'test2' })
     return {
@@ -31,22 +26,14 @@ class BindNested extends HTMLElement { // eslint-disable-line
   }
 }
 
-class NestedElement extends HTMLElement { // eslint-disable-line
-  constructor () {
-    super()
-    subscribe(this)
-    this.attachShadow({ mode: 'open' })
-    this.shadowRoot.innerHTML = /* @html */`
-    <h2 :text="inner" id="inner"></h2>
-    `
+class NestedElement extends window.HTMLElement {
+  template () {
+    return /* @html */`<h2 :text="inner" id="inner"></h2>`
   }
-
-  bind () {
-    return {
-      inner: 'test2'
-    }
+  subscribe () {
+    return { inner: 'state' }
   }
 }
 
-window.customElements.define('bind-nested', BindNested)
-window.customElements.define('nested-element', NestedElement)
+define(BindNested)
+define(NestedElement)

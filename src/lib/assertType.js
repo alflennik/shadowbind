@@ -10,7 +10,7 @@ export default function assertType (value, types, name) {
 
   const errorMessage = (() => {
     if (value === undefined) return `The ${name} cannot be undefined`
-    return `The ${name} was "${actual}", but expected type ` +
+    return `The ${name} was "${actual}" but expected type ` +
       `${arrayToSentence(types.map(type => `"${type}"`))}`
   })()
 

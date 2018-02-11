@@ -3,8 +3,10 @@ import error from './lib/error.js'
 import getType from './util/getType.js'
 import pascalToTrainCase from './util/pascalToTrainCase.js'
 import bindComponent from './lib/bindComponent.js'
+import parseSubscriptions from './lib/parseSubscriptions.js'
 
-let components = []
+let components = {}
+let componentId = 0
 export { components }
 
 export default function define (name, Component = {}) {
@@ -31,15 +33,38 @@ export default function define (name, Component = {}) {
     )
   }
 
+  const { stateSubscriptions, attributeSubscriptions } = parseSubscriptions(
+    Component.prototype.subscribe ? Component.prototype.subscribe() : {}
+  )
+
   class ShadowComponent extends Component {
+    static observedAttributes () {
+      return attributeSubscriptions
+    }
     constructor () {
       super()
+      if (!this.sbPrivate) this.sbPrivate = {}
+
       if (Component.prototype.template) {
         this.attachShadow({ mode: 'open' })
         const template = document.createElement('template')
         template.innerHTML = Component.prototype.template.call(this)
         this.shadowRoot.appendChild(template.content.cloneNode(true))
       }
+
+      if (stateSubscriptions.length) {
+        this.sbPrivate.stateSubscriptions = stateSubscriptions
+      }
+    }
+    connectedCallback () {
+      componentId++
+      this.sbPrivate.id = componentId
+      components[componentId] = this
+      forwardProperty(Component, 'connectedCallback')
+    }
+    disconnectedCallback () {
+      delete components[componentId]
+      forwardProperty(Component, 'disconnectedCallback')
     }
     publish (bindings) {
       bindComponent(this, bindings)
@@ -47,6 +72,10 @@ export default function define (name, Component = {}) {
   }
 
   window.customElements.define(name, ShadowComponent)
+}
 
-  components.push({ Component })
+function forwardProperty (Component, propertyName) {
+  if (Component.prototype[propertyName]) {
+    Component.prototype[propertyName].call(this)
+  }
 }

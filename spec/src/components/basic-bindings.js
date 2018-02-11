@@ -1,6 +1,6 @@
 import define from '../../../src/index.js'
 
-class BasicBindings extends HTMLElement { // eslint-disable-line
+class BasicBindings extends window.HTMLElement {
   template () {
     return /* @html */`
       <span :text="text" id="text"></span>

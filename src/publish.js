@@ -1,5 +1,5 @@
 import trace from './lib/trace.js'
-import { components } from './subscribe.js'
+import { components } from './define.js'
 import applyStateKey from './lib/applyStateKey.js'
 import bindComponent from './lib/bindComponent.js'
 
@@ -11,17 +11,15 @@ export default function publish (state) {
   trace.add('publishedState', state)
   if (previousState !== null && state === previousState) return
 
-  for (const subscribedComponent of components) {
-    const { component, stateKey } = subscribedComponent
-    trace.add('component', component)
-
+  for (const component of Object.values(components)) {
+    const stateKey = component.sbPrivate.stateSubscriptions[0]
     if (
       previousState && stateKey && state[stateKey] === previousState[stateKey]
     ) continue
 
     const subscribedState = applyStateKey(state, stateKey)
 
-    bindComponent(component, subscribedState)
+    bindComponent(component, { [stateKey]: subscribedState })
   }
   previousState = state
 }
