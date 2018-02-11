@@ -1,4 +1,4 @@
-import { subscribe, publish } from '../../../src/index.js'
+import define from '../../../src/index.js'
 
 class WrongPropType extends HTMLElement { // eslint-disable-line
   constructor () {
@@ -8,18 +8,14 @@ class WrongPropType extends HTMLElement { // eslint-disable-line
 }
 
 class PropType extends HTMLElement { // eslint-disable-line
-  constructor () {
-    super()
-    this.attachShadow({ mode: 'open' })
-    this.shadowRoot.innerHTML = /* @html */`
-    <wrong-prop-type prop:not-function="someData"></wrong-prop-type>`
-  }
-  connectedCallback () {
-    subscribe(this)
+  template () {
+    return /* @html */`
+      <wrong-prop-type prop:not-function="someData"></wrong-prop-type>
+    `
   }
   getActual () {
     try {
-      publish({ someData: {} })
+      this.publish({ someData: {} })
     } catch (err) {
       return err.code || err
     }
@@ -30,5 +26,5 @@ class PropType extends HTMLElement { // eslint-disable-line
   }
 }
 
-window.customElements.define('prop-type', PropType)
-window.customElements.define('wrong-prop-type', WrongPropType)
+define(PropType)
+define(WrongPropType)

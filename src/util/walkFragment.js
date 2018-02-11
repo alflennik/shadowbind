@@ -50,7 +50,7 @@ function shadowRootError (component) {
   trace.set({ component: trace.get().component })
   error(
     'shadowbind_no_shadow_root',
-    'Subscribed web component has no shadowRoot. Be sure to call ' +
-      "this.attachShadow({ mode: open }) in the component's constructor"
+    'Subscribed web component has no shadowRoot. Be sure to define ' +
+      "template() { return 'YOUR HTML' } in your component class"
   )
 }

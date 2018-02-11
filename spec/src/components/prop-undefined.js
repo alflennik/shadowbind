@@ -1,18 +1,12 @@
-import { subscribe, publish } from '../../../src/index.js'
+import define from '../../../src/index.js'
 
-class PropUndefined extends HTMLElement { // eslint-disable-line
-  constructor () {
-    super()
-    this.attachShadow({ mode: 'open' })
-    this.shadowRoot.innerHTML = /* @html */`
-    <div prop:anything="someData"></div>`
-  }
-  connectedCallback () {
-    subscribe(this)
+class PropUndefined extends window.HTMLElement {
+  template () {
+    return /* @html */`<div prop:anything="someData"></div>`
   }
   getActual () {
     try {
-      publish({ someData: {} })
+      this.publish({ someData: {} })
     } catch (err) {
       return err.code || err
     }
@@ -23,4 +17,4 @@ class PropUndefined extends HTMLElement { // eslint-disable-line
   }
 }
 
-window.customElements.define('prop-undefined', PropUndefined)
+define(PropUndefined)

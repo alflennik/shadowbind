@@ -1,29 +1,21 @@
-import { subscribe, publish } from '../../../src/index.js'
+import define from '../../../src/index.js'
 
 let result
 
-class BindWithProp extends HTMLElement { // eslint-disable-line
-  constructor () {
-    super()
-    this.notFunction = 'a string'
-  }
+class BindWithProp extends window.HTMLElement {
   testPropBinding (data) {
     result = data
   }
 }
 
-class PropBinding extends HTMLElement { // eslint-disable-line
-  constructor () {
-    super()
-    this.attachShadow({ mode: 'open' })
-    this.shadowRoot.innerHTML = /* @html */`
-    <bind-with-prop prop:test-prop-binding="someData"></bind-with-prop>`
-  }
-  connectedCallback () {
-    subscribe(this)
+class PropBinding extends window.HTMLElement {
+  template () {
+    return /* @html */`
+      <bind-with-prop prop:test-prop-binding="someData"></bind-with-prop>
+    `
   }
   getActual () {
-    publish({ someData: 'in string form' })
+    this.publish({ someData: 'in string form' })
     return result
   }
   getExpected () {
@@ -31,5 +23,5 @@ class PropBinding extends HTMLElement { // eslint-disable-line
   }
 }
 
-window.customElements.define('prop-binding', PropBinding)
-window.customElements.define('bind-with-prop', BindWithProp)
+define(PropBinding)
+define(BindWithProp)

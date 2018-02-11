@@ -1,23 +1,17 @@
-import { subscribe, publish } from '../../../src/index.js'
+import define from '../../../src/index.js'
 
-class NoShadowRoot extends HTMLElement { // eslint-disable-line
-  constructor () {
-    super()
-    subscribe(this)
-  }
-
+class NoShadowRoot extends window.HTMLElement {
   getActual () {
     try {
-      publish({})
+      this.publish({})
     } catch (err) {
       return err.code || err
     }
     return 'no errors'
   }
-
   getExpected () {
     return 'shadowbind_no_shadow_root'
   }
 }
 
-window.customElements.define('no-shadow-root', NoShadowRoot)
+define(NoShadowRoot)

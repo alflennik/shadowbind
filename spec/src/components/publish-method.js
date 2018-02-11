@@ -1,30 +1,19 @@
-import { subscribe, publish } from '../../../src/index.js'
+import define, { publish } from '../../../src/index.js'
 
-class ShowText extends HTMLElement { // eslint-disable-line
-  constructor () {
-    super()
-    this.attachShadow({ mode: 'open' })
-    this.shadowRoot.innerHTML = /* @html */`
-    <span :text="text" id="test">just some placeholder text</span>`
-  }
-  connectedCallback () {
-    subscribe(this, 'text')
-  }
-  bind (state) {
-    return { text: state }
+class ShowText extends window.HTMLElement {
+  template () {
+    return /* @html */`
+      <span :text="text" id="test">just some placeholder text</span>
+    `
   }
 }
 
-class PublishMethod extends HTMLElement { // eslint-disable-line
-  constructor () {
-    super()
-    this.attachShadow({ mode: 'open' })
-    this.shadowRoot.innerHTML = /* @html */`
-    <show-text :publish="alternateText" id="show-text"></show-text>
-    <show-text id="other-text"></show-text>`
-  }
-  connectedCallback () {
-    subscribe(this)
+class PublishMethod extends window.HTMLElement {
+  template () {
+    return /* @html */`
+      <show-text :publish="alternateText" id="show-text"></show-text>
+      <show-text id="other-text"></show-text>
+    `
   }
   getActual () {
     const testElement = this.shadowRoot.querySelector('#show-text').shadowRoot
@@ -48,5 +37,5 @@ class PublishMethod extends HTMLElement { // eslint-disable-line
   }
 }
 
-window.customElements.define('publish-method', PublishMethod)
-window.customElements.define('show-text', ShowText)
+define(PublishMethod)
+define(ShowText)
