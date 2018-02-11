@@ -8,14 +8,15 @@ export default function applyDots (
   errorSource,
   errorCode
 ) {
-  trace.add(`${baseName}:`, baseData)
+  traceSearch([`${baseName}:`, baseData])
   let search = baseData
   let keySearch = baseName
 
   for (const keyPart of key.split('.')) {
     keySearch = `${keySearch}.${keyPart}`
     if (!Object.keys(search).includes(keyPart)) {
-      trace.add(`${keySearch}:`, 'not found')
+      traceSearch([`${keySearch}:`, 'not found'])
+      trace.remove('publishedState')
 
       error(
         errorCode,
@@ -25,9 +26,14 @@ export default function applyDots (
     }
 
     search = search[keyPart]
-    trace.add(`${keySearch}:`, search)
+    traceSearch([`${keySearch}:`, search])
   }
 
-  trace.removeAll('search')
+  trace.remove('search')
   return search
+}
+
+function traceSearch (item) {
+  if (!trace.get().search) trace.add('search', [])
+  trace.add('search', [ ...trace.get().search, item ])
 }

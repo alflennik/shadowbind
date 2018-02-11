@@ -7,7 +7,7 @@ class SubscribeWithoutArgs extends HTMLElement { // eslint-disable-line
     try {
       subscribe()
     } catch (err) {
-      this.errorCode = err.code || err
+      this.errorCode = err.code || err.message
     }
   }
 

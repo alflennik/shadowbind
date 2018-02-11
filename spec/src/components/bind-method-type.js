@@ -12,7 +12,7 @@ class BindMethodType extends window.HTMLElement {
     try {
       this.publish({ myData: [1, 2, 3] })
     } catch (err) {
-      return err.code || err
+      return err.code || err.message
     }
     return 'no errors'
   }

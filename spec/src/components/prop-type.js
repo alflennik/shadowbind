@@ -17,7 +17,7 @@ class PropType extends HTMLElement { // eslint-disable-line
     try {
       this.publish({ someData: {} })
     } catch (err) {
-      return err.code || err
+      return err.code || err.message
     }
     return 'no errors'
   }

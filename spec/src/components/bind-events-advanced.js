@@ -1,22 +1,20 @@
-import { subscribe, publish } from '../../../src/index.js'
+import define from '../../../src/index.js'
 
 let counter = 0
 
-class BindEventsAdvanced extends HTMLElement { // eslint-disable-line
-  constructor () {
-    super()
-    subscribe(this)
-    this.root = this.attachShadow({ mode: 'open' })
-    this.root.innerHTML = /* @html */`
-    <div :text="counter"></div>
-    <input on:focus,blur,input="updateCounter">`
+class BindEventsAdvanced extends window.HTMLElement {
+  template () {
+    return /* @html */`
+      <div :text="counter"></div>
+      <input on:focus,blur,input="updateCounter">
+    `
   }
   bind (state) {
     return {
       ...state,
       updateCounter: event => {
         counter++
-        publish({ counter })
+        this.publish({ counter })
       }
     }
   }
@@ -24,7 +22,7 @@ class BindEventsAdvanced extends HTMLElement { // eslint-disable-line
     return [0, 1, 2, 3]
   }
   getActual () {
-    publish({ counter })
+    this.publish({ counter })
     let tests = []
     const testEl = document.querySelector('bind-events-advanced').shadowRoot
     const input = testEl.querySelector('input')
@@ -39,4 +37,4 @@ class BindEventsAdvanced extends HTMLElement { // eslint-disable-line
   }
 }
 
-window.customElements.define('bind-events-advanced', BindEventsAdvanced)
+define(BindEventsAdvanced)

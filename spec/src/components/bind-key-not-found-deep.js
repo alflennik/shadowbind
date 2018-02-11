@@ -13,7 +13,7 @@ class BindKeyNotFoundDeep extends window.HTMLElement {
     try {
       this.publish({ level1: { level2: {} } })
     } catch (err) {
-      return err.code || err
+      return err.code || err.message
     }
   }
 }

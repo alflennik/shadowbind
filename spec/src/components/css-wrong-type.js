@@ -16,7 +16,7 @@ class CssWrongType extends HTMLElement { // eslint-disable-line
     try {
       publish({ notAnObject: 'instead a string' })
     } catch (err) {
-      return err.code || err
+      return err.code || err.message
     }
     return 'no errors'
   }

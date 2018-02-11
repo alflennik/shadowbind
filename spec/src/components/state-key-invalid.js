@@ -11,7 +11,7 @@ class StateKeyInvalid extends HTMLElement { // eslint-disable-line
     try {
       publish({})
     } catch (err) {
-      return err.code || err
+      return err.code || err.message
     }
   }
 

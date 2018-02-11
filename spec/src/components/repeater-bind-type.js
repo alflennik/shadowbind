@@ -24,7 +24,7 @@ class RepeaterBindType extends HTMLElement { // eslint-disable-line
     try {
       publish({ myData: [1, 2, 3] })
     } catch (err) {
-      return err.code || err
+      return err.code || err.message
     }
     return 'no errors'
   }

@@ -9,7 +9,7 @@ class ClosedShadowRoot extends window.HTMLElement {
     try {
       this.publish({})
     } catch (err) {
-      return err.code || err
+      return err.code || err.message
     }
     return 'no errors'
   }

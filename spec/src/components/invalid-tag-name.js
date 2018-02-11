@@ -1,31 +1,23 @@
-import { subscribe, publish } from '../../../src/index.js'
-
-function tryName (name) {
-  try {
-    publish({ invalidTagName: name })
-  } catch (err) {
-    console.log(err)
-    return err.code || err
-  }
-  return 'no errors'
-}
+import define from '../../../src/index.js'
 
 class InvalidTagName extends HTMLElement { // eslint-disable-line
-  constructor () {
-    super()
-    this.attachShadow({ mode: 'open' })
-    this.shadowRoot.innerHTML = /* @html */`
-    <div :tag="invalidTagName"></div>`
+  template () {
+    return /* @html */`<div :tag="invalidTagName"></div>`
   }
-  connectedCallback () {
-    subscribe(this)
+  tryName (name) {
+    try {
+      this.publish({ invalidTagName: name })
+    } catch (err) {
+      return err.code || err.message
+    }
+    return 'no errors'
   }
   getActual () {
     return [
-      tryName(true),
-      tryName(123),
-      tryName('1-numfirst'),
-      tryName('almost-@valid')
+      this.tryName(true),
+      this.tryName(123),
+      this.tryName('1-numfirst'),
+      this.tryName('almost-@valid')
     ]
   }
   getExpected () {
@@ -38,4 +30,4 @@ class InvalidTagName extends HTMLElement { // eslint-disable-line
   }
 }
 
-window.customElements.define('invalid-tag-name', InvalidTagName)
+define(InvalidTagName)

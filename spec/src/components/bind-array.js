@@ -13,7 +13,7 @@ class BindArray extends window.HTMLElement {
     try {
       this.publish({ getArray: [1, 2, 3] })
     } catch (err) {
-      return err.code || err
+      return err.code || err.message
     }
   }
 }

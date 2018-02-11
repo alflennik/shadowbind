@@ -3,7 +3,7 @@ import applyStateKey from './lib/applyStateKey.js'
 import trace from './lib/trace.js'
 import { previousState } from './publish.js'
 
-export function refresh (component) {
+export default function refresh (component) {
   trace.reset()
 
   const stateKey = (() => {

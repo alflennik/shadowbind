@@ -8,7 +8,7 @@ class PropUndefined extends window.HTMLElement {
     try {
       this.publish({ someData: {} })
     } catch (err) {
-      return err.code || err
+      return err.code || err.message
     }
     return 'no errors'
   }

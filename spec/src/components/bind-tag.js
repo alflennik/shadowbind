@@ -1,4 +1,4 @@
-import { subscribe, publish } from '../../../src/index.js'
+import define from '../../../src/index.js'
 
 let eventHasRun = false
 
@@ -26,17 +26,15 @@ function doTest (shadowRoot) {
 }
 
 class BindTag extends HTMLElement { // eslint-disable-line
-  constructor () {
-    super()
-    subscribe(this)
-    this.root = this.attachShadow({ mode: 'open' })
-    this.root.innerHTML = /* @html */`
-    <div :tag="currentTag"
-    data="should not be removed"
-    on:click="eventTest"
-    id="tag-switcher">
-      <h1><span>Child Element</span></h1>
-    </div>`
+  template () {
+    return /* @html */`
+      <div :tag="currentTag"
+      data="should not be removed"
+      on:click="eventTest"
+      id="tag-switcher">
+        <h1><span>Child Element</span></h1>
+      </div>
+    `
   }
   bind (state) {
     return {
@@ -55,18 +53,18 @@ class BindTag extends HTMLElement { // eslint-disable-line
     ]
   }
   getActual () {
-    publish({ currentTag: 'div' })
+    this.publish({ currentTag: 'div' })
     const shadowRoot = document.querySelector('bind-tag').shadowRoot
     let tests = []
     tests.push(doTest(shadowRoot))
-    publish({ currentTag: 'app-container' })
+    this.publish({ currentTag: 'app-container' })
     tests.push(doTest(shadowRoot))
-    publish({ currentTag: 'app-page' })
+    this.publish({ currentTag: 'app-page' })
     tests.push(doTest(shadowRoot))
-    publish({ currentTag: 'span' })
+    this.publish({ currentTag: 'span' })
     tests.push(doTest(shadowRoot))
     return tests
   }
 }
 
-window.customElements.define('bind-tag', BindTag)
+define(BindTag)

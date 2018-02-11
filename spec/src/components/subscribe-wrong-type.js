@@ -7,7 +7,7 @@ class SubscribeWrongType extends HTMLElement { // eslint-disable-line
     try {
       subscribe('wrong type given')
     } catch (err) {
-      this.errorCode = err.code || err
+      this.errorCode = err.code || err.message
     }
   }
 

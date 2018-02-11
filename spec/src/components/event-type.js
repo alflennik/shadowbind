@@ -18,7 +18,7 @@ class EventType extends HTMLElement { // eslint-disable-line
     try {
       publish({ aString: 'yayyy' })
     } catch (err) {
-      return err.code || err
+      return err.code || err.message
     }
   }
 }

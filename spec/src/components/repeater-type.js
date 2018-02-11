@@ -23,7 +23,7 @@ class RepeaterType extends HTMLElement { // eslint-disable-line
     try {
       publish({ notAnArray: 'instead a string' })
     } catch (err) {
-      return err.code || err
+      return err.code || err.message
     }
     return 'no errors'
   }
