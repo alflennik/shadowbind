@@ -7,13 +7,22 @@ export default function error (code, errorMessage, notes) {
   const TRACE_LINE = '\n    '
 
   let message = [errorMessage]
+  const traceOrder = [
+    ...(trace.search ? trace.search : []),
+    ['css property:', trace.cssProp],
+    ['attribute state:', trace.attributeState],
+    ['bind returned:', trace.bindReturned],
+    ['subscribed state:', trace.subscribedState],
+    ['published state:', trace.publishedState],
+    ['affected attribute:', trace.attribute],
+    ['affected element:', trace.element],
+    ['affected web component:', trace.component]
+  ]
 
-  if (trace.length) {
+  if (Object.keys(trace).length) {
     message.push(TRACE_START)
-    for (const traceItem of trace) {
-      const traceIntro = getTraceIntro(traceItem[0])
-      const traceData = traceItem[1]
-      message.push(traceIntro, traceData, TRACE_LINE)
+    for (const [traceIntro, traceData] of traceOrder) {
+      if (traceData) message.push(traceIntro, traceData, TRACE_LINE)
     }
   }
 
@@ -21,18 +30,4 @@ export default function error (code, errorMessage, notes) {
 
   console.error(...message)
   throw { code } // eslint-disable-line
-}
-
-function getTraceIntro (name) {
-  switch (name) {
-    case 'attributeState': return 'attribute state:'
-    case 'repeaterState': return 'repeater state:'
-    case 'bindReturned': return 'processed state:'
-    case 'subscribedState': return 'component state:'
-    case 'publishedState': return 'global state:'
-    case 'attribute': return 'in attribute:'
-    case 'element': return 'in element:'
-    case 'component': return 'in component:'
-  }
-  return name
 }
