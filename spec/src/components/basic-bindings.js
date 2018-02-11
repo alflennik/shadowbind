@@ -1,20 +1,17 @@
-import { subscribe, publish } from '../../../src/index.js'
+import define from '../../../src/index.js'
 
 class BasicBindings extends HTMLElement { // eslint-disable-line
-  constructor () {
-    super()
-    subscribe(this)
-    this.root = this.attachShadow({ mode: 'open' })
-    this.root.innerHTML = /* @html */`
-    <span :text="text" id="text"></span>
-    <span :text="escaping" id="escaping"></span>
-    <span :html="html" id="html"></span>
-    <span :show="show" id="show"></span>
-    <span :show="hide" id="hide"></span>
-    <span bind:my-attr="myAttr" id="my-attr"></span>
-    <span bind:none="none" id="none"></span>`
+  template () {
+    return /* @html */`
+      <span :text="text" id="text"></span>
+      <span :text="escaping" id="escaping"></span>
+      <span :html="html" id="html"></span>
+      <span :show="show" id="show"></span>
+      <span :show="hide" id="hide"></span>
+      <span attr:my-attr="myAttr" id="my-attr"></span>
+      <span attr:none="none" id="none"></span>
+    `
   }
-
   async getExpected () {
     return {
       text: 'This text',
@@ -26,9 +23,8 @@ class BasicBindings extends HTMLElement { // eslint-disable-line
       none: null
     }
   }
-
   async getActual () {
-    publish({
+    this.publish({
       text: 'This text',
       escaping: '</span>',
       html: 'This html',
@@ -37,17 +33,16 @@ class BasicBindings extends HTMLElement { // eslint-disable-line
       myAttr: 'This attr',
       none: null
     })
-
     return {
-      text: this.root.getElementById('text').innerHTML,
-      escaping: this.root.getElementById('escaping').innerHTML,
-      html: this.root.getElementById('html').innerHTML,
-      show: this.root.getElementById('show').style.display,
-      hide: this.root.getElementById('hide').style.display,
-      myAttr: this.root.getElementById('my-attr').getAttribute('my-attr'),
-      none: this.root.getElementById('none').getAttribute('none')
+      text: this.shadowRoot.querySelector('#text').innerHTML,
+      escaping: this.shadowRoot.querySelector('#escaping').innerHTML,
+      html: this.shadowRoot.querySelector('#html').innerHTML,
+      show: this.shadowRoot.querySelector('#show').style.display,
+      hide: this.shadowRoot.querySelector('#hide').style.display,
+      myAttr: this.shadowRoot.querySelector('#my-attr').getAttribute('my-attr'),
+      none: this.shadowRoot.querySelector('#none').getAttribute('none')
     }
   }
 }
 
-window.customElements.define('basic-bindings', BasicBindings)
+define(BasicBindings)

@@ -44,9 +44,9 @@ export default function bindAttribute (
 
   if (
     (valueType === 'object' || valueType === 'array') &&
-    (type === 'bind' || type === 'text' || type === 'html')
+    (type === 'attr' || type === 'text' || type === 'html')
   ) {
-    const bindSubnote = type === 'bind'
+    const bindSubnote = type === 'attr'
       ? ` or use prop:${param} to bind the data as a property instead of an ` +
         'attribute'
       : ''
@@ -58,7 +58,7 @@ export default function bindAttribute (
   }
 
   switch (type) {
-    case 'bind':
+    case 'attr':
       if (value !== null) element.setAttribute(param, value)
       else element.removeAttribute(param)
       break
