@@ -1,17 +1,11 @@
 import error from './error.js'
 import applyDots from './applyDots.js'
-import getType from '../util/getType.js'
+import assertType from './assertType.js'
 
 export default function applyStateKey (state, stateKey) {
   if (stateKey === undefined) return state
 
-  if (getType(stateKey) !== 'string') {
-    error(
-      'shadowbind_subscribe_key_type',
-      `The key ${JSON.stringify(stateKey)} must be a string, but it was ` +
-        `"${getType(stateKey)}"`
-    )
-  }
+  assertType(stateKey, 'string', 'subscribe key type')
 
   if (!/^[^.].+[^.]$/.test(stateKey)) { // cannot begin or end with dot
     error(

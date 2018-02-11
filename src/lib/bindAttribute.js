@@ -1,6 +1,7 @@
 import bindComponent, { bindMethodUsed } from './bindComponent.js'
 import trace from './trace.js'
 import error from './error.js'
+import assertType from './assertType.js'
 import applyDots from './applyDots.js'
 import getType from '../util/getType.js'
 import toCamelCase from '../util/toCamelCase.js'
@@ -85,13 +86,7 @@ export default function bindAttribute (
 
     case 'text':
     case 'html':
-      if (!['string', 'number', 'null'].includes(getType(value))) {
-        error(
-          'shadowbind_inner_content_type',
-          `"${key}" must be a string or number (or null) when binding to ` +
-            `inner ${type}, but it was "${getType(value)}"`
-        )
-      }
+      assertType(value, ['string', 'number', 'null'], 'inner content type')
 
       if (value != null) {
         type === 'text' ? element.innerText = value : element.innerHTML = value
@@ -99,12 +94,7 @@ export default function bindAttribute (
       break
 
     case 'on':
-      if (getType(value) !== 'function') {
-        error(
-          'shadowbind_event_type',
-          `"${key}" must be a function, but it was "${getType(value)}"`
-        )
-      }
+      assertType(value, 'function', 'event type')
 
       let domKey = getDomKey(element)
       if (!domKey) domKey = setDomKey(element)
@@ -121,13 +111,7 @@ export default function bindAttribute (
       break
 
     case 'css':
-      if (getType(value) !== 'object') {
-        error(
-          'shadowbind_css_type',
-          `"${key}" must be an object when binding to css, but it was ` +
-            `"${getType(value)}"`
-        )
-      }
+      assertType(value, 'object', 'css type')
 
       for (const cssProp of Object.keys(value)) {
         trace.add('cssProp', cssProp)

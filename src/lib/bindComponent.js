@@ -1,7 +1,6 @@
 import bindRepeater from './bindRepeater.js'
 import walkFragment from '../util/walkFragment.js'
-import getType from '../util/getType.js'
-import error from './error.js'
+import assertType from './assertType.js'
 import bindElement from './bindElement.js'
 import trace from './trace.js'
 
@@ -15,24 +14,13 @@ export default function bindComponent (component, subscribedState) {
   let bindings
 
   if (component.bind) {
-    if (getType(component.bind) !== 'function') {
-      error(
-        'shadowbind_bind_property_type',
-        'A bind property was set on the component, but it was ' +
-          `"${getType(component.bind)}" instead of type "function"`
-      )
-    }
+    assertType(component.bind, 'function', 'bind property type')
 
     bindings = component.bind(subscribedState)
     trace.add('bindReturned', bindings)
     bindMethodUsed = true
-    if (getType(bindings) !== 'object') {
-      error(
-        'shadowbind_bind_method_return_type',
-        'The bind method must return an object, but it returned ' +
-          `"${getType(bindings)}"`
-      )
-    }
+
+    assertType(bindings, 'object', 'bind method return type')
   } else {
     bindMethodUsed = false
     bindings = subscribedState
