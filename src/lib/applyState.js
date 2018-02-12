@@ -2,7 +2,12 @@ import error from './error.js'
 import applyDots from './applyDots.js'
 import assertType from './assertType.js'
 
-export default function applyStateKey (state, stateKey) {
+export default function applyState ({ state, component }) {
+  const [key, target] = component.sbPrivate.stateSubscriptions[0]
+  return { [target]: state[key] }
+}
+
+export function applyStateKey (state, stateKey) {
   if (stateKey === undefined) return state
 
   assertType(stateKey, 'string', 'subscribe key type')

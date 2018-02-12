@@ -33,8 +33,12 @@ export default function define (name, Component = {}) {
     )
   }
 
+  const subscriptions = Component.prototype.subscribe
+    ? Component.prototype.subscribe()
+    : {}
+
   const { stateSubscriptions, attributeSubscriptions } = parseSubscriptions(
-    Component.prototype.subscribe ? Component.prototype.subscribe() : {}
+    subscriptions
   )
 
   class ShadowComponent extends Component {
@@ -55,6 +59,8 @@ export default function define (name, Component = {}) {
       if (stateSubscriptions.length) {
         this.sbPrivate.stateSubscriptions = stateSubscriptions
       }
+
+      this.sbPrivate.subscriptions = subscriptions
     }
     connectedCallback () {
       componentId++
