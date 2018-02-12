@@ -8,9 +8,9 @@ test('bind single elements', async t => {
   t.deepEqual(...(await server.test('basic-bindings')))
 })
 
-// test('successfully bind a basic repeater', async t => {
-//   t.deepEqual(...(await server.test('basic-repeater')))
-// })
+test('successfully bind a basic repeater', async t => {
+  t.deepEqual(...(await server.test('basic-repeater')))
+})
 
 test('error if array or object bound to attribute or html', async t => {
   t.deepEqual(...(await server.test('bind-array')))
@@ -52,13 +52,13 @@ test('error if closed shadowRoot is used', async t => {
   t.deepEqual(...(await server.test('closed-shadow-root')))
 })
 
-// test('error if css binding not an object', async t => {
-//   t.deepEqual(...(await server.test('css-wrong-type')))
-// })
+test('error if css binding not an object', async t => {
+  t.deepEqual(...(await server.test('css-wrong-type')))
+})
 
-// test('error if non function used as event handler', async t => {
-//   t.deepEqual(...(await server.test('event-type')))
-// })
+test('error if non function used as event handler', async t => {
+  t.deepEqual(...(await server.test('event-type')))
+})
 
 test('error if invalid tag name used', async t => {
   t.deepEqual(...(await server.test('invalid-tag-name')))
@@ -84,29 +84,29 @@ test('error if property is undefined', async t => {
   t.deepEqual(...(await server.test('prop-undefined')))
 })
 
-// test('repeater can add and remove elements (including all)', async t => {
-//   t.deepEqual(...(await server.test('repeater-add-remove')))
-// })
+test('repeater can add and remove elements (including all)', async t => {
+  t.deepEqual(...(await server.test('repeater-add-remove')))
+})
 
-// test('error if bind property is wrong type', async t => {
-//   t.deepEqual(...(await server.test('repeater-bind-type')))
-// })
+test('error if bind property is wrong type', async t => {
+  t.deepEqual(...(await server.test('repeater-bind-type')))
+})
 
-// test('can bind nested repeaters', async t => {
-//   t.deepEqual(...(await server.test('repeater-nested')))
-// })
+test('can bind nested repeaters', async t => {
+  t.deepEqual(...(await server.test('repeater-nested')))
+})
 
-// test('error if not binding an array to a repeater', async t => {
-//   t.deepEqual(...(await server.test('repeater-type')))
-// })
+test('error if not binding an array to a repeater', async t => {
+  t.deepEqual(...(await server.test('repeater-type')))
+})
 
-// test('slots still work in repeaters', async t => {
-//   t.deepEqual(...(await server.test('repeater-slots')))
-// })
+test('slots still work in repeaters', async t => {
+  t.deepEqual(...(await server.test('repeater-slots')))
+})
 
-// test('error if binding to an element without a shadowRoot', async t => {
-//   t.deepEqual(...(await server.test('repeater-without-shadow')))
-// })
+test('error if binding to an element without a shadowRoot', async t => {
+  t.deepEqual(...(await server.test('repeater-without-shadow')))
+})
 
 // test('error if state key begins or ends with dot', async t => {
 //   t.deepEqual(...(await server.test('state-key-invalid')))

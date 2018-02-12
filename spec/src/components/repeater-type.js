@@ -1,37 +1,28 @@
-import { subscribe, publish } from '../../../src/index.js'
+import define from '../../../src/index.js'
 
-class CustomElem extends HTMLElement { // eslint-disable-line
+class CustomElem extends window.HTMLElement {
   constructor () {
     super()
     this.attachShadow({ mode: 'open' })
   }
 }
 
-class RepeaterType extends HTMLElement { // eslint-disable-line
-  constructor () {
-    super()
-    this.attachShadow({ mode: 'open' })
-    this.shadowRoot.innerHTML = /* @html */`
-    <custom-elem :for="notAnArray"></custom-elem>`
+class RepeaterType extends window.HTMLElement {
+  template () {
+    return /* @html */`<custom-elem :for="notAnArray"></custom-elem>`
   }
-
-  connectedCallback () {
-    subscribe(this)
-  }
-
   getActual () {
     try {
-      publish({ notAnArray: 'instead a string' })
+      this.publish({ notAnArray: 'instead a string' })
     } catch (err) {
       return err.code || err.message
     }
     return 'no errors'
   }
-
   getExpected () {
     return 'shadowbind_for_type'
   }
 }
 
-window.customElements.define('repeater-type', RepeaterType)
-window.customElements.define('custom-elem', CustomElem)
+define(RepeaterType)
+define(CustomElem)

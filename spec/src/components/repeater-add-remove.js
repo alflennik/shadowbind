@@ -1,4 +1,4 @@
-import { subscribe, publish } from '../../../src/index.js'
+import define from '../../../src/index.js'
 
 function readIdList () {
   const repeatShadow = document.querySelector('repeater-add-remove').shadowRoot
@@ -10,13 +10,9 @@ function readIdList () {
   return idList
 }
 
-class RepeaterAddRemove extends HTMLElement { // eslint-disable-line
-  constructor () {
-    super()
-    subscribe(this)
-    this.attachShadow({ mode: 'open' })
-    this.shadowRoot.innerHTML = /* @html */`
-    <id-list :for="idList"></id-list>`
+class RepeaterAddRemove extends window.HTMLElement {
+  template () {
+    return /* @html */`<id-list :for="idList"></id-list>`
   }
   async getExpected () {
     return {
@@ -29,31 +25,28 @@ class RepeaterAddRemove extends HTMLElement { // eslint-disable-line
   }
   async getActual () {
     let attempts = {}
-    publish({ idList: ['a', 'b', 'c', 'd'] })
+    this.publish({ idList: ['a', 'b', 'c', 'd'] })
     attempts.attempt1 = readIdList()
-    publish({ idList: ['b', 'c'] })
+    this.publish({ idList: ['b', 'c'] })
     attempts.attempt2 = readIdList()
-    publish({ idList: ['c', 'b', 'a'] })
+    this.publish({ idList: ['c', 'b', 'a'] })
     attempts.attempt3 = readIdList()
-    publish({ idList: [] })
+    this.publish({ idList: [] })
     attempts.attempt4 = readIdList()
-    publish({ idList: ['a', 'b', 'c', 'd', 'e'] })
+    this.publish({ idList: ['a', 'b', 'c', 'd', 'e'] })
     attempts.attempt5 = readIdList()
     return attempts
   }
 }
 
-class IdList extends HTMLElement { // eslint-disable-line
-  constructor () {
-    super()
-    this.attachShadow({ mode: 'open' })
-    this.shadowRoot.innerHTML = /* @html */`
-    <h2 bind:id="id"></h2>`
+class IdList extends window.HTMLElement {
+  template () {
+    return /* @html */`<h2 attr:id="id"></h2>`
   }
   bind (state) {
     return { id: state }
   }
 }
 
-window.customElements.define('repeater-add-remove', RepeaterAddRemove)
-window.customElements.define('id-list', IdList)
+define(RepeaterAddRemove)
+define(IdList)

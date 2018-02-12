@@ -1,38 +1,31 @@
-import { subscribe, publish } from '../../../src/index.js'
+import define from '../../../src/index.js'
 
-class InvalidBind extends HTMLElement { // eslint-disable-line
+class InvalidBind extends window.HTMLElement {
   constructor () {
     super()
-    this.attachShadow({ mode: 'open' })
-    this.shadowRoot.innerHTML = /* @html */`
-    <span></span>`
-
     this.bind = 'a string'
+  }
+  template () {
+    return /* @html */`<span></span>`
   }
 }
 
-class RepeaterBindType extends HTMLElement { // eslint-disable-line
-  constructor () {
-    super()
-    subscribe(this)
-    this.attachShadow({ mode: 'open' })
-    this.shadowRoot.innerHTML = /* @html */`
-    <invalid-bind :for="myData"></invalid-bind>`
+class RepeaterBindType extends window.HTMLElement {
+  template () {
+    return /* @html */`<invalid-bind :for="myData"></invalid-bind>`
   }
-
   getActual () {
     try {
-      publish({ myData: [1, 2, 3] })
+      this.publish({ myData: [1, 2, 3] })
     } catch (err) {
       return err.code || err.message
     }
     return 'no errors'
   }
-
   getExpected () {
     return 'shadowbind_bind_property_type'
   }
 }
 
-window.customElements.define('repeater-bind-type', RepeaterBindType)
-window.customElements.define('invalid-bind', InvalidBind)
+define(RepeaterBindType)
+define(InvalidBind)

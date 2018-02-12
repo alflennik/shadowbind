@@ -1,14 +1,12 @@
-import { subscribe, publish } from '../../../src/index.js'
+import define from '../../../src/index.js'
 
-class BasicRepeater extends HTMLElement { // eslint-disable-line
-  constructor () {
-    super()
-    subscribe(this)
-    this.attachShadow({ mode: 'open' })
-    this.shadowRoot.innerHTML = /* @html */`
-    <h2 :text="beforeText" id="beforeText"></h2>
-    <repeat-element :for="locations" class="loop"></repeat-element>
-    <h2 :text="afterText" id="afterText"></h2>`
+class BasicRepeater extends window.HTMLElement {
+  template () {
+    return /* @html */`
+      <h2 :text="beforeText" id="beforeText"></h2>
+      <repeat-element :for="locations" class="loop"></repeat-element>
+      <h2 :text="afterText" id="afterText"></h2>
+    `
   }
 
   async getExpected () {
@@ -25,7 +23,7 @@ class BasicRepeater extends HTMLElement { // eslint-disable-line
   }
 
   async getActual () {
-    publish({
+    this.publish({
       beforeText: 'Before the Locations',
       locations: [
         { name: 'Seattle', population: '1,000,000' },
@@ -53,15 +51,14 @@ class BasicRepeater extends HTMLElement { // eslint-disable-line
   }
 }
 
-class RepeatElement extends HTMLElement { // eslint-disable-line
-  constructor () {
-    super()
-    this.attachShadow({ mode: 'open' })
-    this.shadowRoot.innerHTML = /* @html */`
-    <h2 :text="name"></h2>
-    <p>Population: <span :text="population"></span></p>`
+class RepeatElement extends window.HTMLElement {
+  template () {
+    return /* @html */`
+      <h2 :text="name"></h2>
+      <p>Population: <span :text="population"></span></p>
+    `
   }
 }
 
-window.customElements.define('basic-repeater', BasicRepeater)
-window.customElements.define('repeat-element', RepeatElement)
+define(BasicRepeater)
+define(RepeatElement)
