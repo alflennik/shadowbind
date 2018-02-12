@@ -29,5 +29,8 @@ export default function error (code, errorMessage, notes) {
   if (notes) message.push('\n\n' + notes)
 
   console.error(...message)
-  throw { code } // eslint-disable-line
+  class ShadowbindError extends Error {}
+  const error = new ShadowbindError(code)
+  error.code = code
+  throw error
 }

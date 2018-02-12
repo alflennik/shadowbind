@@ -100,9 +100,9 @@ test('error if property is undefined', async t => {
 //   t.deepEqual(...(await server.test('repeater-type')))
 // })
 
-test('slots still work in repeaters', async t => {
-  t.deepEqual(...(await server.test('repeater-slots')))
-})
+// test('slots still work in repeaters', async t => {
+//   t.deepEqual(...(await server.test('repeater-slots')))
+// })
 
 // test('error if binding to an element without a shadowRoot', async t => {
 //   t.deepEqual(...(await server.test('repeater-without-shadow')))
