@@ -52,10 +52,6 @@ test('error if closed shadowRoot is used', async t => {
   t.deepEqual(...(await server.test('closed-shadow-root')))
 })
 
-test('error if css binding not an object', async t => {
-  t.deepEqual(...(await server.test('css-wrong-type')))
-})
-
 test('error if non function used as event handler', async t => {
   t.deepEqual(...(await server.test('event-type')))
 })
