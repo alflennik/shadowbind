@@ -33,17 +33,20 @@ export default function define (name, Component = {}) {
     )
   }
 
-  const subscriptions = Component.prototype.subscribe
+  const rawSubscriptions = Component.prototype.subscribe
     ? Component.prototype.subscribe()
     : {}
 
-  const { stateSubscriptions, attributeSubscriptions } = parseSubscriptions(
-    subscriptions
-  )
+  const {
+    subscriptions,
+    observedAttrs,
+    observedProps,
+    observedState
+  } = parseSubscriptions(rawSubscriptions)
 
   class ShadowComponent extends Component {
     static observedAttributes () {
-      return attributeSubscriptions
+      return observedAttrs
     }
     constructor () {
       super()
@@ -56,10 +59,8 @@ export default function define (name, Component = {}) {
         this.shadowRoot.appendChild(template.content.cloneNode(true))
       }
 
-      if (stateSubscriptions.length) {
-        this.sbPrivate.stateSubscriptions = stateSubscriptions
-      }
-
+      this.sbPrivate.observedState = observedState
+      this.sbPrivate.observedProps = observedProps
       this.sbPrivate.subscriptions = subscriptions
     }
     connectedCallback () {

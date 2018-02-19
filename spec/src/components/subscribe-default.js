@@ -2,19 +2,19 @@ import define, { publish } from '../../../src/index.js'
 
 let state
 
-class SubscribeState extends window.HTMLElement {
+class SubscribeDefault extends window.HTMLElement {
   subscribe () {
-    return { abc: 'state' }
+    return { test: { default: 'abc' } }
   }
   getActual () {
-    publish({ abc: true })
+    publish()
     return state
   }
   getExpected () {
-    return true
+    return 'abc'
   }
-  bind ({ abc }) {
-    state = abc
+  bind ({ test }) {
+    state = test
     return {}
   }
   template () {
@@ -22,4 +22,4 @@ class SubscribeState extends window.HTMLElement {
   }
 }
 
-define(SubscribeState)
+define(SubscribeDefault)

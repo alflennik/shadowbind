@@ -104,6 +104,14 @@ test('error if binding to an element without a shadowRoot', async t => {
   t.deepEqual(...(await server.test('repeater-without-shadow')))
 })
 
+test('subscribe supports default values', async t => {
+  t.deepEqual(...(await server.test('subscribe-default')))
+})
+
+test('subscribe supports renamed state keys', async t => {
+  t.deepEqual(...(await server.test('subscribe-rename')))
+})
+
 // test('error if state key begins or ends with dot', async t => {
 //   t.deepEqual(...(await server.test('state-key-invalid')))
 // })
