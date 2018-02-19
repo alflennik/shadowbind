@@ -104,8 +104,20 @@ test('error if binding to an element without a shadowRoot', async t => {
   t.deepEqual(...(await server.test('repeater-without-shadow')))
 })
 
+test('subscribe supports state', async t => {
+  t.deepEqual(...(await server.test('subscribe-state')))
+})
+
 test('subscribe supports default values', async t => {
   t.deepEqual(...(await server.test('subscribe-default')))
+})
+
+test('subscribe uses most recent of multiple values', async t => {
+  t.deepEqual(...(await server.test('subscribe-multiple')))
+})
+
+test('subscribe understands nested keys and ignores unknown keys', async t => {
+  t.deepEqual(...(await server.test('subscribe-nested')))
 })
 
 test('subscribe supports renamed state keys', async t => {
