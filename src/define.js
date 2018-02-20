@@ -2,7 +2,7 @@ import trace from './lib/trace.js'
 import error from './lib/error.js'
 import getType from './util/getType.js'
 import pascalToTrainCase from './util/pascalToTrainCase.js'
-import bindComponent from './lib/bindComponent.js'
+import queueChanges from './lib/queueChanges.js'
 import parseSubscriptions from './lib/parseSubscriptions.js'
 
 let components = {}
@@ -74,7 +74,7 @@ export default function define (name, Component = {}) {
       forwardProperty(Component, 'disconnectedCallback')
     }
     publish (bindings) {
-      bindComponent(this, bindings)
+      queueChanges(this, { direct: bindings })
     }
   }
 

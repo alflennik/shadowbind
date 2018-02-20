@@ -1,7 +1,7 @@
 import getType from '../util/getType.js'
 import error from './error.js'
 
-export default function applyState ({ state, component }) {
+export default function getBindings (component, { state, direct }) {
   const { subscriptions } = component.sbPrivate
   let bindings = {}
 
@@ -30,7 +30,7 @@ export default function applyState ({ state, component }) {
     }
   }
 
-  return bindings
+  return Object.assign(bindings, direct)
 }
 
 export function applyStateKeyDots (state, watchKey) {
