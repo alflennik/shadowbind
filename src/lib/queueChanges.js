@@ -5,14 +5,13 @@ import { state } from '../publish.js'
 let queue = {}
 let queueProcessing = false
 
-export default function queueChanges (component, { direct } = {}) {
+export default function queueChanges (component, changes = {}) {
   let { id, depth } = component.sbPrivate
-  depth = 0
+  depth = 0 // TODO: actually use the real depth
   if (!queue[depth]) queue[depth] = {}
   if (!queue[depth][id]) queue[depth][id] = {}
 
-  if (state) queue[depth][id].state = state
-  if (direct) queue[depth][id].direct = direct
+  Object.assign(queue[depth][id], changes)
   queue[depth][id].component = component
 
   processQueue()
@@ -24,8 +23,9 @@ function processQueue () {
 
   let queueItem = getNextQueue()
   while (queueItem) {
-    const { direct, component } = queueItem
-    const bindings = getBindings(component, { state, direct })
+    const component = queueItem.component
+    delete queueItem.component
+    const bindings = getBindings(component, queueItem)
     try {
       bindComponent(component, bindings)
     } catch (err) {

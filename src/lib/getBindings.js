@@ -1,42 +1,27 @@
-import getType from '../util/getType.js'
-import error from './error.js'
-
-export default function getBindings (component, { state, direct }) {
-  const { subscriptions } = component.sbPrivate
+export default function getBindings (component, changes = {}) {
+  const { subscriptions, bindings: oldBindings = {} } = component.sbPrivate
   let bindings = {}
 
-  for (const [bindKey, binders] of Object.entries(subscriptions)) {
-    for (const { source, watchKey, callback } of binders) {
-      const startValue = (() => {
-        if (source === 'attr') return component.getAttribute(watchKey)
-        if (source === 'state') return applyStateKeyDots(state, watchKey)
+  for (const [bindKey, watchers] of Object.entries(subscriptions)) {
+    for (const { source, watchKey, callback } of watchers) {
+      const sourceChanges = (() => {
+        if (source === 'attr') return changes['attrs']
+        if (source === 'prop') return changes['props']
+        return changes[source] || {}
       })()
 
-      const value = callback ? callback(startValue) : startValue
-      bindings[bindKey] = value
-      if (value !== undefined) break
+      const startValue = sourceChanges[watchKey]
+
+      const value = startValue && callback ? callback(startValue) : startValue
+
+      if (value !== undefined) {
+        bindings[bindKey] = value
+        break
+      }
     }
   }
 
-  return Object.assign(bindings, direct)
-}
-
-export function applyStateKeyDots (state, watchKey) {
-  if (getType(state) !== 'object') return
-
-  if (!/^[^.].+[^.]$/.test(watchKey)) { // cannot begin or end with dot
-    error(
-      'shadowbind_subscribe_key_invalid',
-      `The key "${watchKey}" could not be parsed`
-    )
-  }
-
-  let search = state
-
-  for (const keyPart of watchKey.split('.')) {
-    if (search[keyPart] === undefined) return
-    search = search[keyPart]
-  }
-
-  return search
+  const newBindings = Object.assign(oldBindings, bindings, changes.direct)
+  component.sbPrivate.bindings = newBindings
+  return newBindings
 }

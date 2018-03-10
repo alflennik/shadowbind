@@ -59,6 +59,14 @@ export default function define (name, Component = {}) {
         this.shadowRoot.appendChild(template.content.cloneNode(true))
       }
 
+      if (observedProps.length) {
+        for (const prop of observedProps) {
+          this[prop] = value => {
+            queueChanges(this, { props: { [prop]: value } })
+          }
+        }
+      }
+
       this.sbPrivate.observedState = observedState
       this.sbPrivate.observedProps = observedProps
       this.sbPrivate.subscriptions = subscriptions
@@ -74,7 +82,7 @@ export default function define (name, Component = {}) {
       forwardProperty(Component, 'disconnectedCallback')
     }
     attributeChangedCallback (attrName, oldValue, newValue) {
-      queueChanges(this)
+      queueChanges(this, { attrs: { [attrName]: newValue } })
       forwardProperty(Component, 'attributeChangedCallback')
     }
     publish (bindings) {

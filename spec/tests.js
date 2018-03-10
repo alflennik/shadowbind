@@ -116,10 +116,6 @@ test('subscribe supports state', async t => {
   t.deepEqual(...(await server.test('subscribe-state')))
 })
 
-test('subscribe supports default values', async t => {
-  t.deepEqual(...(await server.test('subscribe-default')))
-})
-
 test('subscribe uses most recent of multiple values', async t => {
   t.deepEqual(...(await server.test('subscribe-multiple')))
 })

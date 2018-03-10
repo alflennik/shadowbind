@@ -50,14 +50,7 @@ function addBindingFromObject (bindKey, obj) {
     if (obj.state) return 'state'
     if (obj.prop) return 'prop'
     if (obj.attr) return 'attr'
-    if (obj.default) return 'default'
   })()
-
-  if (source === 'default') {
-    const isFunction = getType(obj.default) === 'function'
-    const callback = isFunction ? obj.default : () => obj.default
-    return addBinding({ bindKey, source, watchKey: false, callback })
-  }
 
   addBinding({ bindKey, source, watchKey: obj[source], callback: obj.callback })
 }
