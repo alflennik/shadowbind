@@ -6,28 +6,15 @@ export default function getBindings (component, { state, direct }) {
   let bindings = {}
 
   for (const [bindKey, binders] of Object.entries(subscriptions)) {
-    for (let i = binders.length - 1; i >= 0; i--) {
-      const { source, watchKey, callback } = binders[i]
-
+    for (const { source, watchKey, callback } of binders) {
       const startValue = (() => {
-        if (source === 'default') return
         if (source === 'attr') return component.getAttribute(watchKey)
         if (source === 'state') return applyStateKeyDots(state, watchKey)
       })()
 
       const value = callback ? callback(startValue) : startValue
-
       bindings[bindKey] = value
-
       if (value !== undefined) break
-    }
-
-    if (bindings[bindKey] === undefined) {
-      error(
-        'shadowbind_subscribe_key_not_found',
-        `The subscribed key "${bindKey}" could not be determined and no ` +
-          'default was provided'
-      )
     }
   }
 

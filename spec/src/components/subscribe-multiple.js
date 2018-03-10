@@ -4,7 +4,7 @@ let state
 
 class SubscribeMultiple extends window.HTMLElement {
   subscribe () {
-    return { myVal: [{ state: 'usedSecond' }, { state: 'usedFirst' }] }
+    return { myVal: [{ state: 'usedFirst' }, { state: 'usedSecond' }] }
   }
   getActual () {
     let tests = []
