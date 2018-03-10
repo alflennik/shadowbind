@@ -112,12 +112,12 @@ test('subscribe supports attributes', async t => {
   t.deepEqual(...(await server.test('subscribe-attr')))
 })
 
-test('subscribe supports state', async t => {
-  t.deepEqual(...(await server.test('subscribe-state')))
-})
-
 test('subscribe uses most recent of multiple values', async t => {
   t.deepEqual(...(await server.test('subscribe-multiple')))
+})
+
+test('subscribe supports jumping between types of subscriptions', async t => {
+  t.deepEqual(...(await server.test('subscribe-multiple-types')))
 })
 
 test('subscribe understands nested keys and ignores unknown keys', async t => {
@@ -126,6 +126,10 @@ test('subscribe understands nested keys and ignores unknown keys', async t => {
 
 test('subscribe supports renamed state keys', async t => {
   t.deepEqual(...(await server.test('subscribe-rename')))
+})
+
+test('subscribe supports state', async t => {
+  t.deepEqual(...(await server.test('subscribe-state')))
 })
 
 // test('error if state key begins or ends with dot', async t => {

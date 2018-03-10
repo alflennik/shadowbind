@@ -7,8 +7,8 @@ export default function getBindings (component, changes = {}) {
       const sourceChanges = (() => {
         if (source === 'attr') return changes['attrs']
         if (source === 'prop') return changes['props']
-        return changes[source] || {}
-      })()
+        return changes[source]
+      })() || {}
 
       const startValue = sourceChanges[watchKey]
 

@@ -63,6 +63,7 @@ export default function define (name, Component = {}) {
         for (const prop of observedProps) {
           this[prop] = value => {
             queueChanges(this, { props: { [prop]: value } })
+            // TODO: forward properties
           }
         }
       }
