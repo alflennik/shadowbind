@@ -108,6 +108,10 @@ test('error if binding to an element without a shadowRoot', async t => {
   t.deepEqual(...(await server.test('repeater-without-shadow')))
 })
 
+test('subscribe supports attributes', async t => {
+  t.deepEqual(...(await server.test('subscribe-attr')))
+})
+
 test('subscribe supports state', async t => {
   t.deepEqual(...(await server.test('subscribe-state')))
 })

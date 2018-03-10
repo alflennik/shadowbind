@@ -11,6 +11,7 @@ export default function getBindings (component, { state, direct }) {
 
       const startValue = (() => {
         if (source === 'default') return
+        if (source === 'attr') return component.getAttribute(watchKey)
         if (source === 'state') return applyStateKeyDots(state, watchKey)
       })()
 

@@ -45,7 +45,7 @@ export default function define (name, Component = {}) {
   } = parseSubscriptions(rawSubscriptions)
 
   class ShadowComponent extends Component {
-    static observedAttributes () {
+    static get observedAttributes () {
       return observedAttrs
     }
     constructor () {
@@ -72,6 +72,10 @@ export default function define (name, Component = {}) {
     disconnectedCallback () {
       delete components[componentId]
       forwardProperty(Component, 'disconnectedCallback')
+    }
+    attributeChangedCallback (attrName, oldValue, newValue) {
+      queueChanges(this)
+      forwardProperty(Component, 'attributeChangedCallback')
     }
     publish (bindings) {
       queueChanges(this, { direct: bindings })
