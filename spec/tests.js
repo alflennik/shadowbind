@@ -132,6 +132,10 @@ test('subscribe supports state', async t => {
   t.deepEqual(...(await server.test('subscribe-state')))
 })
 
+test('subscribe detects mutations in nested state values', async t => {
+  t.deepEqual(...(await server.test('subscribe-state-mutations')))
+})
+
 // test('error if state key begins or ends with dot', async t => {
 //   t.deepEqual(...(await server.test('state-key-invalid')))
 // })

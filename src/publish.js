@@ -1,5 +1,7 @@
 import trace from './lib/trace.js'
 import getType from './util/getType.js'
+import deepClone from './util/deepClone.js'
+import deepCompare from './util/deepCompare.js'
 import error from './lib/error.js'
 import { components } from './define.js'
 import queueChanges from './lib/queueChanges.js'
@@ -18,9 +20,8 @@ export default function publish (newState) {
     for (const watchKey of observedState) {
       const oldValue = applyStateKeyDots(state, watchKey)
       const newValue = applyStateKeyDots(newState, watchKey)
-      if (newValue !== oldValue /* TODO: doesn't work with objects */) {
-        changedState[watchKey] = newValue
-      }
+
+      if (!deepCompare(newValue, oldValue)) changedState[watchKey] = newValue
     }
     if (Object.keys(changedState).length) {
       queueChanges(component, { state: changedState })
@@ -28,7 +29,7 @@ export default function publish (newState) {
   }
 
   trace.remove('publishedState')
-  state = newState
+  state = deepClone(newState)
 }
 
 export function applyStateKeyDots (state, watchKey) {
