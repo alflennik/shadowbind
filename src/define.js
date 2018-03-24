@@ -2,7 +2,7 @@ import trace from './lib/trace.js'
 import error from './lib/error.js'
 import getType from './util/getType.js'
 import pascalToTrainCase from './util/pascalToTrainCase.js'
-import queueChanges from './lib/queueChanges.js'
+import * as queue from './lib/queue.js'
 import parseSubscriptions from './lib/parseSubscriptions.js'
 
 let components = {}
@@ -62,10 +62,21 @@ export default function define (name, Component = {}) {
       if (observedProps.length) {
         for (const prop of observedProps) {
           this[prop] = value => {
-            queueChanges(this, { props: { [prop]: value } })
+            queue.add(this, { props: { [prop]: value } })
             // TODO: forward properties
           }
         }
+      }
+
+      this.sbPrivate.getDepth = () => {
+        if (
+          !this.parentNode ||
+          !this.parentNode.host ||
+          !this.parentNode.host.sbPrivate
+        ) {
+          return 0
+        }
+        return this.parentNode.host.sbPrivate.getDepth() + 1
       }
 
       this.sbPrivate.observedState = observedState
@@ -83,11 +94,11 @@ export default function define (name, Component = {}) {
       forwardProperty(Component, 'disconnectedCallback')
     }
     attributeChangedCallback (attrName, oldValue, newValue) {
-      queueChanges(this, { attrs: { [attrName]: newValue } })
+      queue.add(this, { attrs: { [attrName]: newValue } })
       forwardProperty(Component, 'attributeChangedCallback')
     }
     publish (bindings) {
-      queueChanges(this, { direct: bindings })
+      queue.add(this, { direct: bindings })
     }
   }
 

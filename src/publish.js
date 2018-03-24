@@ -4,7 +4,7 @@ import deepClone from './util/deepClone.js'
 import deepCompare from './util/deepCompare.js'
 import error from './lib/error.js'
 import { components } from './define.js'
-import queueChanges from './lib/queueChanges.js'
+import * as queue from './lib/queue.js'
 
 let state
 export { state }
@@ -13,6 +13,7 @@ export { state }
 export default function publish (newState) {
   trace.reset()
   trace.add('publishedState', newState)
+  queue.stop()
 
   for (const component of Object.values(components)) {
     let changedState = {}
@@ -24,10 +25,11 @@ export default function publish (newState) {
       if (!deepCompare(newValue, oldValue)) changedState[watchKey] = newValue
     }
     if (Object.keys(changedState).length) {
-      queueChanges(component, { state: changedState })
+      queue.add(component, { state: changedState })
     }
   }
 
+  queue.start()
   trace.remove('publishedState')
   state = deepClone(newState)
 }

@@ -84,6 +84,10 @@ test('error if property is undefined', async t => {
   t.deepEqual(...(await server.test('prop-undefined')))
 })
 
+test('deeply nested elements are bound last to avoid thrashing', async t => {
+  t.deepEqual(...(await server.test('queue-depth')))
+})
+
 test('repeater can add and remove elements (including all)', async t => {
   t.deepEqual(...(await server.test('repeater-add-remove')))
 })

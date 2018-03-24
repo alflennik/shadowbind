@@ -1,4 +1,4 @@
-export default function getBindings (component, changes = {}) {
+export default function getBindings ({ component, changes = {} }) {
   const { subscriptions, bindings: oldBindings = {} } = component.sbPrivate
   let bindings = {}
 
