@@ -128,6 +128,10 @@ test('subscribe understands nested keys and ignores unknown keys', async t => {
   t.deepEqual(...(await server.test('subscribe-nested')))
 })
 
+test('this.publish() should override all other subscriptions', async t => {
+  t.deepEqual(...(await server.test('subscribe-publish-callback')))
+})
+
 test('subscribe supports renamed state keys', async t => {
   t.deepEqual(...(await server.test('subscribe-rename')))
 })

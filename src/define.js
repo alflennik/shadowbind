@@ -37,12 +37,7 @@ export default function define (name, Component = {}) {
     ? Component.prototype.subscribe()
     : {}
 
-  const {
-    subscriptions,
-    observedAttrs,
-    observedProps,
-    observedState
-  } = parseSubscriptions(rawSubscriptions)
+  const { observedAttrs } = parseSubscriptions(rawSubscriptions)
 
   class ShadowComponent extends Component {
     static get observedAttributes () {
@@ -51,6 +46,12 @@ export default function define (name, Component = {}) {
     constructor () {
       super()
       if (!this.sbPrivate) this.sbPrivate = {}
+
+      const {
+        subscriptions,
+        observedProps,
+        observedState
+      } = parseSubscriptions(this.subscribe ? this.subscribe() : {})
 
       if (Component.prototype.template) {
         this.attachShadow({ mode: 'open' })

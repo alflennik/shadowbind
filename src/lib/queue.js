@@ -1,4 +1,4 @@
-import getBindings from './getBindings.js'
+import addBindings from './addBindings.js'
 import bindComponent from './bindComponent.js'
 
 let queue = []
@@ -21,6 +21,7 @@ export function add (component, changes = {}) {
   if (!queue[depth][id].changes) queue[depth][id].changes = {}
 
   Object.assign(queue[depth][id].changes, changes)
+  addBindings(component, changes)
   queue[depth][id].component = component
 
   processQueue()
@@ -31,9 +32,11 @@ function processQueue () {
 
   let queueItem = nextQueueItem()
   while (queueItem) {
-    const bindings = getBindings(queueItem)
-    bindComponent(queueItem.component, bindings)
-
+    queueItem.component.published = Object.assign(
+      queueItem.component.sbPrivate.bindings,
+      queueItem.component.sbPrivate.direct
+    )
+    bindComponent(queueItem.component, queueItem.component.published)
     queueItem = nextQueueItem()
   }
 }

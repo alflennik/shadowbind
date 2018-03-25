@@ -1,5 +1,5 @@
-export default function getBindings ({ component, changes = {} }) {
-  const { subscriptions, bindings: oldBindings = {} } = component.sbPrivate
+export default function addBindings (component, changes = {}) {
+  const subscriptions = component.sbPrivate.subscriptions
   let bindings = {}
 
   for (const [bindKey, watchers] of Object.entries(subscriptions)) {
@@ -11,9 +11,7 @@ export default function getBindings ({ component, changes = {} }) {
       })() || {}
 
       const startValue = sourceChanges[watchKey]
-
       const value = startValue && callback ? callback(startValue) : startValue
-
       if (value !== undefined) {
         bindings[bindKey] = value
         break
@@ -21,7 +19,16 @@ export default function getBindings ({ component, changes = {} }) {
     }
   }
 
-  const newBindings = Object.assign(oldBindings, bindings, changes.direct)
-  component.sbPrivate.bindings = newBindings
-  return newBindings
+  const newPublished = Object.assign(
+    component.sbPrivate.bindings || {},
+    bindings
+  )
+
+  component.sbPrivate.direct = Object.assign(
+    component.sbPrivate.direct || {},
+    changes.direct
+  )
+
+  component.sbPrivate.bindings = newPublished
+  return newPublished
 }
