@@ -9,14 +9,21 @@ import walkElement from '../util/walkElement.js'
 import { replaceElement, replacePlaceholder } from './bindIf.js'
 
 export default function bindAttribute (
+  component,
   element,
-  localBindings,
-  { type, subtype, key } = {}
+  bindings,
+  type,
+  subtype,
+  key
 ) {
+  if (type === 'on') {
+    return bindEvent(component, element, bindings, subtype, key)
+  }
+
   let value
 
   if (key.indexOf('.') === -1) {
-    if (!Object.keys(localBindings).includes(key)) {
+    if (!Object.keys(bindings).includes(key)) {
       const searchSource = trace.get().bindReturned
         ? 'the object returned by bind()'
         : 'the subscribed state'
@@ -27,10 +34,10 @@ export default function bindAttribute (
       )
     }
 
-    value = localBindings[key]
+    value = bindings[key]
   } else {
     value = applyDots(
-      localBindings,
+      bindings,
       key,
       bindMethodUsed ? 'localState' : 'subscribedState',
       bindMethodUsed ? 'local state' : 'subscribed state',
@@ -89,25 +96,6 @@ export default function bindAttribute (
 
       if (value != null) {
         type === 'text' ? element.innerText = value : element.innerHTML = value
-      }
-      break
-
-    case 'on':
-      assertType(value, 'function', 'event type')
-
-      if (
-        !(element.sbPrivate && element.sbPrivate.eventsAlreadyBound)
-      ) {
-        subtype.split(',').forEach(trigger => {
-          element.addEventListener(trigger, event => {
-            const shouldPropagate = value(event)
-            if (shouldPropagate !== false) return
-            event.preventDefault()
-            event.stopPropagation()
-          })
-          if (!element.sbPrivate) element.sbPrivate = {}
-          element.sbPrivate.eventsAlreadyBound = true
-        })
       }
       break
 
@@ -176,4 +164,23 @@ export default function bindAttribute (
   }
 
   trace.remove('attributeState')
+}
+
+function bindEvent (component, element, bindings, subtype, key) {
+  assertType(component[key], 'function', 'event type')
+
+  if (
+    !(element.sbPrivate && element.sbPrivate.eventsAlreadyBound)
+  ) {
+    subtype.split(',').forEach(trigger => {
+      element.addEventListener(trigger, event => {
+        const shouldPropagate = component[key](event)
+        if (shouldPropagate !== false) return
+        event.preventDefault()
+        event.stopPropagation()
+      })
+      if (!element.sbPrivate) element.sbPrivate = {}
+      element.sbPrivate.eventsAlreadyBound = true
+    })
+  }
 }

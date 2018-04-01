@@ -26,7 +26,7 @@ export default function bindComponent (component, bindings) {
   walkFragment(component, element => {
     trace.add('element', element)
     bindRepeater(element, bindings)
-    bindElement(element, bindings)
+    bindElement(component, element, bindings)
     trace.remove('element')
   })
 

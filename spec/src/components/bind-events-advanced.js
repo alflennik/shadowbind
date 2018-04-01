@@ -9,14 +9,9 @@ class BindEventsAdvanced extends window.HTMLElement {
       <input on:focus,blur,input="updateCounter">
     `
   }
-  bind (state) {
-    return {
-      ...state,
-      updateCounter: event => {
-        counter++
-        this.publish({ counter })
-      }
-    }
+  updateCounter (event) {
+    counter++
+    this.publish({ counter })
   }
   getExpected () {
     return [0, 1, 2, 3]

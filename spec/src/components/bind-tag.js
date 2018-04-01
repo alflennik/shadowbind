@@ -36,13 +36,8 @@ class BindTag extends HTMLElement { // eslint-disable-line
       </div>
     `
   }
-  bind (state) {
-    return {
-      ...state,
-      eventTest: event => {
-        eventHasRun = true
-      }
-    }
+  eventTest (event) {
+    eventHasRun = true
   }
   getExpected () {
     return [

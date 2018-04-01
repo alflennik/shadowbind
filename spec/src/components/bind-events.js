@@ -8,14 +8,9 @@ class BindEvents extends window.HTMLElement {
       <button on:click="incrementCounter" :text="counter"></button>
     `
   }
-  bind (state) {
-    return {
-      ...state,
-      incrementCounter: event => {
-        counter++
-        this.publish({ counter })
-      }
-    }
+  incrementCounter (event) {
+    counter++
+    this.publish({ counter })
   }
   getExpected () {
     return [0, 1, 2]
