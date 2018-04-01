@@ -1,4 +1,4 @@
-import define from '../../../src/index.js'
+import { define } from '../../../src/index.js'
 
 class EventType extends window.HTMLElement {
   template () {

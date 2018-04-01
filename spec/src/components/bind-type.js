@@ -1,4 +1,4 @@
-import define from '../../../src/index.js'
+import { define } from '../../../src/index.js'
 
 class BindType extends window.HTMLElement {
   template () {

@@ -1,4 +1,4 @@
-import define from '../../../src/index.js'
+import { define } from '../../../src/index.js'
 
 class NoShadowRoot extends window.HTMLElement {
   getActual () {

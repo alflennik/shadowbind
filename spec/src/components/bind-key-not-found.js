@@ -1,4 +1,4 @@
-import define from '../../../src/index.js'
+import { define } from '../../../src/index.js'
 
 class BindKeyNotFound extends window.HTMLElement {
   template () {

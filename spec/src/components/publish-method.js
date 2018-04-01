@@ -1,4 +1,4 @@
-import define, { publish } from '../../../src/index.js'
+import { define, publish } from '../../../src/index.js'
 
 class ShowText extends window.HTMLElement {
   subscribe () {

@@ -1,4 +1,4 @@
-import define from '../../../src/index.js'
+import { define } from '../../../src/index.js'
 
 class TagAndRepeater extends window.HTMLElement {
   getActual () {
