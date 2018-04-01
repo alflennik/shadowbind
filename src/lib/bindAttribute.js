@@ -65,8 +65,13 @@ export default function bindAttribute (
 
   switch (type) {
     case 'attr':
-      if (value !== null) element.setAttribute(subtype, value)
-      else element.removeAttribute(subtype)
+      if (value === true) {
+        element.setAttribute(subtype, '')
+      } else if (value != null && value !== false) {
+        element.setAttribute(subtype, value)
+      } else {
+        element.removeAttribute(subtype)
+      }
       break
 
     case 'prop':

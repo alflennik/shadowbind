@@ -48,6 +48,10 @@ test('error if bind does not return an object', async t => {
   t.deepEqual(...(await server.test('bind-type')))
 })
 
+test('booleans simply show or hide attribute with no value', async t => {
+  t.deepEqual(...(await server.test('boolean-attributes')))
+})
+
 test('error if closed shadowRoot is used', async t => {
   t.deepEqual(...(await server.test('closed-shadow-root')))
 })
