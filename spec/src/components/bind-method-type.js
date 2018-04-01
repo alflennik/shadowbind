@@ -6,7 +6,7 @@ class BindMethodType extends window.HTMLElement {
     this.bind = 'a string'
   }
   template () {
-    return /* @html */`<div :for="myData"></div>`
+    return /* @html */`<div :publish="myData"></div>`
   }
   getActual () {
     try {

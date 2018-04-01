@@ -100,16 +100,12 @@ test('can bind nested repeaters', async t => {
   t.deepEqual(...(await server.test('repeater-nested')))
 })
 
-test('error if not binding an array to a repeater', async t => {
-  t.deepEqual(...(await server.test('repeater-type')))
-})
-
 test('slots still work in repeaters', async t => {
   t.deepEqual(...(await server.test('repeater-slots')))
 })
 
 test('error if binding to an element without a shadowRoot', async t => {
-  t.deepEqual(...(await server.test('repeater-without-shadow')))
+  t.deepEqual(...(await server.test('repeater-non-component')))
 })
 
 test('subscribe supports attributes', async t => {
@@ -142,6 +138,10 @@ test('subscribe supports state', async t => {
 
 test('subscribe detects mutations in nested state values', async t => {
   t.deepEqual(...(await server.test('subscribe-state-mutations')))
+})
+
+test('repeater should work in concert with tag binding', async t => {
+  t.deepEqual(...(await server.test('tag-and-repeater')))
 })
 
 // test('error if state key begins or ends with dot', async t => {

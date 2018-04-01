@@ -14,8 +14,8 @@ export default function bindRepeater (element, bindings) {
 
   if (getType(value) !== 'array') {
     error(
-      'shadowbind_for_type',
-      `"${key}" must be an array when using ":for", but it was ` +
+      'shadowbind_publish_type',
+      `"${key}" must be an array when using ":publish", but it was ` +
         `"${getType(value)}"`
     )
   }
@@ -35,10 +35,10 @@ export default function bindRepeater (element, bindings) {
 
   if (expectedCount === 0) return
 
-  if (!element.shadowRoot) {
+  if (!element.sbPrivate) {
     error(
-      'shadowbind_for_without_shadow_root',
-      `":for" must be used on an element with a shadowRoot`
+      'shadowbind_publish_non_component',
+      `":publish" must be used on a shadowbind web component`
     )
   }
 
@@ -51,25 +51,25 @@ export default function bindRepeater (element, bindings) {
 }
 
 function firstElementInRepeat (element) {
-  if (!element.getAttribute(':for')) return false
+  if (!element.getAttribute(':publish')) return false
   const partOfRepeat = PartOfRepeat(element)
   if (element.previousElementSibling === null) return true
   return !partOfRepeat(element.previousElementSibling)
 }
 
 function PartOfRepeat (element) {
-  const elementKey = element.getAttribute(':for')
+  const elementKey = element.getAttribute(':publish')
   return compare => {
     if (compare === null) return false
-    const key = compare.getAttribute(':for')
+    const key = compare.getAttribute(':publish')
     return elementKey === key
   }
 }
 
 function loadKeyValue (element, emptyRepeaterId, bindings) {
   const key = (() => {
-    if (!emptyRepeaterId) return element.getAttribute(':for')
-    return emptyExamples[emptyRepeaterId].getAttribute(':for')
+    if (!emptyRepeaterId) return element.getAttribute(':publish')
+    return emptyExamples[emptyRepeaterId].getAttribute(':publish')
   })()
   const value = bindings[key]
   return { key, value }

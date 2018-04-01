@@ -27,7 +27,7 @@ export function subscribe (component, stateKey) {
     )
   }
 
-  if (component.getAttribute(':publish') || component.getAttribute(':for')) {
+  if (component.getAttribute(':publish')) {
     return // in these cases the state will be bound manually by the user
   }
 

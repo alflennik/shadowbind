@@ -3,7 +3,7 @@ import define from '../../../src/index.js'
 class RepeaterSlots extends window.HTMLElement {
   template () {
     return /* @html */`
-      <repeated-slot-element :for="items" class="loop">
+      <repeated-slot-element :publish="items" class="loop">
         <h2 :text="text" class="slotted"></h2>
       </repeated-slot-element>
     `

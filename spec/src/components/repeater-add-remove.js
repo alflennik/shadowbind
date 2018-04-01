@@ -12,7 +12,7 @@ function readIdList () {
 
 class RepeaterAddRemove extends window.HTMLElement {
   template () {
-    return /* @html */`<id-list :for="idList"></id-list>`
+    return /* @html */`<id-list :publish="idList"></id-list>`
   }
   async getExpected () {
     return {
