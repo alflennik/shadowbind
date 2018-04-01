@@ -56,6 +56,10 @@ test('error if non function used as event handler', async t => {
   t.deepEqual(...(await server.test('event-type')))
 })
 
+test('library exports available as globals on window', async t => {
+  t.deepEqual(...(await server.test('global-shadowbind-support')))
+})
+
 test('error if invalid tag name used', async t => {
   t.deepEqual(...(await server.test('invalid-tag-name')))
 })
