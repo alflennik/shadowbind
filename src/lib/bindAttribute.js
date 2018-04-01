@@ -1,4 +1,4 @@
-import bindComponent, { bindMethodUsed } from './bindComponent.js'
+import { bindMethodUsed } from './bindComponent.js'
 import trace from './trace.js'
 import error from './error.js'
 import assertType from './assertType.js'
@@ -129,10 +129,6 @@ export default function bindAttribute (
       } else {
         element.classList.remove(subtype)
       }
-      break
-
-    case 'publish':
-      bindComponent(element, value)
       break
 
     case 'tag':

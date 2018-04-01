@@ -10,14 +10,18 @@ export default function bindRepeater (element, bindings) {
   const emptyRepeaterId = getEmptyRepeaterId(element)
   if (!firstElementInRepeat(element) && !emptyRepeaterId) return
 
-  const { key, value } = loadKeyValue(element, emptyRepeaterId, bindings)
+  let { key, value } = loadKeyValue(element, emptyRepeaterId, bindings)
 
-  if (getType(value) !== 'array') {
+  const valueType = getType(value)
+  if (valueType !== 'object' && valueType !== 'array') {
     error(
       'shadowbind_publish_type',
-      `"${key}" must be an array when using ":publish", but it was ` +
+      `"${key}" must be an array or object when using ":publish", but it was ` +
         `"${getType(value)}"`
     )
+  }
+  if (valueType === 'object') {
+    value = [value]
   }
 
   trace.add('repeaterState', value)

@@ -1,6 +1,9 @@
 import define, { publish } from '../../../src/index.js'
 
 class ShowText extends window.HTMLElement {
+  subscribe () {
+    return { text: 'state' }
+  }
   template () {
     return /* @html */`
       <span :text="text" id="test">just some placeholder text</span>
@@ -9,31 +12,34 @@ class ShowText extends window.HTMLElement {
 }
 
 class PublishMethod extends window.HTMLElement {
-  template () {
-    return /* @html */`
-      <show-text :publish="alternateText" id="show-text"></show-text>
-      <show-text id="other-text"></show-text>
-    `
+  subscribe () {
+    return { text: 'state', alternate: 'state' }
   }
   getActual () {
     const testElement = this.shadowRoot.querySelector('#show-text').shadowRoot
     const otherElement = this.shadowRoot.querySelector('#other-text').shadowRoot
     let tests = []
-    publish({ text: 'should not appear', alternateText: null })
+    publish({ text: 'default text', alternate: { text: null } })
     tests.push(testElement.querySelector('#test').innerText)
     tests.push(otherElement.querySelector('#test').innerText)
-    publish({ text: null, alternateText: 'alternateText appears' })
+    publish({ text: null, alternate: { text: 'overridden text' } })
     tests.push(testElement.querySelector('#test').innerText)
     tests.push(otherElement.querySelector('#test').innerText)
     return tests
   }
   getExpected () {
     return [
-      'just some placeholder text',
-      'should not appear',
-      'alternateText appears',
-      'should not appear'
+      'default text',
+      'default text',
+      'overridden text',
+      'default text'
     ]
+  }
+  template () {
+    return /* @html */`
+      <show-text :publish="alternate" id="show-text"></show-text>
+      <show-text id="other-text"></show-text>
+    `
   }
 }
 
