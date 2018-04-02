@@ -1,23 +1,22 @@
-// import { subscribe, publish } from '../../../src/index.js'
-//
-// class StateKeyInvalid extends HTMLElement { // eslint-disable-line
-//   constructor () {
-//     super()
-//     subscribe(this, 'firstKey.secondKey.')
-//     this.attachShadow({ mode: 'open' })
-//   }
-//
-//   getActual () {
-//     try {
-//       publish({})
-//     } catch (err) {
-//       return err.code || err.message
-//     }
-//   }
-//
-//   getExpected () {
-//     return 'shadowbind_subscribe_key_invalid'
-//   }
-// }
-//
-// window.customElements.define('state-key-invalid', StateKeyInvalid)
+import * as Shadowbind from '../../../src/index.js'
+
+class StateKeyInvalid extends window.HTMLElement {
+  subscribe () {
+    return { invalidKey: { state: 'firstKey.secondKey.' } }
+  }
+  getActual () {
+    try {
+      Shadowbind.publish({})
+    } catch (err) {
+      return err.code || err.message
+    }
+  }
+  getExpected () {
+    return 'shadowbind_subscribe_key_invalid'
+  }
+  template () {
+    return ''
+  }
+}
+
+Shadowbind.define(StateKeyInvalid)

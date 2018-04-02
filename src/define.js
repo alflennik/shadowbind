@@ -19,19 +19,17 @@ export default function define (name, Component = {}) {
     )
   }
 
-  if (arguments.length === 1) {
-    // Name is optional
-    Component = name
-    name = pascalToTrainCase(Component.name)
-  }
+  if (arguments.length === 1) Component = name // Name is optional
 
   if (!(Component.prototype instanceof window.HTMLElement)) {
     error(
-      'shadowbind_subscribe_type',
+      'shadowbind_define_type',
       'The first argument of define() should be a class extending ' +
         `HTMLElement, not "${getType(Component)}"`
     )
   }
+
+  if (arguments.length === 1) name = pascalToTrainCase(Component.name)
 
   const rawSubscriptions = Component.prototype.subscribe
     ? Component.prototype.subscribe()
