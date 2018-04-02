@@ -16,6 +16,14 @@ test('error if array or object bound to attribute or html', async t => {
   t.deepEqual(...(await server.test('bind-array')))
 })
 
+test('binds CSS classes', async t => {
+  t.deepEqual(...(await server.test('bind-css-classes')))
+})
+
+test('binds CSS variables', async t => {
+  t.deepEqual(...(await server.test('bind-css-variables')))
+})
+
 test('binds multiple events with on:click,touchstart', async t => {
   t.deepEqual(...(await server.test('bind-events-advanced')))
 })
