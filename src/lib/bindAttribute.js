@@ -6,7 +6,7 @@ import applyDots from './applyDots.js'
 import getType from '../util/getType.js'
 import toCamelCase from '../util/toCamelCase.js'
 import walkElement from '../util/walkElement.js'
-import { replaceElement, replacePlaceholder } from './bindIf.js'
+import { replaceWithPlaceholder, putElementBack } from './bindIf.js'
 
 export default function bindAttribute (
   component,
@@ -113,10 +113,10 @@ export default function bindAttribute (
       const placeholderId = element.getAttribute('sb:i')
       if (value) {
         if (!placeholderId) return
-        replaceElement(element)
+        putElementBack(element)
       } else {
         if (placeholderId) return
-        replacePlaceholder(element)
+        replaceWithPlaceholder(element)
       }
       break
 

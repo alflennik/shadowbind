@@ -24,6 +24,10 @@ test('binds CSS variables', async t => {
   t.deepEqual(...(await server.test('bind-css-variables')))
 })
 
+test('bind if removes and replaces elements', async t => {
+  t.deepEqual(...(await server.test('bind-if')))
+})
+
 test('binds multiple events with on:click,touchstart', async t => {
   t.deepEqual(...(await server.test('bind-events-advanced')))
 })
