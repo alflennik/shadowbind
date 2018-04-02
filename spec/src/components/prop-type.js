@@ -1,18 +1,13 @@
-import { define } from '../../../src/index.js'
+import * as Shadowbind from '../../../src/index.js'
 
-class WrongPropType extends HTMLElement { // eslint-disable-line
+class WrongPropType extends window.HTMLElement {
   constructor () {
     super()
     this.notFunction = 'a string'
   }
 }
 
-class PropType extends HTMLElement { // eslint-disable-line
-  template () {
-    return /* @html */`
-      <wrong-prop-type prop:not-function="someData"></wrong-prop-type>
-    `
-  }
+class PropType extends window.HTMLElement {
   getActual () {
     try {
       this.publish({ someData: {} })
@@ -24,7 +19,12 @@ class PropType extends HTMLElement { // eslint-disable-line
   getExpected () {
     return 'shadowbind_prop_type'
   }
+  template () {
+    return /* @html */`
+      <wrong-prop-type prop:not-function="someData"></wrong-prop-type>
+    `
+  }
 }
 
-define(PropType)
-define(WrongPropType)
+Shadowbind.define(PropType)
+Shadowbind.define(WrongPropType)
