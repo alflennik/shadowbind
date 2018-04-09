@@ -4,6 +4,7 @@ import getType from './util/getType.js'
 import pascalToTrainCase from './util/pascalToTrainCase.js'
 import * as queue from './lib/queue.js'
 import parseSubscriptions from './lib/parseSubscriptions.js'
+import { getFormValues, setFormValues } from './util/formValues.js'
 
 let components = {}
 let componentId = 0
@@ -51,6 +52,10 @@ export default function define (name, Component = {}) {
         observedState
       } = parseSubscriptions(this.subscribe ? this.subscribe() : {})
 
+      this.sbPrivate.observedState = observedState
+      this.sbPrivate.observedProps = observedProps
+      this.sbPrivate.subscriptions = subscriptions
+
       if (Component.prototype.template) {
         this.attachShadow({ mode: 'open' })
         const template = document.createElement('template')
@@ -77,10 +82,6 @@ export default function define (name, Component = {}) {
         }
         return this.parentNode.host.sbPrivate.getDepth() + 1
       }
-
-      this.sbPrivate.observedState = observedState
-      this.sbPrivate.observedProps = observedProps
-      this.sbPrivate.subscriptions = subscriptions
     }
     connectedCallback () {
       componentId++
@@ -98,6 +99,20 @@ export default function define (name, Component = {}) {
     }
     publish (bindings) {
       queue.add(this, { direct: bindings })
+    }
+    form (newValues) {
+      const firstForm = this.shadowRoot.querySelector('form')
+      if (!firstForm) {
+        error(
+          'shadowbind_missing_form',
+          'Cannot use this.form() because there is no form in this component'
+        )
+      }
+      if (arguments.length > 0) {
+        return setFormValues(firstForm, newValues)
+      } else {
+        return getFormValues(firstForm)
+      }
     }
   }
 
