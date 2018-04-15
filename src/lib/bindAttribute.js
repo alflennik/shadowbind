@@ -1,4 +1,4 @@
-import { bindMethodUsed } from './bindComponent.js'
+import { bindingsMethodUsed } from './bindComponent.js'
 import trace from './trace.js'
 import error from './error.js'
 import assertType from './assertType.js'
@@ -25,8 +25,8 @@ export default function bindAttribute (
   if (key.indexOf('.') === -1) {
     if (!Object.keys(bindings).includes(key)) {
       const searchSource = trace.get().bindReturned
-        ? 'the object returned by bind()'
-        : 'the subscribed state'
+        ? 'bindings'
+        : 'subscribed state'
 
       error(
         'shadowbind_key_not_found',
@@ -39,8 +39,8 @@ export default function bindAttribute (
     value = applyDots(
       bindings,
       key,
-      bindMethodUsed ? 'localState' : 'subscribedState',
-      bindMethodUsed ? 'local state' : 'subscribed state',
+      bindingsMethodUsed ? 'localState' : 'subscribedState',
+      bindingsMethodUsed ? 'local state' : 'subscribed state',
       'shadowbind_key_not_found'
     )
   }

@@ -1,9 +1,9 @@
 import Shadowbind from '../../../src/index.js'
 
-class BindMethodType extends window.HTMLElement {
+class BindingsMethodType extends window.HTMLElement {
   constructor () {
     super()
-    this.bind = 'a string'
+    this.bindings = 'a string'
   }
   template () {
     return /* @html */`<div :publish="myData"></div>`
@@ -17,8 +17,8 @@ class BindMethodType extends window.HTMLElement {
     return 'no errors'
   }
   getExpected () {
-    return 'shadowbind_bind_property_type'
+    return 'shadowbind_bindings_property_type'
   }
 }
 
-Shadowbind.define(BindMethodType)
+Shadowbind.define(BindingsMethodType)

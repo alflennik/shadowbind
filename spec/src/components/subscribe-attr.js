@@ -11,7 +11,7 @@ class SubscribeAttr extends window.HTMLElement {
   getExpected () {
     return 'testing an attribute!'
   }
-  bind ({ attribute }) {
+  bindings ({ attribute }) {
     this.binding = attribute
     return {}
   }

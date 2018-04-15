@@ -13,7 +13,7 @@ class SubscribeRename extends window.HTMLElement {
   getExpected () {
     return 123
   }
-  bind ({ remapped }) {
+  bindings ({ remapped }) {
     state = remapped
     return {}
   }

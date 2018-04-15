@@ -27,7 +27,7 @@ class RepeatedSlotElement extends window.HTMLElement {
   template () {
     return /* @html */`<slot></slot>`
   }
-  bind (state) {
+  bindings (state) {
     return { text: 'should NOT use inner' }
   }
 }

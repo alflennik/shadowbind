@@ -13,7 +13,7 @@ class QueueDepth extends window.HTMLElement {
   async getExpected () {
     return { top: 1, middle: 1, bottom: 1 }
   }
-  bind () {
+  bindings () {
     bindCounts.top++
     return { nestedAttr: 'nested attr 1' }
   }
@@ -28,7 +28,7 @@ class QueueDepth1 extends window.HTMLElement {
   subscribe () {
     return { myState: 'state', watched: 'attr' }
   }
-  bind () {
+  bindings () {
     bindCounts.middle++
     return { deeper: Math.random() }
   }
@@ -41,7 +41,7 @@ class QueueDepth2 extends window.HTMLElement {
   subscribe () {
     return { myState: 'state', watched: 'attr' }
   }
-  bind () {
+  bindings () {
     bindCounts.bottom++
     return {}
   }

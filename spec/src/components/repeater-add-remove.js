@@ -43,7 +43,7 @@ class IdList extends window.HTMLElement {
   template () {
     return /* @html */`<h2 attr:id="id"></h2>`
   }
-  bind (state) {
+  bindings (state) {
     return { id: state }
   }
 }

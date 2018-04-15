@@ -1,14 +1,14 @@
 import Shadowbind from '../../../src/index.js'
 
-class BindType extends window.HTMLElement {
+class BindingsType extends window.HTMLElement {
   template () {
     return ''
   }
-  bind (state) {
+  bindings (state) {
     return 'this is a string'
   }
   async getExpected () {
-    return 'shadowbind_bind_method_return_type'
+    return 'shadowbind_bindings_method_return_type'
   }
   async getActual () {
     try {
@@ -19,4 +19,4 @@ class BindType extends window.HTMLElement {
   }
 }
 
-Shadowbind.define(BindType)
+Shadowbind.define(BindingsType)

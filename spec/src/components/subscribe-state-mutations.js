@@ -42,7 +42,7 @@ class SubscribeStateMutations extends window.HTMLElement {
       counts: [1, 2, 3, 4] // this confirms SB detected the change in state
     }
   }
-  bind ({ mutations }) {
+  bindings ({ mutations }) {
     bindCount++
     state = mutations
     return {}

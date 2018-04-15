@@ -27,7 +27,7 @@ class SubscribePublishCallback extends window.HTMLElement {
   async getExpected () {
     return [1, 1.6, 'should use callback value', '02:00:00']
   }
-  bind ({ miles, kilometers, milesWatcher, time }) {
+  bindings ({ miles, kilometers, milesWatcher, time }) {
     this.miles = miles
     this.kilometers = kilometers
     this.milesWatcher = milesWatcher

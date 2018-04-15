@@ -4,7 +4,7 @@ class Repeat1 extends window.HTMLElement {
   template () {
     return /* @html */`<repeat-2 :publish="myData"></repeat-2>`
   }
-  bind (state) {
+  bindings (state) {
     return { myData: [1, 2, 3] }
   }
 }
@@ -13,7 +13,7 @@ class Repeat2 extends window.HTMLElement {
   template () {
     return /* @html */`<repeat-3 :publish="myData"></repeat-3>`
   }
-  bind (state) {
+  bindings (state) {
     return { myData: [1, 2, 3] }
   }
 }
@@ -22,7 +22,7 @@ class Repeat3 extends window.HTMLElement {
   template () {
     return /* @html */`<span :text="myText"></span>`
   }
-  bind (state) {
+  bindings (state) {
     return { myText: state }
   }
 }

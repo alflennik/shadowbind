@@ -13,7 +13,7 @@ class SubscribeState extends window.HTMLElement {
   getExpected () {
     return true
   }
-  bind ({ abc }) {
+  bindings ({ abc }) {
     state = abc
     return {}
   }

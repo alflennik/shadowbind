@@ -12,7 +12,7 @@ class PublishOverrides extends window.HTMLElement {
   getExpected () {
     return { stick: 'sticky', stink: false, dynamic: 'dynamo' }
   }
-  bind (data) {
+  bindings (data) {
     this.data = data
     return {}
   }

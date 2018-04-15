@@ -13,7 +13,7 @@ class SubscribeProperty extends window.HTMLElement {
   getExpected () {
     return 'Setting a prop'
   }
-  bind ({ myProperty }) {
+  bindings ({ myProperty }) {
     latestValue = myProperty
     return {}
   }

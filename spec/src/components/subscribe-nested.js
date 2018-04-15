@@ -15,7 +15,7 @@ class SubscribeNested extends window.HTMLElement {
   getExpected () {
     return 'yo!'
   }
-  bind ({ myVal }) {
+  bindings ({ myVal }) {
     state = myVal
     return {}
   }

@@ -6,23 +6,23 @@ import trace from './trace.js'
 import parseAttribute from './parseAttribute.js'
 import bindAttribute from './bindAttribute.js'
 
-let bindMethodUsed
-export { bindMethodUsed }
+let bindingsMethodUsed
+export { bindingsMethodUsed }
 
 export default function bindComponent (component, bindings) {
   trace.add('component', component)
   trace.add('subscribedState', bindings)
 
-  if (component.bind) {
-    assertType(component.bind, 'function', 'bind property type')
+  if (component.bindings) {
+    assertType(component.bindings, 'function', 'bindings property type')
 
-    bindings = component.bind(bindings)
+    bindings = component.bindings(bindings)
     trace.add('bindReturned', bindings)
-    bindMethodUsed = true
+    bindingsMethodUsed = true
 
-    assertType(bindings, 'object', 'bind method return type')
+    assertType(bindings, 'object', 'bindings method return type')
   } else {
-    bindMethodUsed = false
+    bindingsMethodUsed = false
   }
 
   walkFragment(component, element => {

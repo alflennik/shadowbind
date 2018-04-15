@@ -45,7 +45,7 @@ test('error if key not found in localBindings', async t => {
 })
 
 test('error if bind is defined but not a function', async t => {
-  t.deepEqual(...(await server.test('bind-method-type')))
+  t.deepEqual(...(await server.test('bindings-method-type')))
 })
 
 test('can bind to nested web components', async t => {
@@ -57,7 +57,7 @@ test(':tag binding is fully functional', async t => {
 })
 
 test('error if bind does not return an object', async t => {
-  t.deepEqual(...(await server.test('bind-type')))
+  t.deepEqual(...(await server.test('bindings-type')))
 })
 
 test('booleans simply show or hide attribute with no value', async t => {

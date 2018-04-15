@@ -17,7 +17,7 @@ class SubscribeMultiple extends window.HTMLElement {
   getExpected () {
     return ['is used!', 'should be used!']
   }
-  bind ({ myVal }) {
+  bindings ({ myVal }) {
     state = myVal
     return {}
   }
