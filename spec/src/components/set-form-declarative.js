@@ -13,6 +13,7 @@ class SetFormDeclarative extends window.HTMLElement {
       checkboxField: ['c3', 'c4'],
       textareaField: 'abc123'
     })
+
     return this.form()
   }
   getExpected () {

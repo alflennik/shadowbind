@@ -13,7 +13,7 @@ function doTest (shadowRoot) {
 
   const stillHasEvents = (() => {
     eventHasRun = false
-    testEl.dispatchEvent(new Event('click')) // eslint-disable-line
+    testEl.dispatchEvent(new Event('click')) // eslint-disable-line no-undef
     return eventHasRun
   })()
 
@@ -25,7 +25,7 @@ function doTest (shadowRoot) {
   ]
 }
 
-class BindTag extends HTMLElement { // eslint-disable-line
+class BindTag extends window.HTMLElement {
   template () {
     return /* @html */`
       <div :tag="currentTag"

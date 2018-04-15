@@ -22,11 +22,11 @@ class BindEventsAdvanced extends window.HTMLElement {
     const testEl = document.querySelector('bind-events-advanced').shadowRoot
     const input = testEl.querySelector('input')
     tests.push(counter)
-    input.dispatchEvent(new Event('focus')) // eslint-disable-line
+    input.dispatchEvent(new Event('focus')) // eslint-disable-line no-undef
     tests.push(counter)
-    input.dispatchEvent(new Event('blur')) // eslint-disable-line
+    input.dispatchEvent(new Event('blur')) // eslint-disable-line no-undef
     tests.push(counter)
-    input.dispatchEvent(new Event('input')) // eslint-disable-line
+    input.dispatchEvent(new Event('input')) // eslint-disable-line no-undef
     tests.push(counter)
     return tests
   }

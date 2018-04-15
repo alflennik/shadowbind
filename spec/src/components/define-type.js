@@ -1,6 +1,6 @@
 import Shadowbind from '../../../src/index.js'
 
-class DefineType extends HTMLElement { // eslint-disable-line
+class DefineType extends window.HTMLElement {
   getActual () {
     window.ready = true
     let tests = []

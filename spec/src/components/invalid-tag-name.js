@@ -1,6 +1,6 @@
 import Shadowbind from '../../../src/index.js'
 
-class InvalidTagName extends HTMLElement { // eslint-disable-line
+class InvalidTagName extends window.HTMLElement {
   template () {
     return /* @html */`<div :tag="invalidTagName"></div>`
   }
