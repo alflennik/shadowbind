@@ -1,4 +1,4 @@
-import { define } from '../../../src/index.js'
+import Shadowbind from '../../../src/index.js'
 
 function readIdList () {
   const repeatShadow = document.querySelector('repeater-add-remove').shadowRoot

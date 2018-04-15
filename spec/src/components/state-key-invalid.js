@@ -1,4 +1,4 @@
-import * as Shadowbind from '../../../src/index.js'
+import Shadowbind from '../../../src/index.js'
 
 class StateKeyInvalid extends window.HTMLElement {
   subscribe () {

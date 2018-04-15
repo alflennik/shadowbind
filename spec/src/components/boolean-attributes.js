@@ -1,4 +1,4 @@
-import { define } from '../../../src/index.js'
+import Shadowbind from '../../../src/index.js'
 
 class BooleanAttributes extends window.HTMLElement {
   getActual () {

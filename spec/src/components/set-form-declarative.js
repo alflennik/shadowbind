@@ -1,4 +1,4 @@
-import * as Shadowbind from '../../../src/index.js'
+import Shadowbind from '../../../src/index.js'
 
 class SetFormDeclarative extends window.HTMLElement {
   getActual () {

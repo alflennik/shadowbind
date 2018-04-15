@@ -1,4 +1,4 @@
-import { define, publish } from '../../../src/index.js'
+import Shadowbind from '../../../src/index.js'
 
 class BindNested extends window.HTMLElement {
   template () {

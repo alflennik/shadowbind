@@ -1,4 +1,4 @@
-import * as Shadowbind from '../../../src/index.js'
+import Shadowbind from '../../../src/index.js'
 
 class BindIf extends window.HTMLElement {
   getActual () {

@@ -1,4 +1,4 @@
-import { define, publish } from '../../../src/index.js'
+import Shadowbind from '../../../src/index.js'
 
 let state
 let bindCount = 0

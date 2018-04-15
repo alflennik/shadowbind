@@ -1,4 +1,4 @@
-import { define } from '../../../src/index.js'
+import Shadowbind from '../../../src/index.js'
 
 class SubscribeAttr extends window.HTMLElement {
   subscribe () {
