@@ -21,7 +21,7 @@ class SubscribePublishCallback extends window.HTMLElement {
     }
   }
   async getActual () {
-    publish({ miles: 1 })
+    Shadowbind.publish({ miles: 1 })
     return [this.miles, this.kilometers, this.milesWatcher, this.time]
   }
   async getExpected () {
@@ -39,4 +39,4 @@ class SubscribePublishCallback extends window.HTMLElement {
   }
 }
 
-define(SubscribePublishCallback)
+Shadowbind.define(SubscribePublishCallback)

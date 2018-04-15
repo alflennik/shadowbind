@@ -19,4 +19,4 @@ class BindType extends window.HTMLElement {
   }
 }
 
-define(BindType)
+Shadowbind.define(BindType)

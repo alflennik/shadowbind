@@ -9,7 +9,7 @@ class SubscribeNested extends window.HTMLElement {
     }
   }
   getActual () {
-    publish({ level1: { level2: { level3: 'yo!' } } })
+    Shadowbind.publish({ level1: { level2: { level3: 'yo!' } } })
     return state
   }
   getExpected () {
@@ -24,4 +24,4 @@ class SubscribeNested extends window.HTMLElement {
   }
 }
 
-define(SubscribeNested)
+Shadowbind.define(SubscribeNested)

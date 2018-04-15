@@ -18,4 +18,4 @@ class BindArray extends window.HTMLElement {
   }
 }
 
-define(BindArray)
+Shadowbind.define(BindArray)

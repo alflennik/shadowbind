@@ -21,4 +21,4 @@ class BindMethodType extends window.HTMLElement {
   }
 }
 
-define(BindMethodType)
+Shadowbind.define(BindMethodType)

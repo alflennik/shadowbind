@@ -23,5 +23,5 @@ class PropBinding extends window.HTMLElement {
   }
 }
 
-define(PropBinding)
-define(BindWithProp)
+Shadowbind.define(PropBinding)
+Shadowbind.define(BindWithProp)

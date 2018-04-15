@@ -18,4 +18,4 @@ class ClosedShadowRoot extends window.HTMLElement {
   }
 }
 
-define(ClosedShadowRoot)
+Shadowbind.define(ClosedShadowRoot)

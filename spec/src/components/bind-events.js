@@ -28,4 +28,4 @@ class BindEvents extends window.HTMLElement {
   }
 }
 
-define(BindEvents)
+Shadowbind.define(BindEvents)

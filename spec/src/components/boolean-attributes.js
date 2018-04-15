@@ -22,4 +22,4 @@ class BooleanAttributes extends window.HTMLElement {
   }
 }
 
-define(BooleanAttributes)
+Shadowbind.define(BooleanAttributes)

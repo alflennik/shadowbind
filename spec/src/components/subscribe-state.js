@@ -7,7 +7,7 @@ class SubscribeState extends window.HTMLElement {
     return { abc: 'state' }
   }
   getActual () {
-    publish({ abc: true })
+    Shadowbind.publish({ abc: true })
     return state
   }
   getExpected () {
@@ -22,4 +22,4 @@ class SubscribeState extends window.HTMLElement {
   }
 }
 
-define(SubscribeState)
+Shadowbind.define(SubscribeState)

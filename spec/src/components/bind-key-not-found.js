@@ -16,4 +16,4 @@ class BindKeyNotFound extends window.HTMLElement {
   }
 }
 
-define(BindKeyNotFound)
+Shadowbind.define(BindKeyNotFound)

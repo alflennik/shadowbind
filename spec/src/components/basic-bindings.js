@@ -45,4 +45,4 @@ class BasicBindings extends window.HTMLElement {
   }
 }
 
-define(BasicBindings)
+Shadowbind.define(BasicBindings)

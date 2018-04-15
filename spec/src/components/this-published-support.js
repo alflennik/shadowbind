@@ -23,4 +23,4 @@ class ThisPublishedSupport extends window.HTMLElement {
   }
 }
 
-define(ThisPublishedSupport)
+Shadowbind.define(ThisPublishedSupport)

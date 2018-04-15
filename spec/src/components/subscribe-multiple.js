@@ -8,9 +8,9 @@ class SubscribeMultiple extends window.HTMLElement {
   }
   getActual () {
     let tests = []
-    publish({ usedSecond: 'not used!', usedFirst: 'is used!' })
+    Shadowbind.publish({ usedSecond: 'not used!', usedFirst: 'is used!' })
     tests.push(state)
-    publish({ usedSecond: 'should be used!' })
+    Shadowbind.publish({ usedSecond: 'should be used!' })
     tests.push(state)
     return tests
   }
@@ -26,4 +26,4 @@ class SubscribeMultiple extends window.HTMLElement {
   }
 }
 
-define(SubscribeMultiple)
+Shadowbind.define(SubscribeMultiple)

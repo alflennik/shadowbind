@@ -48,5 +48,5 @@ class IdList extends window.HTMLElement {
   }
 }
 
-define(RepeaterAddRemove)
-define(IdList)
+Shadowbind.define(RepeaterAddRemove)
+Shadowbind.define(IdList)

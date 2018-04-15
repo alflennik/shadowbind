@@ -27,5 +27,5 @@ class RepeaterBindType extends window.HTMLElement {
   }
 }
 
-define(RepeaterBindType)
-define(InvalidBind)
+Shadowbind.define(RepeaterBindType)
+Shadowbind.define(InvalidBind)

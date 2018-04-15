@@ -32,5 +32,5 @@ class RepeatedSlotElement extends window.HTMLElement {
   }
 }
 
-define(RepeaterSlots)
-define(RepeatedSlotElement)
+Shadowbind.define(RepeaterSlots)
+Shadowbind.define(RepeatedSlotElement)

@@ -26,5 +26,5 @@ class TagRepeaterComponent extends window.HTMLElement {
   }
 }
 
-define(TagAndRepeater)
-define(TagRepeaterComponent)
+Shadowbind.define(TagAndRepeater)
+Shadowbind.define(TagRepeaterComponent)

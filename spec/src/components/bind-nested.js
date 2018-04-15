@@ -14,7 +14,7 @@ class BindNested extends window.HTMLElement {
     return { outer: 'test', inner: 'test2' }
   }
   async getActual () {
-    publish({ outer: 'test', inner: 'test2' })
+    Shadowbind.publish({ outer: 'test', inner: 'test2' })
     return {
       outer: this.shadowRoot.querySelector('#outer').innerText,
       inner: this.shadowRoot
@@ -35,5 +35,5 @@ class NestedElement extends window.HTMLElement {
   }
 }
 
-define(BindNested)
-define(NestedElement)
+Shadowbind.define(BindNested)
+Shadowbind.define(NestedElement)

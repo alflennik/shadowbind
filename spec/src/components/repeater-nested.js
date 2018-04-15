@@ -52,7 +52,7 @@ class RepeaterNested extends window.HTMLElement {
   }
 }
 
-define(RepeaterNested)
-define('repeat-1', Repeat1)
-define('repeat-2', Repeat2)
-define('repeat-3', Repeat3)
+Shadowbind.define(RepeaterNested)
+Shadowbind.define('repeat-1', Repeat1)
+Shadowbind.define('repeat-2', Repeat2)
+Shadowbind.define('repeat-3', Repeat3)

@@ -20,4 +20,4 @@ class SubscribeAttr extends window.HTMLElement {
   }
 }
 
-define(SubscribeAttr)
+Shadowbind.define(SubscribeAttr)

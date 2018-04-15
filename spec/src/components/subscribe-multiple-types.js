@@ -11,21 +11,21 @@ class SubscribeMultipleTypes extends window.HTMLElement {
   }
   getActual () {
     let tests = []
-    publish({ mixed: 1 })
+    Shadowbind.publish({ mixed: 1 })
     tests.push(mixed)
     this.mixed(2)
     tests.push(mixed)
     this.setAttribute('mixed', 3)
     tests.push(mixed)
     this.setAttribute('unrelated', 'should ignore')
-    publish({ somethingUnrelated: 'abc' })
+    Shadowbind.publish({ somethingUnrelated: 'abc' })
     this.publish({ anotherUnrelated: 'dce' })
     tests.push(mixed) // Should reuse previous value here
-    publish({ mixed: 4 })
+    Shadowbind.publish({ mixed: 4 })
     tests.push(mixed)
     this.publish({ mixed: 5 })
     tests.push(mixed)
-    publish({ mixed: 4 }) // Should be ignored since it hasn't changed
+    Shadowbind.publish({ mixed: 4 }) // Should be ignored since it hasn't changed
     tests.push(mixed)
     return tests
   }
@@ -41,4 +41,4 @@ class SubscribeMultipleTypes extends window.HTMLElement {
   }
 }
 
-define(SubscribeMultipleTypes)
+Shadowbind.define(SubscribeMultipleTypes)

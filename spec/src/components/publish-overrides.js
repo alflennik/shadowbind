@@ -5,7 +5,7 @@ class PublishOverrides extends window.HTMLElement {
     return { stick: 'state' }
   }
   getActual () {
-    publish({ stick: 'sticky', stink: 'stinky' })
+    Shadowbind.publish({ stick: 'sticky', stink: 'stinky' })
     this.publish({ stink: false, dynamic: 'dynamo' })
     return this.data
   }
@@ -21,4 +21,4 @@ class PublishOverrides extends window.HTMLElement {
   }
 }
 
-define(PublishOverrides)
+Shadowbind.define(PublishOverrides)

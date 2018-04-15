@@ -62,4 +62,4 @@ class BindTag extends HTMLElement { // eslint-disable-line
   }
 }
 
-define(BindTag)
+Shadowbind.define(BindTag)

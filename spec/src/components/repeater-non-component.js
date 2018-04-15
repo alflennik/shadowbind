@@ -51,5 +51,5 @@ class ValidShadowbindComponent extends window.HTMLElement {
 }
 
 window.customElements.define('non-shadowbind', NonShadowbindWebComponent)
-define(RepeaterNonComponent)
-define(ValidShadowbindComponent)
+Shadowbind.define(RepeaterNonComponent)
+Shadowbind.define(ValidShadowbindComponent)

@@ -60,5 +60,5 @@ class RepeatElement extends window.HTMLElement {
   }
 }
 
-define(BasicRepeater)
-define(RepeatElement)
+Shadowbind.define(BasicRepeater)
+Shadowbind.define(RepeatElement)

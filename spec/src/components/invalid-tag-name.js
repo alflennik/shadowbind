@@ -30,4 +30,4 @@ class InvalidTagName extends HTMLElement { // eslint-disable-line
   }
 }
 
-define(InvalidTagName)
+Shadowbind.define(InvalidTagName)

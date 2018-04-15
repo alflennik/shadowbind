@@ -16,4 +16,4 @@ class EventType extends window.HTMLElement {
   }
 }
 
-define(EventType)
+Shadowbind.define(EventType)

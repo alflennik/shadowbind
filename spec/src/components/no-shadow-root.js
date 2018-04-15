@@ -14,4 +14,4 @@ class NoShadowRoot extends window.HTMLElement {
   }
 }
 
-define(NoShadowRoot)
+Shadowbind.define(NoShadowRoot)

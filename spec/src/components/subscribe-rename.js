@@ -7,7 +7,7 @@ class SubscribeRename extends window.HTMLElement {
     return { remapped: { state: 'sourceState' } }
   }
   getActual () {
-    publish({ sourceState: 123 })
+    Shadowbind.publish({ sourceState: 123 })
     return state
   }
   getExpected () {
@@ -22,4 +22,4 @@ class SubscribeRename extends window.HTMLElement {
   }
 }
 
-define(SubscribeRename)
+Shadowbind.define(SubscribeRename)

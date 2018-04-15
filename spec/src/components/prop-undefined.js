@@ -17,4 +17,4 @@ class PropUndefined extends window.HTMLElement {
   }
 }
 
-define(PropUndefined)
+Shadowbind.define(PropUndefined)

@@ -7,7 +7,7 @@ class QueueDepth extends window.HTMLElement {
     return { myState: 'state' }
   }
   async getActual () {
-    publish({ myState: 10 })
+    Shadowbind.publish({ myState: 10 })
     return bindCounts
   }
   async getExpected () {
@@ -50,6 +50,6 @@ class QueueDepth2 extends window.HTMLElement {
   }
 }
 
-define('queue-depth-2', QueueDepth2)
-define(QueueDepth)
-define('queue-depth-1', QueueDepth1)
+Shadowbind.define('queue-depth-2', QueueDepth2)
+Shadowbind.define(QueueDepth)
+Shadowbind.define('queue-depth-1', QueueDepth1)

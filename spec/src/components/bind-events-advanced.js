@@ -32,4 +32,4 @@ class BindEventsAdvanced extends window.HTMLElement {
   }
 }
 
-define(BindEventsAdvanced)
+Shadowbind.define(BindEventsAdvanced)

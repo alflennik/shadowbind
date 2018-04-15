@@ -19,10 +19,10 @@ class PublishMethod extends window.HTMLElement {
     const testElement = this.shadowRoot.querySelector('#show-text').shadowRoot
     const otherElement = this.shadowRoot.querySelector('#other-text').shadowRoot
     let tests = []
-    publish({ text: 'default text', alternate: { text: null } })
+    Shadowbind.publish({ text: 'default text', alternate: { text: null } })
     tests.push(testElement.querySelector('#test').innerText)
     tests.push(otherElement.querySelector('#test').innerText)
-    publish({ text: null, alternate: { text: 'overridden text' } })
+    Shadowbind.publish({ text: null, alternate: { text: 'overridden text' } })
     tests.push(testElement.querySelector('#test').innerText)
     tests.push(otherElement.querySelector('#test').innerText)
     return tests
@@ -43,5 +43,5 @@ class PublishMethod extends window.HTMLElement {
   }
 }
 
-define(PublishMethod)
-define(ShowText)
+Shadowbind.define(PublishMethod)
+Shadowbind.define(ShowText)

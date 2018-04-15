@@ -14,23 +14,23 @@ class SubscribeStateMutations extends window.HTMLElement {
     let counts = []
 
     let nestedState = { level1: { level2: 'yo!' } }
-    publish(nestedState)
+    Shadowbind.publish(nestedState)
     values.push(state)
     counts.push(bindCount)
 
     nestedState.level1.level2 = 'hello!'
-    publish(nestedState)
+    Shadowbind.publish(nestedState)
     values.push(state)
     counts.push(bindCount)
 
     let nested2 = { abc: { dce: 123 } }
     nestedState.level1.level2 = nested2
-    publish(nestedState)
+    Shadowbind.publish(nestedState)
     values.push(JSON.stringify(state))
     counts.push(bindCount)
 
     nested2.abc.dce = 456
-    publish(nestedState)
+    Shadowbind.publish(nestedState)
     values.push(JSON.stringify(state))
     counts.push(bindCount)
 
@@ -52,4 +52,4 @@ class SubscribeStateMutations extends window.HTMLElement {
   }
 }
 
-define(SubscribeStateMutations)
+Shadowbind.define(SubscribeStateMutations)

@@ -2,7 +2,7 @@ import Shadowbind from '../../../src/index.js'
 
 class SetFormDeclarative extends window.HTMLElement {
   getActual () {
-    typeIntoField('textValue')
+    // typeIntoField('textValue')
 
     this.publish({
       emailField: 'value@gmail.com',

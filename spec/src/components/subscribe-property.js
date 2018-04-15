@@ -22,4 +22,4 @@ class SubscribeProperty extends window.HTMLElement {
   }
 }
 
-define(SubscribeProperty)
+Shadowbind.define(SubscribeProperty)
