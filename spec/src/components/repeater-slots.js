@@ -12,7 +12,7 @@ class RepeaterSlots extends window.HTMLElement {
     return ['should use outer', 'should use outer', 'should use outer']
   }
   async getActual () {
-    this.publish({ items: [1, 2, 3], text: 'should use outer' })
+    this.data({ items: [1, 2, 3], text: 'should use outer' })
     const r = this.shadowRoot
 
     return [

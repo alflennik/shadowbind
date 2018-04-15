@@ -10,7 +10,7 @@ class WrongPropType extends window.HTMLElement {
 class PropType extends window.HTMLElement {
   getActual () {
     try {
-      this.publish({ someData: {} })
+      this.data({ someData: {} })
     } catch (err) {
       return err.code || err.message
     }

@@ -6,7 +6,7 @@ class InvalidTagName extends HTMLElement { // eslint-disable-line
   }
   tryName (name) {
     try {
-      this.publish({ invalidTagName: name })
+      this.data({ invalidTagName: name })
     } catch (err) {
       return err.code || err.message
     }

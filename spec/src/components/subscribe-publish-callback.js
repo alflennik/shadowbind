@@ -6,7 +6,7 @@ class SubscribePublishCallback extends window.HTMLElement {
       miles: {
         state: 'miles',
         callback: mi => {
-          this.publish({ kilometers: mi * 1.6, time: '02:00:00' })
+          this.data({ kilometers: mi * 1.6, time: '02:00:00' })
           return mi
         }
       },

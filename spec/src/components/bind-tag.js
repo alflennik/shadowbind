@@ -48,15 +48,15 @@ class BindTag extends HTMLElement { // eslint-disable-line
     ]
   }
   getActual () {
-    this.publish({ currentTag: 'div' })
+    this.data({ currentTag: 'div' })
     const shadowRoot = document.querySelector('bind-tag').shadowRoot
     let tests = []
     tests.push(doTest(shadowRoot))
-    this.publish({ currentTag: 'app-container' })
+    this.data({ currentTag: 'app-container' })
     tests.push(doTest(shadowRoot))
-    this.publish({ currentTag: 'app-page' })
+    this.data({ currentTag: 'app-page' })
     tests.push(doTest(shadowRoot))
-    this.publish({ currentTag: 'span' })
+    this.data({ currentTag: 'span' })
     tests.push(doTest(shadowRoot))
     return tests
   }

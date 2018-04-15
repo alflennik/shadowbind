@@ -2,7 +2,7 @@ import Shadowbind from '../../../src/index.js'
 
 class BindCssVariables extends window.HTMLElement {
   getActual () {
-    this.publish({
+    this.data({
       widthValue: '100px',
       heightValue: null
     })

@@ -2,7 +2,7 @@ import Shadowbind from '../../../src/index.js'
 
 class BooleanAttributes extends window.HTMLElement {
   getActual () {
-    this.publish({
+    this.data({
       isChecked: true,
       notChecked: false
     })

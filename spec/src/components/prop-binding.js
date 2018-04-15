@@ -15,7 +15,7 @@ class PropBinding extends window.HTMLElement {
     `
   }
   getActual () {
-    this.publish({ someData: 'in string form' })
+    this.data({ someData: 'in string form' })
     return result
   }
   getExpected () {

@@ -25,15 +25,15 @@ class RepeaterAddRemove extends window.HTMLElement {
   }
   async getActual () {
     let attempts = {}
-    this.publish({ idList: ['a', 'b', 'c', 'd'] })
+    this.data({ idList: ['a', 'b', 'c', 'd'] })
     attempts.attempt1 = readIdList()
-    this.publish({ idList: ['b', 'c'] })
+    this.data({ idList: ['b', 'c'] })
     attempts.attempt2 = readIdList()
-    this.publish({ idList: ['c', 'b', 'a'] })
+    this.data({ idList: ['c', 'b', 'a'] })
     attempts.attempt3 = readIdList()
-    this.publish({ idList: [] })
+    this.data({ idList: [] })
     attempts.attempt4 = readIdList()
-    this.publish({ idList: ['a', 'b', 'c', 'd', 'e'] })
+    this.data({ idList: ['a', 'b', 'c', 'd', 'e'] })
     attempts.attempt5 = readIdList()
     return attempts
   }

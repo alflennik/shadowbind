@@ -23,7 +23,7 @@ class BasicRepeater extends window.HTMLElement {
   }
 
   async getActual () {
-    this.publish({
+    this.data({
       beforeText: 'Before the Locations',
       locations: [
         { name: 'Seattle', population: '1,000,000' },

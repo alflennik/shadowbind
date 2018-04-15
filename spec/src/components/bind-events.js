@@ -10,13 +10,13 @@ class BindEvents extends window.HTMLElement {
   }
   incrementCounter (event) {
     counter++
-    this.publish({ counter })
+    this.data({ counter })
   }
   getExpected () {
     return [0, 1, 2]
   }
   getActual () {
-    this.publish({ counter })
+    this.data({ counter })
     const button = this.shadowRoot.querySelector('button')
     let tests = []
     tests.push(counter)

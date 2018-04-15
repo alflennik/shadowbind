@@ -24,7 +24,7 @@ class BasicBindings extends window.HTMLElement {
     }
   }
   async getActual () {
-    this.publish({
+    this.data({
       text: 'This text',
       escaping: '</span>',
       html: 'This html',

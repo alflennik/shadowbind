@@ -2,7 +2,7 @@ import Shadowbind from '../../../src/index.js'
 
 class TagAndRepeater extends window.HTMLElement {
   getActual () {
-    this.publish({ tag: 'tag-repeater-component', myData: [1, 2] })
+    this.data({ tag: 'tag-repeater-component', myData: [1, 2] })
     const elements = this.shadowRoot.querySelectorAll('.repeatedElement')
     let tagNames = []
     for (const element of elements) {

@@ -10,7 +10,7 @@ class BindingsMethodType extends window.HTMLElement {
   }
   getActual () {
     try {
-      this.publish({ myData: [1, 2, 3] })
+      this.data({ myData: [1, 2, 3] })
     } catch (err) {
       return err.code || err.message
     }

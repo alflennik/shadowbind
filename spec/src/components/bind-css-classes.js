@@ -2,7 +2,7 @@ import Shadowbind from '../../../src/index.js'
 
 class BindCssClasses extends window.HTMLElement {
   getActual () {
-    this.publish({
+    this.data({
       added: true,
       truthy: 'a string is truthy',
       falsy: undefined,

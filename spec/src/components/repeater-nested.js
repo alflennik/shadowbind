@@ -32,7 +32,7 @@ class RepeaterNested extends window.HTMLElement {
     return /* @html */`<repeat-1 :publish="myData"></repeat-1>`
   }
   getActual () {
-    this.publish({ myData: [1, 2, 3] })
+    this.data({ myData: [1, 2, 3] })
     let results = []
     for (const repeat1 of this.shadowRoot.querySelectorAll('repeat-1')) {
       for (const repeat2 of repeat1.shadowRoot.querySelectorAll('repeat-2')) {

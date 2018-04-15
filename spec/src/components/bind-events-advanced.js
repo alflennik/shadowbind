@@ -11,13 +11,13 @@ class BindEventsAdvanced extends window.HTMLElement {
   }
   updateCounter (event) {
     counter++
-    this.publish({ counter })
+    this.data({ counter })
   }
   getExpected () {
     return [0, 1, 2, 3]
   }
   getActual () {
-    this.publish({ counter })
+    this.data({ counter })
     let tests = []
     const testEl = document.querySelector('bind-events-advanced').shadowRoot
     const input = testEl.querySelector('input')

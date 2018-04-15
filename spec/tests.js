@@ -105,7 +105,7 @@ test('component uses :publish value instead of subscribed value', async t => {
 })
 
 test('component uses :publish value instead of subscribed value', async t => {
-  t.deepEqual(...(await server.test('publish-overrides')))
+  t.deepEqual(...(await server.test('manual-overrides')))
 })
 
 test('deeply nested elements are bound last to avoid thrashing', async t => {
@@ -168,7 +168,7 @@ test('subscribe works with properties', async t => {
   t.deepEqual(...(await server.test('subscribe-property')))
 })
 
-test('this.publish() should override all other subscriptions', async t => {
+test('this.data() should override all other subscriptions', async t => {
   t.deepEqual(...(await server.test('subscribe-publish-callback')))
 })
 
@@ -188,6 +188,6 @@ test('repeater should work in concert with tag binding', async t => {
   t.deepEqual(...(await server.test('tag-and-repeater')))
 })
 
-test('recently published data accessible through this.published', async t => {
-  t.deepEqual(...(await server.test('this-published-support')))
+test('recently published data accessible through this.data()', async t => {
+  t.deepEqual(...(await server.test('this-data-support')))
 })

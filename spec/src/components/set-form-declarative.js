@@ -4,7 +4,7 @@ class SetFormDeclarative extends window.HTMLElement {
   getActual () {
     // typeIntoField('textValue')
 
-    this.publish({
+    this.data({
       emailField: 'value@gmail.com',
       numberField: 200,
       selectField: 's2',
@@ -29,7 +29,7 @@ class SetFormDeclarative extends window.HTMLElement {
   }
   onInput () {
     console.log(this.form())
-    // this.publish(this.form())
+    // this.data(this.form())
   }
   template () {
     return /* @html */`

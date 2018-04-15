@@ -9,7 +9,7 @@ class EventType extends window.HTMLElement {
   }
   async getActual () {
     try {
-      this.publish({ aString: 'yayyy' })
+      this.data({ aString: 'yayyy' })
     } catch (err) {
       return err.code || err.message
     }

@@ -1,19 +1,19 @@
 import Shadowbind from '../../../src/index.js'
 
-class PublishOverrides extends window.HTMLElement {
+class ManualOverrides extends window.HTMLElement {
   subscribe () {
     return { stick: 'state' }
   }
   getActual () {
     Shadowbind.publish({ stick: 'sticky', stink: 'stinky' })
-    this.publish({ stink: false, dynamic: 'dynamo' })
-    return this.data
+    this.data({ stink: false, dynamic: 'dynamo' })
+    return this.results
   }
   getExpected () {
     return { stick: 'sticky', stink: false, dynamic: 'dynamo' }
   }
   bindings (data) {
-    this.data = data
+    this.results = data
     return {}
   }
   template () {
@@ -21,4 +21,4 @@ class PublishOverrides extends window.HTMLElement {
   }
 }
 
-Shadowbind.define(PublishOverrides)
+Shadowbind.define(ManualOverrides)

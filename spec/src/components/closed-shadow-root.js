@@ -7,7 +7,7 @@ class ClosedShadowRoot extends window.HTMLElement {
   }
   getActual () {
     try {
-      this.publish({})
+      this.data({})
     } catch (err) {
       return err.code || err.message
     }

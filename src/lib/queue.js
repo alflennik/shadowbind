@@ -32,11 +32,11 @@ function processQueue () {
 
   let queueItem = nextQueueItem()
   while (queueItem) {
-    queueItem.component.published = Object.assign(
+    queueItem.component.sbPrivate.data = Object.assign(
       queueItem.component.sbPrivate.bindings,
       queueItem.component.sbPrivate.direct
     )
-    bindComponent(queueItem.component, queueItem.component.published)
+    bindComponent(queueItem.component, queueItem.component.sbPrivate.data)
     queueItem = nextQueueItem()
   }
 }

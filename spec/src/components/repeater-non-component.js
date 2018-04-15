@@ -4,19 +4,19 @@ class RepeaterNonComponent extends window.HTMLElement {
   getActual () {
     this.results = []
     try {
-      this.publish({ tag: 'valid-shadowbind-component', myData: [1, 2, 3] })
+      this.data({ tag: 'valid-shadowbind-component', myData: [1, 2, 3] })
     } catch (err) {
       this.results.push(err.code || err.message)
     }
 
     try {
-      this.publish({ tag: 'non-shadowbind', myData: [1, 2, 3] })
+      this.data({ tag: 'non-shadowbind', myData: [1, 2, 3] })
     } catch (err) {
       this.results.push(err.code || err.message)
     }
 
     try {
-      this.publish({ tag: 'div', myData: [1, 2, 3] })
+      this.data({ tag: 'div', myData: [1, 2, 3] })
     } catch (err) {
       this.results.push(err.code || err.message)
     }

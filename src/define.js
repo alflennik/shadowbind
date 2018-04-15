@@ -97,7 +97,8 @@ export default function define (name, Component = {}) {
       queue.add(this, { attrs: { [attrName]: newValue } })
       forwardProperty(Component, 'attributeChangedCallback')
     }
-    publish (bindings) {
+    data (bindings) {
+      if (arguments.length === 0) return this.sbPrivate.data
       queue.add(this, { direct: bindings })
     }
     form (newValues) {

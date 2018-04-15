@@ -12,7 +12,7 @@ class BindingsType extends window.HTMLElement {
   }
   async getActual () {
     try {
-      this.publish({})
+      this.data({})
     } catch (err) {
       return err.code || err.message
     }

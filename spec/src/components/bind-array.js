@@ -11,7 +11,7 @@ class BindArray extends window.HTMLElement {
   }
   async getActual () {
     try {
-      this.publish({ getArray: [1, 2, 3] })
+      this.data({ getArray: [1, 2, 3] })
     } catch (err) {
       return err.code || err.message
     }

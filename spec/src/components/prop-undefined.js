@@ -6,7 +6,7 @@ class PropUndefined extends window.HTMLElement {
   }
   getActual () {
     try {
-      this.publish({ someData: {} })
+      this.data({ someData: {} })
     } catch (err) {
       return err.code || err.message
     }

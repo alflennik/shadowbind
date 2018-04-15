@@ -11,7 +11,7 @@ class BindKeyNotFoundDeep extends window.HTMLElement {
   }
   async getActual () {
     try {
-      this.publish({ level1: { level2: {} } })
+      this.data({ level1: { level2: {} } })
     } catch (err) {
       return err.code || err.message
     }

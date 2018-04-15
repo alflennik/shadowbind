@@ -19,11 +19,11 @@ class SubscribeMultipleTypes extends window.HTMLElement {
     tests.push(mixed)
     this.setAttribute('unrelated', 'should ignore')
     Shadowbind.publish({ somethingUnrelated: 'abc' })
-    this.publish({ anotherUnrelated: 'dce' })
+    this.data({ anotherUnrelated: 'dce' })
     tests.push(mixed) // Should reuse previous value here
     Shadowbind.publish({ mixed: 4 })
     tests.push(mixed)
-    this.publish({ mixed: 5 })
+    this.data({ mixed: 5 })
     tests.push(mixed)
     Shadowbind.publish({ mixed: 4 }) // Should be ignored since it hasn't changed
     tests.push(mixed)
