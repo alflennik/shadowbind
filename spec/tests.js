@@ -104,6 +104,10 @@ test('component uses :publish value instead of subscribed value', async t => {
   t.deepEqual(...(await server.test('publish-method')))
 })
 
+test('lifecycle callbacks are called', async t => {
+  t.deepEqual(...(await server.test('lifecycle-callbacks')))
+})
+
 test('component uses :publish value instead of subscribed value', async t => {
   t.deepEqual(...(await server.test('manual-overrides')))
 })
@@ -140,9 +144,9 @@ test('set form values using the imperative api', async t => {
   t.deepEqual(...(await server.test('set-form-imperative')))
 })
 
-test('set form values using the declarative api', async t => {
-  t.deepEqual(...(await server.test('set-form-declarative')))
-})
+// test('set form values using the declarative api', async t => {
+//   t.deepEqual(...(await server.test('set-form-declarative')))
+// })
 
 test('error if state key begins or ends with dot', async t => {
   t.deepEqual(...(await server.test('state-key-invalid')))
