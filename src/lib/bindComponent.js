@@ -13,6 +13,8 @@ export default function bindComponent (component, bindings) {
   trace.add('component', component)
   trace.add('subscribedState', bindings)
 
+  if (component.beforeBindCallback) component.beforeBindCallback()
+
   if (component.bindings) {
     assertType(component.bindings, 'function', 'bindings property type')
 
@@ -44,6 +46,8 @@ export default function bindComponent (component, bindings) {
     }
     trace.remove('element')
   })
+
+  if (component.afterBindCallback) component.afterBindCallback()
 
   trace.remove('bindReturned')
   trace.remove('subscribedState')
