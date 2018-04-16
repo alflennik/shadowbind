@@ -108,6 +108,10 @@ test('lifecycle callbacks are called', async t => {
   t.deepEqual(...(await server.test('lifecycle-callbacks')))
 })
 
+test('native web component lifecycle callbacks are preserved', async t => {
+  t.deepEqual(...(await server.test('lifecycle-native-callbacks')))
+})
+
 test('component uses :publish value instead of subscribed value', async t => {
   t.deepEqual(...(await server.test('manual-overrides')))
 })

@@ -40,7 +40,14 @@ export default function define (name, Component = {}) {
 
   class ShadowComponent extends Component {
     static get observedAttributes () {
-      return observedAttrs
+      let manualAttrs = (() => {
+        if (getType(Component.observedAttributes) === 'function') {
+          return Component.observedAttributes()
+        }
+        return []
+      })()
+
+      return (observedAttrs || []).concat(manualAttrs)
     }
     constructor () {
       super()
@@ -87,15 +94,15 @@ export default function define (name, Component = {}) {
       componentId++
       this.sbPrivate.id = componentId
       components[componentId] = this
-      forwardProperty(Component, 'connectedCallback')
+      forwardProperty(this, Component, 'connectedCallback')
     }
     disconnectedCallback () {
       delete components[componentId]
-      forwardProperty(Component, 'disconnectedCallback')
+      forwardProperty(this, Component, 'disconnectedCallback')
     }
     attributeChangedCallback (attrName, oldValue, newValue) {
       queue.add(this, { attrs: { [attrName]: newValue } })
-      forwardProperty(Component, 'attributeChangedCallback')
+      forwardProperty(this, Component, 'attributeChangedCallback', arguments)
     }
     data (bindings) {
       if (arguments.length === 0) return this.sbPrivate.data
@@ -120,8 +127,8 @@ export default function define (name, Component = {}) {
   window.customElements.define(name, ShadowComponent)
 }
 
-function forwardProperty (Component, propertyName) {
+function forwardProperty (component, Component, propertyName, args = []) {
   if (Component.prototype[propertyName]) {
-    Component.prototype[propertyName].call(this)
+    Component.prototype[propertyName].call(component, ...args)
   }
 }
