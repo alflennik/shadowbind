@@ -1,7 +1,7 @@
 import trace from './lib/trace.js'
 import error from './lib/error.js'
 import getType from './util/getType.js'
-import pascalToTrainCase from './util/pascalToTrainCase.js'
+import { titleToTrain, trainToCamel, camelToTrain } from './util/convertCase.js'
 import * as queue from './lib/queue.js'
 import parseSubscriptions from './lib/parseSubscriptions.js'
 import { getFormValues, setFormValues } from './util/formValues.js'
@@ -30,7 +30,7 @@ export default function define (name, Component = {}) {
     )
   }
 
-  if (arguments.length === 1) name = pascalToTrainCase(Component.name)
+  if (arguments.length === 1) name = titleToTrain(Component.name)
 
   const rawSubscriptions = Component.prototype.subscribe
     ? Component.prototype.subscribe()
@@ -46,8 +46,7 @@ export default function define (name, Component = {}) {
         }
         return []
       })()
-
-      return (observedAttrs || []).concat(manualAttrs)
+      return observedAttrs.concat(manualAttrs).map(attr => camelToTrain(attr))
     }
     constructor () {
       super()
@@ -101,7 +100,7 @@ export default function define (name, Component = {}) {
       forwardProperty(this, Component, 'disconnectedCallback')
     }
     attributeChangedCallback (attrName, oldValue, newValue) {
-      queue.add(this, { attrs: { [attrName]: newValue } })
+      queue.add(this, { attrs: { [trainToCamel(attrName)]: newValue } })
       forwardProperty(this, Component, 'attributeChangedCallback', arguments)
     }
     data (bindings) {

@@ -2,17 +2,18 @@ import Shadowbind from '../../../src/index.js'
 
 class SubscribeAttr extends window.HTMLElement {
   subscribe () {
-    return { attribute: 'attr' }
+    return { attribute: 'attr', camelCased: 'attr' }
   }
   getActual () {
     this.setAttribute('attribute', 'testing an attribute!')
-    return this.binding
+    this.setAttribute('camel-cased', 'and another!')
+    return this.results
   }
   getExpected () {
-    return 'testing an attribute!'
+    return { attribute: 'testing an attribute!', camelCased: 'and another!'}
   }
-  bindings ({ attribute }) {
-    this.binding = attribute
+  beforeBindCallback () {
+    this.results = this.data()
     return {}
   }
   template () {
