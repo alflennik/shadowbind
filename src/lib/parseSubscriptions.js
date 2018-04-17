@@ -1,4 +1,6 @@
 import getType from '../util/getType.js'
+import error from './error.js'
+import assertType from './assertType.js'
 
 let subscriptions
 let observedAttrs
@@ -31,6 +33,8 @@ export default function parseSubscriptions (subscriptionObject) {
         }
         continue
     }
+
+    failureToParse()
   }
 
   return { subscriptions, observedAttrs, observedProps, observedState }
@@ -39,9 +43,12 @@ export default function parseSubscriptions (subscriptionObject) {
 function addBinding ({ bindKey, source, watchKey, callback }) {
   if (watchKey) {
     if (source === 'state') observedState.push(watchKey)
-    if (source === 'attr') observedAttrs.push(watchKey)
-    if (source === 'prop') observedProps.push(watchKey)
+    else if (source === 'attr') observedAttrs.push(watchKey)
+    else if (source === 'prop') observedProps.push(watchKey)
+    else failureToParse()
   }
+  assertType(callback, ['function', 'undefined'], 'subscribe callback')
+  assertType(watchKey, ['string'], 'subscribe watch key')
   subscriptions[bindKey].push({ source, watchKey, callback })
 }
 
@@ -57,4 +64,11 @@ function addBindingFromObject (bindKey, obj) {
 
 function addBindingFromString (bindKey, str) {
   addBinding({ bindKey, source: str, watchKey: bindKey, callback: undefined })
+}
+
+function failureToParse() {
+  error(
+    'shadowbind_invalid_subscribe',
+    'Your subscribe() response is invalid'
+  )
 }

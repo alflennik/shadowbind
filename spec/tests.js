@@ -92,6 +92,10 @@ test('error if invalid tag name used', async t => {
   t.deepEqual(...(await server.test('invalid-tag-name')))
 })
 
+test('error for invalid subscribe response', async t => {
+  t.deepEqual(...(await server.test('invalid-subscribe')))
+})
+
 test('error if no shadowRoot is present in component', async t => {
   t.deepEqual(...(await server.test('no-shadow-root')))
 })
