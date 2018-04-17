@@ -68,6 +68,10 @@ test('error if closed shadowRoot is used', async t => {
   t.deepEqual(...(await server.test('closed-shadow-root')))
 })
 
+test('helpful error when invalid component name provided', async t => {
+  t.deepEqual(...(await server.test('component-names')))
+})
+
 test('error if define called without args or invalid input', async t => {
   t.deepEqual(...(await server.test('define-type')))
 })

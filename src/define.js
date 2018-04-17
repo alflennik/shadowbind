@@ -31,6 +31,7 @@ export default function define (name, Component = {}) {
   }
 
   if (arguments.length === 1) name = titleToTrain(Component.name)
+  validateName(Component, name, arguments.length === 1)
 
   const rawSubscriptions = Component.prototype.subscribe
     ? Component.prototype.subscribe()
@@ -130,4 +131,26 @@ function forwardProperty (component, Component, propertyName, args = []) {
   if (Component.prototype[propertyName]) {
     Component.prototype[propertyName].call(component, ...args)
   }
+}
+
+function validateName(Component, name, isImplicit) {
+  if (!(
+    name.indexOf('--') !== -1 ||
+    name.indexOf('-') === -1 ||
+    /^-/.test(name) !== false ||
+    /-$/.test(name) !== false ||
+    /[^a-zA-Z0-9-]/.test(name) !== false
+  )) return
+
+  const errName = isImplicit ? 'implicit_component_name' : 'component_name'
+  const details = isImplicit
+    ? ` The name was automatically determined from your class name ` +
+      `"${Component.name}".`
+    : ''
+
+  error(
+    `shadowbind_${errName}`,
+    `Web component name "${name}" was invalid - note that names must be two ` +
+      `words.${details}`
+  )
 }
