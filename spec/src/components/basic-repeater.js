@@ -34,9 +34,9 @@ class BasicRepeater extends window.HTMLElement {
     })
 
     const r = this.shadowRoot
-    const r1 = this.shadowRoot.querySelector('.loop:nth-of-type(1)').shadowRoot
-    const r2 = this.shadowRoot.querySelector('.loop:nth-of-type(2)').shadowRoot
-    const r3 = this.shadowRoot.querySelector('.loop:nth-of-type(3)').shadowRoot
+    const r1 = this.shadowRoot.querySelectorAll('.loop')[0].shadowRoot
+    const r2 = this.shadowRoot.querySelectorAll('.loop')[1].shadowRoot
+    const r3 = this.shadowRoot.querySelectorAll('.loop')[2].shadowRoot
 
     return {
       seattle: r1.querySelector('h2').innerText,

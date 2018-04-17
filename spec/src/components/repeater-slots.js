@@ -16,9 +16,9 @@ class RepeaterSlots extends window.HTMLElement {
     const r = this.shadowRoot
 
     return [
-      r.querySelector('repeated-slot-element:nth-child(1) .slotted').innerText,
-      r.querySelector('repeated-slot-element:nth-child(2) .slotted').innerText,
-      r.querySelector('repeated-slot-element:nth-child(3) .slotted').innerText
+      r.querySelectorAll('repeated-slot-element .slotted')[0].innerText,
+      r.querySelectorAll('repeated-slot-element .slotted')[1].innerText,
+      r.querySelectorAll('repeated-slot-element .slotted')[2].innerText
     ]
   }
 }

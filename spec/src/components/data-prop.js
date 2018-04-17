@@ -20,7 +20,6 @@ class DataProp extends window.HTMLElement {
     const otherElement = this.shadowRoot.querySelector('#other-text').shadowRoot
     let tests = []
     Shadowbind.publish({ text: 'default text', alternate: {} })
-    debugger
     tests.push(testElement.querySelector('#test').innerText)
     tests.push(otherElement.querySelector('#test').innerText)
     Shadowbind.publish({ text: null, alternate: { text: 'overridden text' } })
