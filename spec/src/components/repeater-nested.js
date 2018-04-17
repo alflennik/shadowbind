@@ -2,7 +2,7 @@ import Shadowbind from '../../../src/index.js'
 
 class Repeat1 extends window.HTMLElement {
   template () {
-    return /* @html */`<repeat-2 :publish="myData"></repeat-2>`
+    return /* @html */`<repeat-2 :map="myData"></repeat-2>`
   }
   bindings (state) {
     return { myData: [1, 2, 3] }
@@ -11,7 +11,7 @@ class Repeat1 extends window.HTMLElement {
 
 class Repeat2 extends window.HTMLElement {
   template () {
-    return /* @html */`<repeat-3 :publish="myData"></repeat-3>`
+    return /* @html */`<repeat-3 :map="myData"></repeat-3>`
   }
   bindings (state) {
     return { myData: [1, 2, 3] }
@@ -29,7 +29,7 @@ class Repeat3 extends window.HTMLElement {
 
 class RepeaterNested extends window.HTMLElement {
   template () {
-    return /* @html */`<repeat-1 :publish="myData"></repeat-1>`
+    return /* @html */`<repeat-1 :map="myData"></repeat-1>`
   }
   getActual () {
     this.data({ myData: [1, 2, 3] })

@@ -12,16 +12,12 @@ export default function bindRepeater (element, bindings) {
 
   let { key, value } = loadKeyValue(element, emptyRepeaterId, bindings)
 
-  const valueType = getType(value)
-  if (valueType !== 'object' && valueType !== 'array') {
+  if (getType(value) !== 'array') {
     error(
-      'shadowbind_publish_type',
-      `"${key}" must be an array or object when using ":publish", but it was ` +
+      'shadowbind_map_type',
+      `"${key}" must be an array when using ":map", but it was ` +
         `"${getType(value)}"`
     )
-  }
-  if (valueType === 'object') {
-    value = [value]
   }
 
   trace.add('repeaterState', value)
@@ -41,8 +37,8 @@ export default function bindRepeater (element, bindings) {
 
   if (!element.sbPrivate) {
     error(
-      'shadowbind_publish_non_component',
-      `":publish" must be used on a shadowbind web component`
+      'shadowbind_map_non_component',
+      `":map" must be used on a shadowbind web component`
     )
   }
 
@@ -55,25 +51,25 @@ export default function bindRepeater (element, bindings) {
 }
 
 function firstElementInRepeat (element) {
-  if (!element.getAttribute(':publish')) return false
+  if (!element.getAttribute(':map')) return false
   const partOfRepeat = PartOfRepeat(element)
   if (element.previousElementSibling === null) return true
   return !partOfRepeat(element.previousElementSibling)
 }
 
 function PartOfRepeat (element) {
-  const elementKey = element.getAttribute(':publish')
+  const elementKey = element.getAttribute(':map')
   return compare => {
     if (compare === null) return false
-    const key = compare.getAttribute(':publish')
+    const key = compare.getAttribute(':map')
     return elementKey === key
   }
 }
 
 function loadKeyValue (element, emptyRepeaterId, bindings) {
   const key = (() => {
-    if (!emptyRepeaterId) return element.getAttribute(':publish')
-    return emptyExamples[emptyRepeaterId].getAttribute(':publish')
+    if (!emptyRepeaterId) return element.getAttribute(':map')
+    return emptyExamples[emptyRepeaterId].getAttribute(':map')
   })()
   const value = bindings[key]
   return { key, value }

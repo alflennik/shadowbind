@@ -5,9 +5,6 @@ class BindingsMethodType extends window.HTMLElement {
     super()
     this.bindings = 'a string'
   }
-  template () {
-    return /* @html */`<div :publish="myData"></div>`
-  }
   getActual () {
     try {
       this.data({ myData: [1, 2, 3] })
@@ -18,6 +15,9 @@ class BindingsMethodType extends window.HTMLElement {
   }
   getExpected () {
     return 'shadowbind_bindings_property_type'
+  }
+  template () {
+    return ''
   }
 }
 

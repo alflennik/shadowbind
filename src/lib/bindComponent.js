@@ -41,7 +41,7 @@ export default function bindComponent (component, bindings) {
     }
 
     bindRepeater(element, bindings)
-    if (!element.attributes[':publish']) {
+    if (!element.attributes[':map']) {
       bindElement(component, element, bindings)
     }
     trace.remove('element')

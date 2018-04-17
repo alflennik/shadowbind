@@ -11,7 +11,7 @@ class ShowText extends window.HTMLElement {
   }
 }
 
-class PublishMethod extends window.HTMLElement {
+class DataProp extends window.HTMLElement {
   subscribe () {
     return { text: 'state', alternate: 'state' }
   }
@@ -19,7 +19,8 @@ class PublishMethod extends window.HTMLElement {
     const testElement = this.shadowRoot.querySelector('#show-text').shadowRoot
     const otherElement = this.shadowRoot.querySelector('#other-text').shadowRoot
     let tests = []
-    Shadowbind.publish({ text: 'default text', alternate: { text: null } })
+    Shadowbind.publish({ text: 'default text', alternate: {} })
+    debugger
     tests.push(testElement.querySelector('#test').innerText)
     tests.push(otherElement.querySelector('#test').innerText)
     Shadowbind.publish({ text: null, alternate: { text: 'overridden text' } })
@@ -37,11 +38,11 @@ class PublishMethod extends window.HTMLElement {
   }
   template () {
     return /* @html */`
-      <show-text :publish="alternate" id="show-text"></show-text>
+      <show-text prop:data="alternate" id="show-text"></show-text>
       <show-text id="other-text"></show-text>
     `
   }
 }
 
-Shadowbind.define(PublishMethod)
+Shadowbind.define(DataProp)
 Shadowbind.define(ShowText)

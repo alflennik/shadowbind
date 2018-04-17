@@ -12,7 +12,7 @@ class InvalidBind extends window.HTMLElement {
 
 class RepeaterBindType extends window.HTMLElement {
   template () {
-    return /* @html */`<invalid-bind :publish="myData"></invalid-bind>`
+    return /* @html */`<invalid-bind :map="myData"></invalid-bind>`
   }
   getActual () {
     try {

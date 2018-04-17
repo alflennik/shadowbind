@@ -4,7 +4,7 @@ class BasicRepeater extends window.HTMLElement {
   template () {
     return /* @html */`
       <h2 :text="beforeText" id="beforeText"></h2>
-      <repeat-element :publish="locations" class="loop"></repeat-element>
+      <repeat-element :map="locations" class="loop"></repeat-element>
       <h2 :text="afterText" id="afterText"></h2>
     `
   }

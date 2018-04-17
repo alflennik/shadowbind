@@ -72,6 +72,10 @@ test('helpful error when invalid component name provided', async t => {
   t.deepEqual(...(await server.test('component-names')))
 })
 
+test('component uses prop:data value instead of subscribed value', async t => {
+  t.deepEqual(...(await server.test('data-prop')))
+})
+
 test('error if define called without args or invalid input', async t => {
   t.deepEqual(...(await server.test('define-type')))
 })
@@ -104,10 +108,6 @@ test('error if property is undefined', async t => {
   t.deepEqual(...(await server.test('prop-undefined')))
 })
 
-test('component uses :publish value instead of subscribed value', async t => {
-  t.deepEqual(...(await server.test('publish-method')))
-})
-
 test('lifecycle callbacks are called', async t => {
   t.deepEqual(...(await server.test('lifecycle-callbacks')))
 })
@@ -116,7 +116,7 @@ test('native web component lifecycle callbacks are preserved', async t => {
   t.deepEqual(...(await server.test('lifecycle-native-callbacks')))
 })
 
-test('component uses :publish value instead of subscribed value', async t => {
+test('component uses :map value instead of subscribed value', async t => {
   t.deepEqual(...(await server.test('manual-overrides')))
 })
 

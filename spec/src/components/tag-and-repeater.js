@@ -15,7 +15,7 @@ class TagAndRepeater extends window.HTMLElement {
   }
   template () {
     return /* @html */`
-      <div :tag="tag" :publish="myData" class="repeatedElement"></div>
+      <div :tag="tag" :map="myData" class="repeatedElement"></div>
     `
   }
 }

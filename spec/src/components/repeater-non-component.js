@@ -25,13 +25,13 @@ class RepeaterNonComponent extends window.HTMLElement {
   }
   getExpected () {
     return [
-      'shadowbind_publish_non_component',
-      'shadowbind_publish_non_component'
+      'shadowbind_map_non_component',
+      'shadowbind_map_non_component'
     ]
   }
   template () {
     return /* @html */`
-      <div :tag="tag" :publish="myData"></div>
+      <div :tag="tag" :map="myData"></div>
       <!-- <div :tag="tag"></div> -->
     `
   }
