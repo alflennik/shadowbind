@@ -7,13 +7,29 @@ export function setFormValues (form, newValues) {
 
   for (const [name, value] of Object.entries(newValues)) {
     const element = elements[name]
+    const isArray = Array.isArray(element)
+
     if (isMultiSelect(element)) {
       setSelectValues(element, value)
-    } else if (Array.isArray(element)) {
-      for (const checkbox of element) {
-        if (value.includes(checkbox.value)) checkbox.setAttribute('checked', '')
-        else checkbox.removeAttribute('checked')
+    } else if (isArray || element.type === 'checkbox') {
+      const checkboxes = (() => {
+        if (!isArray) return [element]
+        return element
+      })()
+
+      for (const checkbox of checkboxes) {
+        if (value === true) {
+          checkbox.setAttribute('checked', '')
+        } else if (value === false) {
+          checkbox.removeAttribute('checked')
+        } else if (value.includes(checkbox.value)) {
+          checkbox.setAttribute('checked', '')
+        } else {
+          checkbox.removeAttribute('checked')
+        }
       }
+    } else if (element.type === 'checkbox') {
+
     } else {
       element.value = value
     }
@@ -27,11 +43,13 @@ export function parseForm (form) {
     const name = element.name
     let value
 
-    if (element.type === 'checkbox') {
-      if (!values[name]) value = null
+    if (!name) continue
 
+    if (element.type === 'checkbox' && element.getAttribute('value') === null) {
+      value = element.checked
+    } else if (element.type === 'checkbox') {
       if (element.checked) value = (values[name] || []).concat(element.value)
-      else value = values[name]
+      else value = values[name] || []
 
       element = (elements[name] || []).concat(element)
     } else if (element.type === 'radio') {

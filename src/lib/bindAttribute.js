@@ -162,6 +162,24 @@ export default function bindAttribute (
       parent.removeChild(element)
       parent.insertBefore(replacement, sibling)
       break
+
+    case 'value':
+      if (element.options && element.multiple) {
+        for (const option of element.options) {
+          if (value.includes(option.value)) option.selected = true
+        }
+      } else if (element.type === 'checkbox') {
+        if (value === true) element.checked = true
+        else if (value === false) element.checked = false
+        else {
+          if (value.includes(element.value)) element.checked = true
+        }
+      } else if (element.type === 'radio') {
+        if (value === element.value) element.checked = true
+      } else {
+        element.value = value
+      }
+      break
   }
 
   trace.remove('attributeState')

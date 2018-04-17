@@ -1,16 +1,15 @@
 import Shadowbind from '../../../src/index.js'
 
-class SetFormDeclarative extends window.HTMLElement {
+class FormsDeclarative extends window.HTMLElement {
   getActual () {
-    // typeIntoField('textValue')
-
     this.data({
+      textField: 'textValue',
       emailField: 'value@gmail.com',
       numberField: 200,
       selectField: 's2',
       multiSelectField: ['m2', 'm3', 'm4'],
       radioField: 'r3',
-      checkboxField: ['c3', 'c4'],
+      checkField: ['c3', 'c4'],
       textareaField: 'abc123'
     })
 
@@ -24,7 +23,7 @@ class SetFormDeclarative extends window.HTMLElement {
       selectField: 's2',
       multiSelectField: ['m2', 'm3', 'm4'],
       radioField: 'r3',
-      checkboxField: ['c3', 'c4'],
+      checkField: ['c3', 'c4'],
       textareaField: 'abc123'
     }
   }
@@ -56,21 +55,21 @@ class SetFormDeclarative extends window.HTMLElement {
           </select>
         </span>
 
-        <input type="radio" name="radioField" :value="radioField">
-        <input type="radio" name="radioField" :value="radioField">
-        <input type="radio" name="radioField" :value="radioField">
+        <input type="radio" name="radioField" value="r1" :value="radioField">
+        <input type="radio" name="radioField" value="r2" :value="radioField">
+        <input type="radio" name="radioField" value="r3" :value="radioField">
 
-        <input type="checkbox" name="checkboxField" :value="checkboxField">
-        <input type="checkbox" name="checkboxField" :value="checkboxField">
-        <input type="checkbox" name="checkboxField" :value="checkboxField">
-        <input type="checkbox" name="checkboxField" :value="checkboxField">
-        <input type="checkbox" name="checkboxField" :value="checkboxField">
+        <input type="checkbox" name="checkField" value="c1" :value="checkField">
+        <input type="checkbox" name="checkField" value="c2" :value="checkField">
+        <input type="checkbox" name="checkField" value="c3" :value="checkField">
+        <input type="checkbox" name="checkField" value="c4" :value="checkField">
+        <input type="checkbox" name="checkField" value="c5" :value="checkField">
 
-        <textarea name="textareaField"></textarea>
+        <textarea name="textareaField" :value="textareaField"></textarea>
       </form>
       <input type="text" name="disregardedField">
     `
   }
 }
 
-Shadowbind.define(SetFormDeclarative)
+Shadowbind.define(FormsDeclarative)

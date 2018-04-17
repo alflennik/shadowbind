@@ -1,6 +1,6 @@
 import Shadowbind from '../../../src/index.js'
 
-class SetFormImperative extends window.HTMLElement {
+class FormsImperative extends window.HTMLElement {
   getActual () {
     this.form({
       textField: 'textValue',
@@ -10,6 +10,8 @@ class SetFormImperative extends window.HTMLElement {
       multiSelectField: ['m2', 'm3', 'm4'],
       radioField: 'r3',
       checkboxField: ['c3', 'c4'],
+      checkboxCheckAll: true,
+      checkboxSingle: true,
       textareaField: 'abc123'
     })
     return this.form()
@@ -23,6 +25,8 @@ class SetFormImperative extends window.HTMLElement {
       multiSelectField: ['m2', 'm3', 'm4'],
       radioField: 'r3',
       checkboxField: ['c3', 'c4'],
+      checkboxCheckAll: ['cc1', 'cc2'],
+      checkboxSingle: true,
       textareaField: 'abc123'
     }
   }
@@ -60,6 +64,11 @@ class SetFormImperative extends window.HTMLElement {
         <input type="checkbox" name="checkboxField" value="c4">
         <input type="checkbox" name="checkboxField" value="c5">
 
+        <input type="checkbox" name="checkboxCheckAll" value="cc1">
+        <input type="checkbox" name="checkboxCheckAll" value="cc2">
+
+        <input type="checkbox" name="checkboxSingle">
+
         <textarea name="textareaField"></textarea>
       </form>
       <input type="text" name="disregardedField">
@@ -67,4 +76,4 @@ class SetFormImperative extends window.HTMLElement {
   }
 }
 
-Shadowbind.define(SetFormImperative)
+Shadowbind.define(FormsImperative)

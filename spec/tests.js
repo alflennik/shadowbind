@@ -120,10 +120,6 @@ test('deeply nested elements are bound last to avoid thrashing', async t => {
   t.deepEqual(...(await server.test('queue-depth')))
 })
 
-test('can read form values into an object', async t => {
-  t.deepEqual(...(await server.test('read-form-support')))
-})
-
 test('repeater can add and remove elements (including all)', async t => {
   t.deepEqual(...(await server.test('repeater-add-remove')))
 })
@@ -145,12 +141,12 @@ test('slots still work in repeaters', async t => {
 })
 
 test('set form values using the imperative api', async t => {
-  t.deepEqual(...(await server.test('set-form-imperative')))
+  t.deepEqual(...(await server.test('forms-imperative')))
 })
 
-// test('set form values using the declarative api', async t => {
-//   t.deepEqual(...(await server.test('set-form-declarative')))
-// })
+test('set form values using the declarative api', async t => {
+  t.deepEqual(...(await server.test('forms-declarative')))
+})
 
 test('error if state key begins or ends with dot', async t => {
   t.deepEqual(...(await server.test('state-key-invalid')))
