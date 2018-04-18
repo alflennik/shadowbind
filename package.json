@@ -3,8 +3,8 @@
   "author": "Alexander Flenniken",
   "version": "0.1.0",
   "repository": "Soon...",
-  "description": "Declarative web components in an insanely lightweight package",
-  "main": "index.js",
+  "description": "Radically Simple Web Components",
+  "main": "dist/shadowbind.js",
   "devDependencies": {
     "ava": "^0.22.0",
     "eslint": "^4.4.1",
