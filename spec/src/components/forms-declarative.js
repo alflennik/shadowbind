@@ -27,10 +27,6 @@ class FormsDeclarative extends window.HTMLElement {
       textareaField: 'abc123'
     }
   }
-  onInput () {
-    console.log(this.form())
-    // this.data(this.form())
-  }
   template () {
     return /* @html */`
       <form on:input="onInput">

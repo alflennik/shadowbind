@@ -31,7 +31,6 @@ function processQueue () {
   if (!processing) return
 
   let queueItem = nextQueueItem()
-  console.log(queueItem)
   while (queueItem) {
     queueItem.component.sbPrivate.data = Object.assign(
       queueItem.component.sbPrivate.bindings,
