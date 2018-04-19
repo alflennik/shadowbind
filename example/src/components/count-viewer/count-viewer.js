@@ -6,7 +6,7 @@ class CountViewer extends HTMLElement {
   }
   template() {
     return /* @html */`
-      <h1>Counter 3</h1>
+      <h1>Counter</h1>
       Count: <span :text="counter"></span>
     `
   }

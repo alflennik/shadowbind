@@ -6,9 +6,9 @@
   "main": "src/index.js",
   "scripts": {
     "dev": "webpack -d --watch",
+    "build": "webpack -p",
     "serve": "live-server"
   },
-  "keywords": [],
   "author": "My project author",
   "license": "MIT",
   "dependencies": {

@@ -1519,14 +1519,14 @@ function setSelectValues (options, values) {
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__publish__ = __webpack_require__(5);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__publish_js__ = __webpack_require__(5);
 
 
 /* harmony default export */ __webpack_exports__["a"] = (store => {
-  Object(__WEBPACK_IMPORTED_MODULE_0__publish__["a" /* default */])(store.getState())
+  Object(__WEBPACK_IMPORTED_MODULE_0__publish_js__["a" /* default */])(store.getState())
   return next => action => {
     next(action)
-    Object(__WEBPACK_IMPORTED_MODULE_0__publish__["a" /* default */])(store.getState())
+    Object(__WEBPACK_IMPORTED_MODULE_0__publish_js__["a" /* default */])(store.getState())
   }
 });
 
