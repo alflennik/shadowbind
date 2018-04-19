@@ -88,6 +88,14 @@ test('library exports available as globals on window', async t => {
   t.deepEqual(...(await server.test('global-shadowbind-support')))
 })
 
+test('Components should load external data when created', async t => {
+  t.deepEqual(...(await server.test('initial-data')))
+})
+
+test('event listeners should be automatically attached', async t => {
+  t.deepEqual(...(await server.test('initial-events')))
+})
+
 test('error if invalid tag name used', async t => {
   t.deepEqual(...(await server.test('invalid-tag-name')))
 })

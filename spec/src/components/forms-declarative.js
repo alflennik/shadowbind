@@ -29,7 +29,7 @@ class FormsDeclarative extends window.HTMLElement {
   }
   template () {
     return /* @html */`
-      <form on:input="onInput">
+      <form>
         <div>
           <input type="text" name="textField" :value="textField">
           <input type="email" name="emailField" :value="emailField">
