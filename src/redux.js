@@ -1,4 +1,4 @@
-import publish from './publish'
+import publish from './publish.js'
 
 export default store => {
   publish(store.getState())
