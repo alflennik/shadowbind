@@ -1,0 +1,22 @@
+{
+  "name": "Shadowbind-Project",
+  "version": "1.0.0",
+  "description": "My project description",
+  "repository": "My project repository",
+  "main": "src/index.js",
+  "scripts": {
+    "dev": "webpack -d --watch",
+    "serve": "live-server"
+  },
+  "keywords": [],
+  "author": "My project author",
+  "license": "MIT",
+  "dependencies": {
+    "redux": "^4.0.0"
+  },
+  "devDependencies": {
+    "live-server": "^1.2.0",
+    "webpack": "^4.6.0",
+    "webpack-cli": "^2.0.14"
+  }
+}
