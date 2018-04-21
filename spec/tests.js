@@ -132,6 +132,10 @@ test('component uses :map value instead of subscribed value', async t => {
   t.deepEqual(...(await server.test('manual-overrides')))
 })
 
+test('this.data() and this.form() can be used in the constructor', async t => {
+  t.deepEqual(...(await server.test('methods-in-constructor')))
+})
+
 test('deeply nested elements are bound last to avoid thrashing', async t => {
   t.deepEqual(...(await server.test('queue-depth')))
 })
