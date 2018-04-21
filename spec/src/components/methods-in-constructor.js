@@ -26,7 +26,7 @@ class MethodsInConstructor extends window.HTMLElement {
     return [
       {},
       'shadowbind_form_without_shadow_root',
-      {},
+      { message: 'Replacement message' },
       { textField: 'to be replaced' },
       'Replacement message',
       'Replacement value'
