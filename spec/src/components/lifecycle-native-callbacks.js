@@ -1,6 +1,6 @@
 import Shadowbind from '../../../src/index.js'
 
-function disconnectAndReconnect(element) {
+function disconnectAndReconnect (element) {
   const parent = element.parentElement
   const referenceElement = element.nextElementSibling
   parent.removeChild(element)
@@ -8,16 +8,15 @@ function disconnectAndReconnect(element) {
 }
 
 class LifecycleNativeCallbacks extends window.HTMLElement {
-  static observedAttributes() {
+  static observedAttributes () {
     return ['tester', 'testy']
   }
-  constructor() {
+  constructor () {
     super()
     this.attachShadow({ mode: 'open' })
     this.sequence = ['constructor']
   }
   getActual () {
-    const tests = []
     this.sequence.push('connect test started')
     disconnectAndReconnect(this)
 
@@ -38,16 +37,16 @@ class LifecycleNativeCallbacks extends window.HTMLElement {
       'attribute test started',
       'attributeChangedCallback(tester, null, 123)',
       'attributeChangedCallback(testy, null, abc)',
-      'attributeChangedCallback(tester, 123, 456)',
+      'attributeChangedCallback(tester, 123, 456)'
     ]
   }
-  connectedCallback() {
+  connectedCallback () {
     this.sequence.push('connectedCallback')
   }
-  disconnectedCallback() {
+  disconnectedCallback () {
     this.sequence.push('disconnectedCallback')
   }
-  attributeChangedCallback(attributeName, oldValue, newValue) {
+  attributeChangedCallback (attributeName, oldValue, newValue) {
     this.sequence.push(
       `attributeChangedCallback(${attributeName}, ${oldValue}, ${newValue})`
     )

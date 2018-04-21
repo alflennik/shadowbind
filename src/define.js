@@ -133,7 +133,7 @@ function forwardProperty (component, Component, propertyName, args = []) {
   }
 }
 
-function validateName(Component, name, isImplicit) {
+function validateName (Component, name, isImplicit) {
   if (!(
     name.indexOf('--') !== -1 ||
     name.indexOf('-') === -1 ||
