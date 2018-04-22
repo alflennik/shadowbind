@@ -17,4 +17,4 @@ class PropUndefined extends Shadowbind.Element {
   }
 }
 
-Shadowbind.define(PropUndefined)
+Shadowbind.define({ PropUndefined })

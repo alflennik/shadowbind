@@ -21,4 +21,4 @@ class SubscribeAttr extends Shadowbind.Element {
   }
 }
 
-Shadowbind.define(SubscribeAttr)
+Shadowbind.define({ SubscribeAttr })

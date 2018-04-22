@@ -22,4 +22,4 @@ class SubscribeRename extends Shadowbind.Element {
   }
 }
 
-Shadowbind.define(SubscribeRename)
+Shadowbind.define({ SubscribeRename })

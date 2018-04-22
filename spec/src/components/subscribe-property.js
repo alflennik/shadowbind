@@ -22,4 +22,4 @@ class SubscribeProperty extends Shadowbind.Element {
   }
 }
 
-Shadowbind.define(SubscribeProperty)
+Shadowbind.define({ SubscribeProperty })

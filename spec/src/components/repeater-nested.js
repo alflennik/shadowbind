@@ -52,7 +52,7 @@ class RepeaterNested extends Shadowbind.Element {
   }
 }
 
-Shadowbind.define(RepeaterNested)
-Shadowbind.define('repeat-1', Repeat1)
-Shadowbind.define('repeat-2', Repeat2)
-Shadowbind.define('repeat-3', Repeat3)
+Shadowbind.define({ RepeaterNested })
+Shadowbind.define({ 'repeat-1':  Repeat1 })
+Shadowbind.define({ 'repeat-2':  Repeat2 })
+Shadowbind.define({ 'repeat-3':  Repeat3 })

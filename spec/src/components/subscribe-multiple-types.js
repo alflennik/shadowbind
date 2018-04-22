@@ -41,4 +41,4 @@ class SubscribeMultipleTypes extends Shadowbind.Element {
   }
 }
 
-Shadowbind.define(SubscribeMultipleTypes)
+Shadowbind.define({ SubscribeMultipleTypes })

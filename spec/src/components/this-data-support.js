@@ -23,4 +23,4 @@ class ThisDataSupport extends Shadowbind.Element {
   }
 }
 
-Shadowbind.define(ThisDataSupport)
+Shadowbind.define({ ThisDataSupport })

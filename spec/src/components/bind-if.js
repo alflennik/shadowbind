@@ -22,4 +22,4 @@ class BindIf extends Shadowbind.Element {
   }
 }
 
-Shadowbind.define(BindIf)
+Shadowbind.define({ BindIf })

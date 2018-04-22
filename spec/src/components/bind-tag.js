@@ -62,4 +62,4 @@ class BindTag extends Shadowbind.Element {
   }
 }
 
-Shadowbind.define(BindTag)
+Shadowbind.define({ BindTag })

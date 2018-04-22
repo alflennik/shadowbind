@@ -24,4 +24,4 @@ class SubscribeNested extends Shadowbind.Element {
   }
 }
 
-Shadowbind.define(SubscribeNested)
+Shadowbind.define({ SubscribeNested })

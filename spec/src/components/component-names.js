@@ -3,7 +3,7 @@ import Shadowbind from '../../../src/index.js'
 function tryToDefine (Component, name) {
   try {
     if (name) Shadowbind.define(name, Component)
-    else Shadowbind.define(Component)
+    else Shadowbind.define({ Component })
   } catch (err) {
     return err.code || err.message
   }
@@ -36,4 +36,4 @@ class Single extends Shadowbind.Element {}
 class capitalization_component extends Shadowbind.Element {}
 class camelComponent extends Shadowbind.Element {}
 
-Shadowbind.define(ComponentNames)
+Shadowbind.define({ ComponentNames })

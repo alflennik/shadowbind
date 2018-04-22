@@ -26,5 +26,5 @@ class TagRepeaterComponent extends Shadowbind.Element {
   }
 }
 
-Shadowbind.define(TagAndRepeater)
-Shadowbind.define(TagRepeaterComponent)
+Shadowbind.define({ TagAndRepeater })
+Shadowbind.define({ TagRepeaterComponent })

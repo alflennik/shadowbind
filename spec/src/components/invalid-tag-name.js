@@ -30,4 +30,4 @@ class InvalidTagName extends Shadowbind.Element {
   }
 }
 
-Shadowbind.define(InvalidTagName)
+Shadowbind.define({ InvalidTagName })

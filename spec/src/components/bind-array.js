@@ -18,4 +18,4 @@ class BindArray extends Shadowbind.Element {
   }
 }
 
-Shadowbind.define(BindArray)
+Shadowbind.define({ BindArray })

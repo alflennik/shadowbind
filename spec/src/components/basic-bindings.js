@@ -45,4 +45,4 @@ class BasicBindings extends Shadowbind.Element {
   }
 }
 
-Shadowbind.define(BasicBindings)
+Shadowbind.define({ BasicBindings })

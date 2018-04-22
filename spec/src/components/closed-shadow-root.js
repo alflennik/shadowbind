@@ -18,4 +18,4 @@ class ClosedShadowRoot extends Shadowbind.Element {
   }
 }
 
-Shadowbind.define(ClosedShadowRoot)
+Shadowbind.define({ ClosedShadowRoot })

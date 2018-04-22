@@ -21,4 +21,4 @@ class BindingsMethodType extends Shadowbind.Element {
   }
 }
 
-Shadowbind.define(BindingsMethodType)
+Shadowbind.define({ BindingsMethodType })

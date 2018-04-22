@@ -16,4 +16,4 @@ class BindKeyNotFound extends Shadowbind.Element {
   }
 }
 
-Shadowbind.define(BindKeyNotFound)
+Shadowbind.define({ BindKeyNotFound })

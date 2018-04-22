@@ -33,4 +33,4 @@ class BindCssVariables extends Shadowbind.Element {
   }
 }
 
-Shadowbind.define(BindCssVariables)
+Shadowbind.define({ BindCssVariables })

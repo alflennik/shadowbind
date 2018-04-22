@@ -21,4 +21,4 @@ class ManualOverrides extends Shadowbind.Element {
   }
 }
 
-Shadowbind.define(ManualOverrides)
+Shadowbind.define({ ManualOverrides })

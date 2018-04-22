@@ -60,5 +60,5 @@ class RepeatElement extends Shadowbind.Element {
   }
 }
 
-Shadowbind.define(BasicRepeater)
-Shadowbind.define(RepeatElement)
+Shadowbind.define({ BasicRepeater })
+Shadowbind.define({ RepeatElement })

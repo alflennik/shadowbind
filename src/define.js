@@ -4,32 +4,38 @@ import error from './lib/error.js'
 import * as queue from './lib/queue.js'
 import { titleToTrain, trainToCamel, camelToTrain } from './util/convertCase.js'
 import parseSubscriptions from './lib/parseSubscriptions.js'
+import ShadowbindElement from './Element.js'
 
 let components = {}
 let componentId = 0
 export { components }
 
-export default function define (name, Component = {}) {
+export default function define (Components) {
   trace.reset()
   if (!arguments.length) {
     error(
       'shadowbind_define_without_arguments',
-      'The first argument of define() should be a class extending ' +
-        'HTMLElement, but no arguments were given'
+      'The first argument of define() should an object but no arguments were ' +
+        'given'
     )
   }
 
-  if (arguments.length === 1) Component = name // Name is optional
+  for (const [name, Component] of Object.entries(Components)) {
+    defineComponent(name, Component)
+  }
+}
 
-  if (!(Component.prototype instanceof window.HTMLElement)) {
+function defineComponent (name, Component) {
+  if (!(Component.prototype instanceof ShadowbindElement)) {
     error(
       'shadowbind_define_type',
-      'The first argument of define() should be a class extending ' +
-        `HTMLElement, not "${getType(Component)}"`
+      'The first argument of define() should be an object where the keys are ' +
+        'component names and the values are classes extending ' +
+        `Shadowbind.Element`
     )
   }
 
-  if (arguments.length === 1) name = titleToTrain(Component.name)
+  if (name.indexOf(/A-Z/)) name = titleToTrain(name)
   validateName(Component, name, arguments.length === 1)
 
   const rawSubscriptions = Component.prototype.subscribe
@@ -93,15 +99,9 @@ function validateName (Component, name, isImplicit) {
     /[^a-zA-Z0-9-]/.test(name) !== false
   )) return
 
-  const errName = isImplicit ? 'implicit_component_name' : 'component_name'
-  const details = isImplicit
-    ? ` The name was automatically determined from your class name ` +
-      `"${Component.name}".`
-    : ''
-
   error(
-    `shadowbind_${errName}`,
+    `shadowbind_component_name`,
     `Web component name "${name}" was invalid - note that names must be two ` +
-      `words.${details}`
+      `words.`
   )
 }

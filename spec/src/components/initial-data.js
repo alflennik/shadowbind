@@ -46,6 +46,6 @@ class InitialDataAttr extends Shadowbind.Element {
   }
 }
 
-Shadowbind.define(InitialData)
-Shadowbind.define(InitialDataState)
-Shadowbind.define(InitialDataAttr)
+Shadowbind.define({ InitialData })
+Shadowbind.define({ InitialDataState })
+Shadowbind.define({ InitialDataAttr })

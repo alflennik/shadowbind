@@ -22,4 +22,4 @@ class BooleanAttributes extends Shadowbind.Element {
   }
 }
 
-Shadowbind.define(BooleanAttributes)
+Shadowbind.define({ BooleanAttributes })

@@ -32,5 +32,5 @@ class RepeatedSlotElement extends Shadowbind.Element {
   }
 }
 
-Shadowbind.define(RepeaterSlots)
-Shadowbind.define(RepeatedSlotElement)
+Shadowbind.define({ RepeaterSlots })
+Shadowbind.define({ RepeatedSlotElement })

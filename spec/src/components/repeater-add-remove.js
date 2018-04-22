@@ -48,5 +48,5 @@ class IdList extends Shadowbind.Element {
   }
 }
 
-Shadowbind.define(RepeaterAddRemove)
-Shadowbind.define(IdList)
+Shadowbind.define({ RepeaterAddRemove })
+Shadowbind.define({ IdList })

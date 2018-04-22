@@ -32,4 +32,4 @@ class BindEventsAdvanced extends Shadowbind.Element {
   }
 }
 
-Shadowbind.define(BindEventsAdvanced)
+Shadowbind.define({ BindEventsAdvanced })

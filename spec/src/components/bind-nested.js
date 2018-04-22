@@ -35,5 +35,5 @@ class NestedElement extends Shadowbind.Element {
   }
 }
 
-Shadowbind.define(BindNested)
-Shadowbind.define(NestedElement)
+Shadowbind.define({ BindNested })
+Shadowbind.define({ NestedElement })

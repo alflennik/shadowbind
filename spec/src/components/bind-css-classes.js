@@ -43,4 +43,4 @@ class BindCssClasses extends Shadowbind.Element {
   }
 }
 
-Shadowbind.define(BindCssClasses)
+Shadowbind.define({ BindCssClasses })

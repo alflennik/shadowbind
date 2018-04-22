@@ -43,5 +43,5 @@ class DataProp extends Shadowbind.Element {
   }
 }
 
-Shadowbind.define(DataProp)
-Shadowbind.define(ShowText)
+Shadowbind.define({ DataProp })
+Shadowbind.define({ ShowText })

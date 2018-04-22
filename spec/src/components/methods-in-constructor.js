@@ -52,4 +52,4 @@ class MethodsInConstructor extends Shadowbind.Element {
   }
 }
 
-Shadowbind.define(MethodsInConstructor)
+Shadowbind.define({ MethodsInConstructor })

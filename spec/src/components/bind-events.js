@@ -28,4 +28,4 @@ class BindEvents extends Shadowbind.Element {
   }
 }
 
-Shadowbind.define(BindEvents)
+Shadowbind.define({ BindEvents })

@@ -2,7 +2,7 @@ import Shadowbind from '../../../src/index.js'
 
 function tryDefine(Component) {
   try {
-    Shadowbind.define(Component)
+    Shadowbind.define({ Component })
   } catch (err) {
     return err.code || err.message
   }
@@ -52,4 +52,4 @@ class InvalidSubscribe4 extends Shadowbind.Element {
   }
 }
 
-Shadowbind.define(InvalidSubscribe)
+Shadowbind.define({ InvalidSubscribe })

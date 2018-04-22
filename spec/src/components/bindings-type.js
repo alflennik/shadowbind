@@ -19,4 +19,4 @@ class BindingsType extends Shadowbind.Element {
   }
 }
 
-Shadowbind.define(BindingsType)
+Shadowbind.define({ BindingsType })

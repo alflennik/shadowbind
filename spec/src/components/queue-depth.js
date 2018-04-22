@@ -50,6 +50,6 @@ class QueueDepth2 extends Shadowbind.Element {
   }
 }
 
-Shadowbind.define('queue-depth-2', QueueDepth2)
-Shadowbind.define(QueueDepth)
-Shadowbind.define('queue-depth-1', QueueDepth1)
+Shadowbind.define({ 'queue-depth-2':  QueueDepth2 })
+Shadowbind.define({ QueueDepth })
+Shadowbind.define({ 'queue-depth-1':  QueueDepth1 })

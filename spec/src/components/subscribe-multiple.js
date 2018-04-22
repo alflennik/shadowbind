@@ -26,4 +26,4 @@ class SubscribeMultiple extends Shadowbind.Element {
   }
 }
 
-Shadowbind.define(SubscribeMultiple)
+Shadowbind.define({ SubscribeMultiple })

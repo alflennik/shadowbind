@@ -22,4 +22,4 @@ class SubscribeState extends Shadowbind.Element {
   }
 }
 
-Shadowbind.define(SubscribeState)
+Shadowbind.define({ SubscribeState })

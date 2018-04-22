@@ -18,4 +18,4 @@ class BindKeyNotFoundDeep extends Shadowbind.Element {
   }
 }
 
-Shadowbind.define(BindKeyNotFoundDeep)
+Shadowbind.define({ BindKeyNotFoundDeep })

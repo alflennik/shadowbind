@@ -27,4 +27,4 @@ class LifecycleCallbacks extends Shadowbind.Element {
   }
 }
 
-Shadowbind.define(LifecycleCallbacks)
+Shadowbind.define({ LifecycleCallbacks })

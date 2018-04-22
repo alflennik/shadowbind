@@ -16,4 +16,4 @@ class EventType extends Shadowbind.Element {
   }
 }
 
-Shadowbind.define(EventType)
+Shadowbind.define({ EventType })

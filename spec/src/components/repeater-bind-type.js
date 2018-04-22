@@ -27,5 +27,5 @@ class RepeaterBindType extends Shadowbind.Element {
   }
 }
 
-Shadowbind.define(RepeaterBindType)
-Shadowbind.define(InvalidBind)
+Shadowbind.define({ RepeaterBindType })
+Shadowbind.define({ InvalidBind })

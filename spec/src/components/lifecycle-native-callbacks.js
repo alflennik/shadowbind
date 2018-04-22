@@ -53,4 +53,4 @@ class LifecycleNativeCallbacks extends Shadowbind.Element {
   }
 }
 
-Shadowbind.define(LifecycleNativeCallbacks)
+Shadowbind.define({ LifecycleNativeCallbacks })

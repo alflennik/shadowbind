@@ -19,4 +19,4 @@ class StateKeyInvalid extends Shadowbind.Element {
   }
 }
 
-Shadowbind.define(StateKeyInvalid)
+Shadowbind.define({ StateKeyInvalid })

@@ -26,5 +26,5 @@ class PropType extends Shadowbind.Element {
   }
 }
 
-Shadowbind.define(PropType)
-Shadowbind.define(WrongPropType)
+Shadowbind.define({ PropType })
+Shadowbind.define({ WrongPropType })

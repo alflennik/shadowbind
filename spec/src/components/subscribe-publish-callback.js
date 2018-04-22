@@ -39,4 +39,4 @@ class SubscribePublishCallback extends Shadowbind.Element {
   }
 }
 
-Shadowbind.define(SubscribePublishCallback)
+Shadowbind.define({ SubscribePublishCallback })

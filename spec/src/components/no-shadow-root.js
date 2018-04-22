@@ -14,4 +14,4 @@ class NoShadowRoot extends Shadowbind.Element {
   }
 }
 
-Shadowbind.define(NoShadowRoot)
+Shadowbind.define({ NoShadowRoot })

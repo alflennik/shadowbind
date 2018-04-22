@@ -76,4 +76,4 @@ class FormsImperative extends Shadowbind.Element {
   }
 }
 
-Shadowbind.define(FormsImperative)
+Shadowbind.define({ FormsImperative })

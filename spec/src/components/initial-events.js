@@ -20,4 +20,4 @@ class InitialEvents extends Shadowbind.Element {
   }
 }
 
-Shadowbind.define(InitialEvents)
+Shadowbind.define({ InitialEvents })

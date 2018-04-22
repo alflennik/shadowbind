@@ -2,7 +2,6 @@ import Shadowbind from '../../../src/index.js'
 
 class DefineType extends Shadowbind.Element {
   getActual () {
-    window.ready = true
     let tests = []
 
     try {
@@ -12,13 +11,26 @@ class DefineType extends Shadowbind.Element {
     }
 
     try {
-      Shadowbind.define({ just: 'a plain object' })
+      Shadowbind.define({ 'a-plain-object': { just: 'a plain object' } })
     } catch (err) {
       tests.push(err.code || err.message)
     }
 
     try {
-      Shadowbind.define(document.createElement('div'))
+      Shadowbind.define({ 'my-div': document.createElement('div') })
+    } catch (err) {
+      tests.push(err.code || err.message)
+    }
+
+    try {
+      Shadowbind.define({ 'my-function': () => {} })
+    } catch (err) {
+      tests.push(err.code || err.message)
+    }
+
+    try {
+      class ValidWebComponent extends window.HTMLElement {}
+      Shadowbind.define({ ValidWebComponent })
     } catch (err) {
       tests.push(err.code || err.message)
     }
@@ -29,9 +41,11 @@ class DefineType extends Shadowbind.Element {
     return [
       'shadowbind_define_without_arguments',
       'shadowbind_define_type',
+      'shadowbind_define_type',
+      'shadowbind_define_type',
       'shadowbind_define_type'
     ]
   }
 }
 
-Shadowbind.define(DefineType)
+Shadowbind.define({ DefineType })

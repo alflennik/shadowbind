@@ -23,5 +23,5 @@ class PropBinding extends Shadowbind.Element {
   }
 }
 
-Shadowbind.define(PropBinding)
-Shadowbind.define(BindWithProp)
+Shadowbind.define({ PropBinding })
+Shadowbind.define({ BindWithProp })

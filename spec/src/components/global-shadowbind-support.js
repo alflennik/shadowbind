@@ -17,4 +17,4 @@ class GlobalShadowbindSupport extends Shadowbind.Element {
   }
 }
 
-Shadowbind.define(GlobalShadowbindSupport)  // eslint-disable-line no-undef
+Shadowbind.define({ GlobalShadowbindSupport })  // eslint-disable-line no-undef

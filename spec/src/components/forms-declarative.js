@@ -68,4 +68,4 @@ class FormsDeclarative extends Shadowbind.Element {
   }
 }
 
-Shadowbind.define(FormsDeclarative)
+Shadowbind.define({ FormsDeclarative })

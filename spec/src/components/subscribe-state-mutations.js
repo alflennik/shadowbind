@@ -52,4 +52,4 @@ class SubscribeStateMutations extends Shadowbind.Element {
   }
 }
 
-Shadowbind.define(SubscribeStateMutations)
+Shadowbind.define({ SubscribeStateMutations })
