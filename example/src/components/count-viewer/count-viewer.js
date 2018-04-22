@@ -1,6 +1,6 @@
 import Shadowbind from '../../../../dist/shadowbind'
 
-class CountViewer extends HTMLElement {
+class CountViewer extends Shadowbind.Element {
   subscribe() {
     return { counter: 'state' }
   }
@@ -12,4 +12,4 @@ class CountViewer extends HTMLElement {
   }
 }
 
-Shadowbind.define(CountViewer)
+Shadowbind.define({ CountViewer })

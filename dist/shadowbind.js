@@ -70,7 +70,7 @@ return /******/ (function(modules) { // webpackBootstrap
 /******/ 	__webpack_require__.p = "";
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 11);
+/******/ 	return __webpack_require__(__webpack_require__.s = 13);
 /******/ })
 /************************************************************************/
 /******/ ([
@@ -167,362 +167,11 @@ function getType (item) {
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return bindingsMethodUsed; });
-/* harmony export (immutable) */ __webpack_exports__["b"] = bindComponent;
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__bindRepeater_js__ = __webpack_require__(16);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__util_walkFragment_js__ = __webpack_require__(17);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__assertType_js__ = __webpack_require__(4);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__bindElement_js__ = __webpack_require__(19);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__trace_js__ = __webpack_require__(0);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__parseAttribute_js__ = __webpack_require__(9);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__bindAttribute_js__ = __webpack_require__(10);
-
-
-
-
-
-
-
-
-let bindingsMethodUsed
-
-
-function bindComponent (component, bindings) {
-  __WEBPACK_IMPORTED_MODULE_4__trace_js__["a" /* default */].add('component', component)
-  __WEBPACK_IMPORTED_MODULE_4__trace_js__["a" /* default */].add('subscribedState', bindings)
-
-  if (component.beforeBindCallback) component.beforeBindCallback()
-
-  if (component.bindings) {
-    Object(__WEBPACK_IMPORTED_MODULE_2__assertType_js__["a" /* default */])(component.bindings, 'function', 'bindings property type')
-
-    bindings = component.bindings(bindings)
-    __WEBPACK_IMPORTED_MODULE_4__trace_js__["a" /* default */].add('bindReturned', bindings)
-    bindingsMethodUsed = true
-
-    Object(__WEBPACK_IMPORTED_MODULE_2__assertType_js__["a" /* default */])(bindings, 'object', 'bindings method return type')
-  } else {
-    bindingsMethodUsed = false
-  }
-
-  Object(__WEBPACK_IMPORTED_MODULE_1__util_walkFragment_js__["a" /* default */])(component, element => {
-    __WEBPACK_IMPORTED_MODULE_4__trace_js__["a" /* default */].add('element', element)
-    // Bind the tag first so events can be reattached after element is recreated
-    // and repeaters can run
-    const tagAttribute = element.attributes[':tag']
-    if (tagAttribute) {
-      __WEBPACK_IMPORTED_MODULE_4__trace_js__["a" /* default */].add('attribute', tagAttribute)
-      bindTag(component, element, bindings)
-      __WEBPACK_IMPORTED_MODULE_4__trace_js__["a" /* default */].remove('attribute')
-      // If element has been removed, continue to next element, its replacement
-      if (element.parentNode === null) return
-    }
-
-    Object(__WEBPACK_IMPORTED_MODULE_0__bindRepeater_js__["a" /* default */])(element, bindings)
-    if (!element.attributes[':map']) {
-      Object(__WEBPACK_IMPORTED_MODULE_3__bindElement_js__["a" /* default */])(component, element, bindings)
-    }
-    __WEBPACK_IMPORTED_MODULE_4__trace_js__["a" /* default */].remove('element')
-  })
-
-  if (component.afterBindCallback) component.afterBindCallback()
-
-  __WEBPACK_IMPORTED_MODULE_4__trace_js__["a" /* default */].remove('bindReturned')
-  __WEBPACK_IMPORTED_MODULE_4__trace_js__["a" /* default */].remove('subscribedState')
-  __WEBPACK_IMPORTED_MODULE_4__trace_js__["a" /* default */].remove('component')
-}
-
-function bindTag (component, element, bindings) {
-  const { type, subtype, key } = Object(__WEBPACK_IMPORTED_MODULE_5__parseAttribute_js__["a" /* default */])(element.attributes[':tag'])
-  Object(__WEBPACK_IMPORTED_MODULE_6__bindAttribute_js__["a" /* default */])(component, element, bindings, type, subtype, key)
-}
-
-
-/***/ }),
-/* 4 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-/* harmony export (immutable) */ __webpack_exports__["a"] = assertType;
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__util_getType_js__ = __webpack_require__(2);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__util_arrayToSentence_js__ = __webpack_require__(18);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__error_js__ = __webpack_require__(1);
-
-
-
-
-function assertType (value, types, name) {
-  if (!Array.isArray(types)) types = [types]
-  const actual = Object(__WEBPACK_IMPORTED_MODULE_0__util_getType_js__["a" /* default */])(value)
-
-  if (types.includes(actual)) return
-
-  const errorMessage = (() => {
-    if (value === undefined) return `The ${name} cannot be undefined`
-    return `The ${name} was "${actual}" but expected type ` +
-      `${Object(__WEBPACK_IMPORTED_MODULE_1__util_arrayToSentence_js__["a" /* default */])(types.map(type => `"${type}"`))}`
-  })()
-
-  const errorCode = `shadowbind_${name.replace(/[^a-z]/g, '_')}`
-
-  Object(__WEBPACK_IMPORTED_MODULE_2__error_js__["a" /* default */])(errorCode, errorMessage)
-}
-
-
-/***/ }),
-/* 5 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-/* unused harmony export state */
-/* harmony export (immutable) */ __webpack_exports__["a"] = publish;
-/* unused harmony export applyStateKeyDots */
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__lib_trace_js__ = __webpack_require__(0);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__util_getType_js__ = __webpack_require__(2);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__util_deepClone_js__ = __webpack_require__(12);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__util_deepCompare_js__ = __webpack_require__(13);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__lib_error_js__ = __webpack_require__(1);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__define_js__ = __webpack_require__(6);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__lib_queue_js__ = __webpack_require__(7);
-
-
-
-
-
-
-
-
-let state
-
-
-// Apply data-binding to all affected web components when the state changes
-function publish (newState) {
-  __WEBPACK_IMPORTED_MODULE_0__lib_trace_js__["a" /* default */].reset()
-  __WEBPACK_IMPORTED_MODULE_0__lib_trace_js__["a" /* default */].add('publishedState', newState)
-  __WEBPACK_IMPORTED_MODULE_6__lib_queue_js__["c" /* stop */]()
-
-  for (const component of Object.values(__WEBPACK_IMPORTED_MODULE_5__define_js__["a" /* components */])) {
-    let changedState = {}
-    const observedState = component.sbPrivate.observedState
-    for (const watchKey of observedState) {
-      const oldValue = applyStateKeyDots(state, watchKey)
-      const newValue = applyStateKeyDots(newState, watchKey)
-
-      if (!Object(__WEBPACK_IMPORTED_MODULE_3__util_deepCompare_js__["a" /* default */])(newValue, oldValue)) changedState[watchKey] = newValue
-    }
-    if (Object.keys(changedState).length) {
-      __WEBPACK_IMPORTED_MODULE_6__lib_queue_js__["a" /* add */](component, { state: changedState })
-    }
-  }
-
-  __WEBPACK_IMPORTED_MODULE_6__lib_queue_js__["b" /* start */]()
-  __WEBPACK_IMPORTED_MODULE_0__lib_trace_js__["a" /* default */].remove('publishedState')
-  state = Object(__WEBPACK_IMPORTED_MODULE_2__util_deepClone_js__["a" /* default */])(newState)
-}
-
-function applyStateKeyDots (state, watchKey) {
-  if (Object(__WEBPACK_IMPORTED_MODULE_1__util_getType_js__["a" /* default */])(state) !== 'object') return
-
-  if (!/^[^.].+[^.]$/.test(watchKey)) { // cannot begin or end with dot
-    Object(__WEBPACK_IMPORTED_MODULE_4__lib_error_js__["a" /* default */])(
-      'shadowbind_subscribe_key_invalid',
-      `The key "${watchKey}" could not be parsed`
-    )
-  }
-
-  let search = state
-
-  for (const keyPart of watchKey.split('.')) {
-    if (search[keyPart] === undefined) return
-    search = search[keyPart]
-  }
-
-  return search
-}
-
-
-/***/ }),
-/* 6 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return components; });
-/* harmony export (immutable) */ __webpack_exports__["b"] = define;
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__lib_trace_js__ = __webpack_require__(0);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__lib_error_js__ = __webpack_require__(1);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__util_getType_js__ = __webpack_require__(2);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__util_convertCase_js__ = __webpack_require__(14);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__lib_queue_js__ = __webpack_require__(7);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__lib_parseSubscriptions_js__ = __webpack_require__(23);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__util_formValues_js__ = __webpack_require__(24);
-
-
-
-
-
-
-
-
-let components = {}
-let componentId = 0
-
-
-function define (name, Component = {}) {
-  __WEBPACK_IMPORTED_MODULE_0__lib_trace_js__["a" /* default */].reset()
-  if (!arguments.length) {
-    Object(__WEBPACK_IMPORTED_MODULE_1__lib_error_js__["a" /* default */])(
-      'shadowbind_define_without_arguments',
-      'The first argument of define() should be a class extending ' +
-        'HTMLElement, but no arguments were given'
-    )
-  }
-
-  if (arguments.length === 1) Component = name // Name is optional
-
-  if (!(Component.prototype instanceof window.HTMLElement)) {
-    Object(__WEBPACK_IMPORTED_MODULE_1__lib_error_js__["a" /* default */])(
-      'shadowbind_define_type',
-      'The first argument of define() should be a class extending ' +
-        `HTMLElement, not "${Object(__WEBPACK_IMPORTED_MODULE_2__util_getType_js__["a" /* default */])(Component)}"`
-    )
-  }
-
-  if (arguments.length === 1) name = Object(__WEBPACK_IMPORTED_MODULE_3__util_convertCase_js__["b" /* titleToTrain */])(Component.name)
-  validateName(Component, name, arguments.length === 1)
-
-  const rawSubscriptions = Component.prototype.subscribe
-    ? Component.prototype.subscribe()
-    : {}
-
-  const { observedAttrs } = Object(__WEBPACK_IMPORTED_MODULE_5__lib_parseSubscriptions_js__["a" /* default */])(rawSubscriptions)
-
-  class ShadowComponent extends Component {
-    static get observedAttributes () {
-      let manualAttrs = (() => {
-        if (Object(__WEBPACK_IMPORTED_MODULE_2__util_getType_js__["a" /* default */])(Component.observedAttributes) === 'function') {
-          return Component.observedAttributes()
-        }
-        return []
-      })()
-      return observedAttrs.concat(manualAttrs).map(attr => Object(__WEBPACK_IMPORTED_MODULE_3__util_convertCase_js__["a" /* camelToTrain */])(attr))
-    }
-    constructor () {
-      super()
-      if (!this.sbPrivate) this.sbPrivate = {}
-
-      const {
-        subscriptions,
-        observedProps,
-        observedState
-      } = Object(__WEBPACK_IMPORTED_MODULE_5__lib_parseSubscriptions_js__["a" /* default */])(this.subscribe ? this.subscribe() : {})
-
-      this.sbPrivate.observedState = observedState
-      this.sbPrivate.observedProps = observedProps
-      this.sbPrivate.subscriptions = subscriptions
-
-      if (Component.prototype.template) {
-        this.attachShadow({ mode: 'open' })
-        const template = document.createElement('template')
-        template.innerHTML = Component.prototype.template.call(this)
-        this.shadowRoot.appendChild(template.content.cloneNode(true))
-      }
-
-      if (observedProps.length) {
-        for (const prop of observedProps) {
-          this[prop] = value => {
-            __WEBPACK_IMPORTED_MODULE_4__lib_queue_js__["a" /* add */](this, { props: { [prop]: value } })
-            // TODO: forward properties
-          }
-        }
-      }
-
-      this.sbPrivate.getDepth = () => {
-        if (
-          !this.parentNode ||
-          !this.parentNode.host ||
-          !this.parentNode.host.sbPrivate
-        ) {
-          return 0
-        }
-        return this.parentNode.host.sbPrivate.getDepth() + 1
-      }
-    }
-    connectedCallback () {
-      componentId++
-      this.sbPrivate.id = componentId
-      components[componentId] = this
-      forwardProperty(this, Component, 'connectedCallback')
-    }
-    disconnectedCallback () {
-      delete components[componentId]
-      forwardProperty(this, Component, 'disconnectedCallback')
-    }
-    attributeChangedCallback (attrName, oldValue, newValue) {
-      __WEBPACK_IMPORTED_MODULE_4__lib_queue_js__["a" /* add */](this, { attrs: { [Object(__WEBPACK_IMPORTED_MODULE_3__util_convertCase_js__["c" /* trainToCamel */])(attrName)]: newValue } })
-      forwardProperty(this, Component, 'attributeChangedCallback', arguments)
-    }
-    data (bindings) {
-      if (arguments.length === 0) return this.sbPrivate.data
-      __WEBPACK_IMPORTED_MODULE_4__lib_queue_js__["a" /* add */](this, { direct: bindings })
-    }
-    form (newValues) {
-      const firstForm = this.shadowRoot.querySelector('form')
-      if (!firstForm) {
-        Object(__WEBPACK_IMPORTED_MODULE_1__lib_error_js__["a" /* default */])(
-          'shadowbind_missing_form',
-          'Cannot use this.form() because there is no form in this component'
-        )
-      }
-      if (arguments.length > 0) {
-        return Object(__WEBPACK_IMPORTED_MODULE_6__util_formValues_js__["b" /* setFormValues */])(firstForm, newValues)
-      } else {
-        return Object(__WEBPACK_IMPORTED_MODULE_6__util_formValues_js__["a" /* getFormValues */])(firstForm)
-      }
-    }
-  }
-
-  window.customElements.define(name, ShadowComponent)
-}
-
-function forwardProperty (component, Component, propertyName, args = []) {
-  if (Component.prototype[propertyName]) {
-    Component.prototype[propertyName].call(component, ...args)
-  }
-}
-
-function validateName(Component, name, isImplicit) {
-  if (!(
-    name.indexOf('--') !== -1 ||
-    name.indexOf('-') === -1 ||
-    /^-/.test(name) !== false ||
-    /-$/.test(name) !== false ||
-    /[^a-zA-Z0-9-]/.test(name) !== false
-  )) return
-
-  const errName = isImplicit ? 'implicit_component_name' : 'component_name'
-  const details = isImplicit
-    ? ` The name was automatically determined from your class name ` +
-      `"${Component.name}".`
-    : ''
-
-  Object(__WEBPACK_IMPORTED_MODULE_1__lib_error_js__["a" /* default */])(
-    `shadowbind_${errName}`,
-    `Web component name "${name}" was invalid - note that names must be two ` +
-      `words.${details}`
-  )
-}
-
-
-/***/ }),
-/* 7 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
 /* harmony export (immutable) */ __webpack_exports__["b"] = start;
 /* harmony export (immutable) */ __webpack_exports__["c"] = stop;
 /* harmony export (immutable) */ __webpack_exports__["a"] = add;
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__addBindings_js__ = __webpack_require__(15);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__bindComponent_js__ = __webpack_require__(3);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__addBindings_js__ = __webpack_require__(16);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__bindComponent_js__ = __webpack_require__(4);
 
 
 
@@ -590,6 +239,308 @@ function nextQueueItem () {
 
 
 /***/ }),
+/* 4 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return bindingsMethodUsed; });
+/* harmony export (immutable) */ __webpack_exports__["b"] = bindComponent;
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__bindRepeater_js__ = __webpack_require__(17);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__util_walkFragment_js__ = __webpack_require__(18);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__assertType_js__ = __webpack_require__(5);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__bindElement_js__ = __webpack_require__(20);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__trace_js__ = __webpack_require__(0);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__parseAttribute_js__ = __webpack_require__(9);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__bindAttribute_js__ = __webpack_require__(10);
+
+
+
+
+
+
+
+
+let bindingsMethodUsed
+
+
+function bindComponent (component, bindings) {
+  __WEBPACK_IMPORTED_MODULE_4__trace_js__["a" /* default */].add('component', component)
+  __WEBPACK_IMPORTED_MODULE_4__trace_js__["a" /* default */].add('subscribedState', bindings)
+
+  if (component.beforeBindCallback) component.beforeBindCallback()
+
+  if (component.bindings) {
+    Object(__WEBPACK_IMPORTED_MODULE_2__assertType_js__["a" /* default */])(component.bindings, 'function', 'bindings property type')
+
+    bindings = component.bindings(bindings)
+    __WEBPACK_IMPORTED_MODULE_4__trace_js__["a" /* default */].add('bindReturned', bindings)
+    bindingsMethodUsed = true
+
+    Object(__WEBPACK_IMPORTED_MODULE_2__assertType_js__["a" /* default */])(bindings, 'object', 'bindings method return type')
+  } else {
+    bindingsMethodUsed = false
+  }
+
+  Object(__WEBPACK_IMPORTED_MODULE_1__util_walkFragment_js__["a" /* default */])(component, element => {
+    __WEBPACK_IMPORTED_MODULE_4__trace_js__["a" /* default */].add('element', element)
+    // Bind the tag first so events can be reattached after element is recreated
+    // and repeaters can run
+    const tagAttribute = element.attributes[':tag']
+    if (tagAttribute) {
+      __WEBPACK_IMPORTED_MODULE_4__trace_js__["a" /* default */].add('attribute', tagAttribute)
+      bindTag(component, element, bindings)
+      __WEBPACK_IMPORTED_MODULE_4__trace_js__["a" /* default */].remove('attribute')
+      // If element has been removed, continue to next element, its replacement
+      if (element.parentNode === null) return
+    }
+
+    Object(__WEBPACK_IMPORTED_MODULE_0__bindRepeater_js__["a" /* default */])(element, bindings)
+    if (!element.attributes[':map']) {
+      Object(__WEBPACK_IMPORTED_MODULE_3__bindElement_js__["a" /* default */])(component, element, bindings)
+    }
+    __WEBPACK_IMPORTED_MODULE_4__trace_js__["a" /* default */].remove('element')
+  })
+
+  if (component.afterBindCallback) component.afterBindCallback()
+
+  __WEBPACK_IMPORTED_MODULE_4__trace_js__["a" /* default */].remove('bindReturned')
+  __WEBPACK_IMPORTED_MODULE_4__trace_js__["a" /* default */].remove('subscribedState')
+  __WEBPACK_IMPORTED_MODULE_4__trace_js__["a" /* default */].remove('component')
+}
+
+function bindTag (component, element, bindings) {
+  const { type, subtype, key } = Object(__WEBPACK_IMPORTED_MODULE_5__parseAttribute_js__["a" /* default */])(element.attributes[':tag'])
+  Object(__WEBPACK_IMPORTED_MODULE_6__bindAttribute_js__["a" /* default */])(component, element, bindings, type, subtype, key)
+}
+
+
+/***/ }),
+/* 5 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony export (immutable) */ __webpack_exports__["a"] = assertType;
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__util_getType_js__ = __webpack_require__(2);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__util_arrayToSentence_js__ = __webpack_require__(19);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__error_js__ = __webpack_require__(1);
+
+
+
+
+function assertType (value, types, name) {
+  if (!Array.isArray(types)) types = [types]
+  const actual = Object(__WEBPACK_IMPORTED_MODULE_0__util_getType_js__["a" /* default */])(value)
+
+  if (types.includes(actual)) return
+
+  const errorMessage = (() => {
+    if (value === undefined) return `The ${name} cannot be undefined`
+    return `The ${name} was "${actual}" but expected type ` +
+      `${Object(__WEBPACK_IMPORTED_MODULE_1__util_arrayToSentence_js__["a" /* default */])(types.map(type => `"${type}"`))}`
+  })()
+
+  const errorCode = `shadowbind_${name.replace(/[^a-z]/g, '_')}`
+
+  Object(__WEBPACK_IMPORTED_MODULE_2__error_js__["a" /* default */])(errorCode, errorMessage)
+}
+
+
+/***/ }),
+/* 6 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* unused harmony export state */
+/* harmony export (immutable) */ __webpack_exports__["a"] = publish;
+/* unused harmony export applyStateKeyDots */
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__lib_trace_js__ = __webpack_require__(0);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__util_getType_js__ = __webpack_require__(2);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__util_deepClone_js__ = __webpack_require__(14);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__util_deepCompare_js__ = __webpack_require__(15);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__lib_error_js__ = __webpack_require__(1);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__define_js__ = __webpack_require__(7);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__lib_queue_js__ = __webpack_require__(3);
+
+
+
+
+
+
+
+
+let state
+
+
+// Apply data-binding to all affected web components when the state changes
+function publish (newState) {
+  __WEBPACK_IMPORTED_MODULE_0__lib_trace_js__["a" /* default */].reset()
+  __WEBPACK_IMPORTED_MODULE_0__lib_trace_js__["a" /* default */].add('publishedState', newState)
+  __WEBPACK_IMPORTED_MODULE_6__lib_queue_js__["c" /* stop */]()
+
+  for (const component of Object.values(__WEBPACK_IMPORTED_MODULE_5__define_js__["a" /* components */])) {
+    let changedState = {}
+    const observedState = component.sbPrivate.observedState
+    for (const watchKey of observedState) {
+      const oldValue = applyStateKeyDots(state, watchKey)
+      const newValue = applyStateKeyDots(newState, watchKey)
+
+      if (!Object(__WEBPACK_IMPORTED_MODULE_3__util_deepCompare_js__["a" /* default */])(newValue, oldValue)) changedState[watchKey] = newValue
+    }
+    if (Object.keys(changedState).length) {
+      __WEBPACK_IMPORTED_MODULE_6__lib_queue_js__["a" /* add */](component, { state: changedState })
+    }
+  }
+
+  __WEBPACK_IMPORTED_MODULE_6__lib_queue_js__["b" /* start */]()
+  __WEBPACK_IMPORTED_MODULE_0__lib_trace_js__["a" /* default */].remove('publishedState')
+  state = Object(__WEBPACK_IMPORTED_MODULE_2__util_deepClone_js__["a" /* default */])(newState)
+}
+
+function applyStateKeyDots (state, watchKey) {
+  if (Object(__WEBPACK_IMPORTED_MODULE_1__util_getType_js__["a" /* default */])(state) !== 'object') return
+
+  if (!/^[^.].+[^.]$/.test(watchKey)) { // cannot begin or end with dot
+    Object(__WEBPACK_IMPORTED_MODULE_4__lib_error_js__["a" /* default */])(
+      'shadowbind_subscribe_key_invalid',
+      `The key "${watchKey}" could not be parsed`
+    )
+  }
+
+  let search = state
+
+  for (const keyPart of watchKey.split('.')) {
+    if (search[keyPart] === undefined) return
+    search = search[keyPart]
+  }
+
+  return search
+}
+
+
+/***/ }),
+/* 7 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return components; });
+/* harmony export (immutable) */ __webpack_exports__["b"] = define;
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__lib_trace_js__ = __webpack_require__(0);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__util_getType_js__ = __webpack_require__(2);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__lib_error_js__ = __webpack_require__(1);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__lib_queue_js__ = __webpack_require__(3);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__util_convertCase_js__ = __webpack_require__(24);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__lib_parseSubscriptions_js__ = __webpack_require__(11);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__Element_js__ = __webpack_require__(12);
+
+
+
+
+
+
+
+
+let components = {}
+let componentId = 0
+
+
+function define (Components) {
+  __WEBPACK_IMPORTED_MODULE_0__lib_trace_js__["a" /* default */].reset()
+  if (!arguments.length) {
+    Object(__WEBPACK_IMPORTED_MODULE_2__lib_error_js__["a" /* default */])(
+      'shadowbind_define_without_arguments',
+      'The first argument of define() should an object but no arguments were ' +
+        'given'
+    )
+  }
+
+  for (const [name, Component] of Object.entries(Components)) {
+    defineComponent(name, Component)
+  }
+}
+
+function defineComponent (name, Component) {
+  if (!(Component.prototype instanceof __WEBPACK_IMPORTED_MODULE_6__Element_js__["a" /* default */])) {
+    Object(__WEBPACK_IMPORTED_MODULE_2__lib_error_js__["a" /* default */])(
+      'shadowbind_define_type',
+      'The first argument of define() should be an object where the keys are ' +
+        'component names and the values are classes extending ' +
+        `Shadowbind.Element`
+    )
+  }
+
+  if (name.indexOf(/A-Z/)) name = Object(__WEBPACK_IMPORTED_MODULE_4__util_convertCase_js__["b" /* titleToTrain */])(name)
+  validateName(Component, name, arguments.length === 1)
+
+  const rawSubscriptions = Component.prototype.subscribe
+    ? Component.prototype.subscribe()
+    : {}
+
+  const { observedAttrs } = Object(__WEBPACK_IMPORTED_MODULE_5__lib_parseSubscriptions_js__["a" /* default */])(rawSubscriptions)
+
+  class ShadowComponent extends Component {
+    static get observedAttributes () {
+      let manualAttrs = (() => {
+        if (Object(__WEBPACK_IMPORTED_MODULE_1__util_getType_js__["a" /* default */])(Component.observedAttributes) === 'function') {
+          return Component.observedAttributes()
+        }
+        return []
+      })()
+      return observedAttrs.concat(manualAttrs).map(attr => Object(__WEBPACK_IMPORTED_MODULE_4__util_convertCase_js__["a" /* camelToTrain */])(attr))
+    }
+    constructor () {
+      super()
+      if (this.sbPrivate.observedProps.length) {
+        for (const prop of this.sbPrivate.observedProps) {
+          this[prop] = value => {
+            __WEBPACK_IMPORTED_MODULE_3__lib_queue_js__["a" /* add */](this, { props: { [prop]: value } })
+            // TODO: forward properties
+          }
+        }
+      }
+    }
+    connectedCallback () {
+      componentId++
+      this.sbPrivate.id = componentId
+      components[componentId] = this
+      forwardProperty(this, Component, 'connectedCallback')
+    }
+    disconnectedCallback () {
+      delete components[componentId]
+      forwardProperty(this, Component, 'disconnectedCallback')
+    }
+    attributeChangedCallback (attrName, oldValue, newValue) {
+      __WEBPACK_IMPORTED_MODULE_3__lib_queue_js__["a" /* add */](this, { attrs: { [Object(__WEBPACK_IMPORTED_MODULE_4__util_convertCase_js__["c" /* trainToCamel */])(attrName)]: newValue } })
+      forwardProperty(this, Component, 'attributeChangedCallback', arguments)
+    }
+  }
+
+  window.customElements.define(name, ShadowComponent)
+}
+
+function forwardProperty (component, Component, propertyName, args = []) {
+  if (Component.prototype[propertyName]) {
+    Component.prototype[propertyName].call(component, ...args)
+  }
+}
+
+function validateName (Component, name, isImplicit) {
+  if (!(
+    name.indexOf('--') !== -1 ||
+    name.indexOf('-') === -1 ||
+    /^-/.test(name) !== false ||
+    /-$/.test(name) !== false ||
+    /[^a-zA-Z0-9-]/.test(name) !== false
+  )) return
+
+  Object(__WEBPACK_IMPORTED_MODULE_2__lib_error_js__["a" /* default */])(
+    `shadowbind_component_name`,
+    `Web component name "${name}" was invalid - note that names must be two ` +
+      `words.`
+  )
+}
+
+
+/***/ }),
 /* 8 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
@@ -634,15 +585,15 @@ const priorityAttributes = ['value']
 
 "use strict";
 /* harmony export (immutable) */ __webpack_exports__["a"] = bindAttribute;
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__bindComponent_js__ = __webpack_require__(3);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__bindComponent_js__ = __webpack_require__(4);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__trace_js__ = __webpack_require__(0);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__error_js__ = __webpack_require__(1);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__assertType_js__ = __webpack_require__(4);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__applyDots_js__ = __webpack_require__(20);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__assertType_js__ = __webpack_require__(5);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__applyDots_js__ = __webpack_require__(21);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__util_getType_js__ = __webpack_require__(2);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__util_toCamelCase_js__ = __webpack_require__(21);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__util_toCamelCase_js__ = __webpack_require__(22);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_7__util_walkElement_js__ = __webpack_require__(8);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_8__bindIf_js__ = __webpack_require__(22);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_8__bindIf_js__ = __webpack_require__(23);
 
 
 
@@ -855,20 +806,178 @@ function bindEvent (component, element, bindings, subtype, key) {
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__publish_js__ = __webpack_require__(5);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__define_js__ = __webpack_require__(6);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__redux_js__ = __webpack_require__(25);
+/* harmony export (immutable) */ __webpack_exports__["a"] = parseSubscriptions;
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__util_getType_js__ = __webpack_require__(2);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__error_js__ = __webpack_require__(1);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__assertType_js__ = __webpack_require__(5);
 
 
 
 
-/* harmony default export */ __webpack_exports__["default"] = ({ define: __WEBPACK_IMPORTED_MODULE_1__define_js__["b" /* default */], publish: __WEBPACK_IMPORTED_MODULE_0__publish_js__["a" /* default */], redux: __WEBPACK_IMPORTED_MODULE_2__redux_js__["a" /* default */] });
-window.Shadowbind = { define: __WEBPACK_IMPORTED_MODULE_1__define_js__["b" /* default */], publish: __WEBPACK_IMPORTED_MODULE_0__publish_js__["a" /* default */], redux: __WEBPACK_IMPORTED_MODULE_2__redux_js__["a" /* default */] }
+let subscriptions
+let observedAttrs
+let observedProps
+let observedState
+
+function parseSubscriptions (subscriptionObject) {
+  subscriptions = {}
+  observedAttrs = []
+  observedProps = []
+  observedState = []
+
+  for (const [bindKey, value] of Object.entries(subscriptionObject)) {
+    subscriptions[bindKey] = []
+
+    switch (Object(__WEBPACK_IMPORTED_MODULE_0__util_getType_js__["a" /* default */])(value)) {
+      case 'string':
+        addBindingFromString(bindKey, value)
+        continue
+
+      case 'object':
+        addBindingFromObject(bindKey, value)
+        continue
+
+      case 'array':
+        for (const binder of value) {
+          const valueType = Object(__WEBPACK_IMPORTED_MODULE_0__util_getType_js__["a" /* default */])(binder)
+          if (valueType === 'string') addBindingFromString(bindKey, binder)
+          if (valueType === 'object') addBindingFromObject(bindKey, binder)
+        }
+        continue
+    }
+
+    failureToParse()
+  }
+
+  return { subscriptions, observedAttrs, observedProps, observedState }
+}
+
+function addBinding ({ bindKey, source, watchKey, callback }) {
+  if (watchKey) {
+    if (source === 'state') observedState.push(watchKey)
+    else if (source === 'attr') observedAttrs.push(watchKey)
+    else if (source === 'prop') observedProps.push(watchKey)
+    else failureToParse()
+  }
+  Object(__WEBPACK_IMPORTED_MODULE_2__assertType_js__["a" /* default */])(callback, ['function', 'undefined'], 'subscribe callback')
+  Object(__WEBPACK_IMPORTED_MODULE_2__assertType_js__["a" /* default */])(watchKey, ['string'], 'subscribe watch key')
+  subscriptions[bindKey].push({ source, watchKey, callback })
+}
+
+function addBindingFromObject (bindKey, obj) {
+  const source = (() => {
+    if (obj.state) return 'state'
+    if (obj.prop) return 'prop'
+    if (obj.attr) return 'attr'
+  })()
+
+  addBinding({ bindKey, source, watchKey: obj[source], callback: obj.callback })
+}
+
+function addBindingFromString (bindKey, str) {
+  addBinding({ bindKey, source: str, watchKey: bindKey, callback: undefined })
+}
+
+function failureToParse() {
+  Object(__WEBPACK_IMPORTED_MODULE_1__error_js__["a" /* default */])(
+    'shadowbind_invalid_subscribe',
+    'Your subscribe() response is invalid'
+  )
+}
 
 
 /***/ }),
 /* 12 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__lib_error_js__ = __webpack_require__(1);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__lib_queue_js__ = __webpack_require__(3);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__util_formValues_js__ = __webpack_require__(25);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__lib_parseSubscriptions_js__ = __webpack_require__(11);
+
+
+
+
+
+class Element extends window.HTMLElement {
+  constructor () {
+    super()
+    if (!this.sbPrivate) this.sbPrivate = {}
+
+    const {
+      subscriptions,
+      observedProps,
+      observedState
+    } = Object(__WEBPACK_IMPORTED_MODULE_3__lib_parseSubscriptions_js__["a" /* default */])(this.subscribe ? this.subscribe() : {})
+
+    this.sbPrivate.observedState = observedState
+    this.sbPrivate.observedProps = observedProps
+    this.sbPrivate.subscriptions = subscriptions
+    this.sbPrivate.data = {}
+
+    if (this.template) {
+      this.attachShadow({ mode: 'open' })
+      const template = document.createElement('template')
+      template.innerHTML = this.template()
+      this.shadowRoot.appendChild(template.content.cloneNode(true))
+    }
+
+    this.sbPrivate.getDepth = () => {
+      if (
+        !this.parentNode ||
+        !this.parentNode.host ||
+        !this.parentNode.host.sbPrivate
+      ) {
+        return 0
+      }
+      return this.parentNode.host.sbPrivate.getDepth() + 1
+    }
+  }
+  data (bindings) {
+    if (arguments.length === 0) return this.sbPrivate.data
+    __WEBPACK_IMPORTED_MODULE_1__lib_queue_js__["a" /* add */](this, { direct: bindings })
+  }
+  form (newValues) {
+    const firstForm = this.shadowRoot.querySelector('form')
+    if (!firstForm) {
+      Object(__WEBPACK_IMPORTED_MODULE_0__lib_error_js__["a" /* default */])(
+        'shadowbind_missing_form',
+        'Cannot use this.form() because there is no form in this component'
+      )
+    }
+    if (arguments.length > 0) {
+      return Object(__WEBPACK_IMPORTED_MODULE_2__util_formValues_js__["b" /* setFormValues */])(firstForm, newValues)
+    } else {
+      return Object(__WEBPACK_IMPORTED_MODULE_2__util_formValues_js__["a" /* getFormValues */])(firstForm)
+    }
+  }
+}
+/* harmony export (immutable) */ __webpack_exports__["a"] = Element;
+
+
+
+/***/ }),
+/* 13 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__publish_js__ = __webpack_require__(6);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__define_js__ = __webpack_require__(7);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__redux_js__ = __webpack_require__(26);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__Element_js__ = __webpack_require__(12);
+
+
+
+
+
+/* harmony default export */ __webpack_exports__["default"] = ({ define: __WEBPACK_IMPORTED_MODULE_1__define_js__["b" /* default */], publish: __WEBPACK_IMPORTED_MODULE_0__publish_js__["a" /* default */], redux: __WEBPACK_IMPORTED_MODULE_2__redux_js__["a" /* default */], Element: __WEBPACK_IMPORTED_MODULE_3__Element_js__["a" /* default */] });
+window.Shadowbind = { define: __WEBPACK_IMPORTED_MODULE_1__define_js__["b" /* default */], publish: __WEBPACK_IMPORTED_MODULE_0__publish_js__["a" /* default */], redux: __WEBPACK_IMPORTED_MODULE_2__redux_js__["a" /* default */], Element: __WEBPACK_IMPORTED_MODULE_3__Element_js__["a" /* default */] }
+
+
+/***/ }),
+/* 14 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -879,7 +988,7 @@ function deepClone (obj) {
 
 
 /***/ }),
-/* 13 */
+/* 15 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -890,37 +999,7 @@ function deepCompare (val1, val2) {
 
 
 /***/ }),
-/* 14 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-/* harmony export (immutable) */ __webpack_exports__["b"] = titleToTrain;
-/* harmony export (immutable) */ __webpack_exports__["c"] = trainToCamel;
-/* harmony export (immutable) */ __webpack_exports__["a"] = camelToTrain;
-function titleToTrain (TitleCase) {
-  return TitleCase.replace(
-    /[A-Z]/g,
-    (letter, offset) => {
-      if (offset === 0) return letter.toLowerCase()
-      return '-' + letter.toLowerCase()
-    }
-  )
-}
-
-function trainToCamel (trainCase) {
-  return trainCase.replace(
-    /-[a-z]/g,
-    letters => letters.charAt(1).toUpperCase()
-  ).replace(/-/g, '')
-}
-
-function camelToTrain (camelCase) {
-  return titleToTrain(camelCase)
-}
-
-
-/***/ }),
-/* 15 */
+/* 16 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -962,7 +1041,7 @@ function addBindings (component, changes = {}) {
 
 
 /***/ }),
-/* 16 */
+/* 17 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -970,7 +1049,7 @@ function addBindings (component, changes = {}) {
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__util_getType_js__ = __webpack_require__(2);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__trace_js__ = __webpack_require__(0);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__error_js__ = __webpack_require__(1);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__bindComponent_js__ = __webpack_require__(3);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__bindComponent_js__ = __webpack_require__(4);
 
 
 
@@ -1110,7 +1189,7 @@ function generatePlaceholder () {
 
 
 /***/ }),
-/* 17 */
+/* 18 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -1173,7 +1252,7 @@ function shadowRootError (component) {
 
 
 /***/ }),
-/* 18 */
+/* 19 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -1189,7 +1268,7 @@ function arrayToSentence (arr) {
 
 
 /***/ }),
-/* 19 */
+/* 20 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -1231,7 +1310,7 @@ function tryApplyAttribute(component, element, bindings, attribute) {
 
 
 /***/ }),
-/* 20 */
+/* 21 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -1280,7 +1359,7 @@ function traceSearch (item) {
 
 
 /***/ }),
-/* 21 */
+/* 22 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -1291,7 +1370,7 @@ function toCamelCase (trainCase) {
 
 
 /***/ }),
-/* 22 */
+/* 23 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -1328,92 +1407,37 @@ function createPlaceholder (element) {
 
 
 /***/ }),
-/* 23 */
+/* 24 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-/* harmony export (immutable) */ __webpack_exports__["a"] = parseSubscriptions;
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__util_getType_js__ = __webpack_require__(2);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__error_js__ = __webpack_require__(1);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__assertType_js__ = __webpack_require__(4);
-
-
-
-
-let subscriptions
-let observedAttrs
-let observedProps
-let observedState
-
-function parseSubscriptions (subscriptionObject) {
-  subscriptions = {}
-  observedAttrs = []
-  observedProps = []
-  observedState = []
-
-  for (const [bindKey, value] of Object.entries(subscriptionObject)) {
-    subscriptions[bindKey] = []
-
-    switch (Object(__WEBPACK_IMPORTED_MODULE_0__util_getType_js__["a" /* default */])(value)) {
-      case 'string':
-        addBindingFromString(bindKey, value)
-        continue
-
-      case 'object':
-        addBindingFromObject(bindKey, value)
-        continue
-
-      case 'array':
-        for (const binder of value) {
-          const valueType = Object(__WEBPACK_IMPORTED_MODULE_0__util_getType_js__["a" /* default */])(binder)
-          if (valueType === 'string') addBindingFromString(bindKey, binder)
-          if (valueType === 'object') addBindingFromObject(bindKey, binder)
-        }
-        continue
+/* harmony export (immutable) */ __webpack_exports__["b"] = titleToTrain;
+/* harmony export (immutable) */ __webpack_exports__["c"] = trainToCamel;
+/* harmony export (immutable) */ __webpack_exports__["a"] = camelToTrain;
+function titleToTrain (TitleCase) {
+  return TitleCase.replace(
+    /[A-Z]/g,
+    (letter, offset) => {
+      if (offset === 0) return letter.toLowerCase()
+      return '-' + letter.toLowerCase()
     }
-
-    failureToParse()
-  }
-
-  return { subscriptions, observedAttrs, observedProps, observedState }
-}
-
-function addBinding ({ bindKey, source, watchKey, callback }) {
-  if (watchKey) {
-    if (source === 'state') observedState.push(watchKey)
-    else if (source === 'attr') observedAttrs.push(watchKey)
-    else if (source === 'prop') observedProps.push(watchKey)
-    else failureToParse()
-  }
-  Object(__WEBPACK_IMPORTED_MODULE_2__assertType_js__["a" /* default */])(callback, ['function', 'undefined'], 'subscribe callback')
-  Object(__WEBPACK_IMPORTED_MODULE_2__assertType_js__["a" /* default */])(watchKey, ['string'], 'subscribe watch key')
-  subscriptions[bindKey].push({ source, watchKey, callback })
-}
-
-function addBindingFromObject (bindKey, obj) {
-  const source = (() => {
-    if (obj.state) return 'state'
-    if (obj.prop) return 'prop'
-    if (obj.attr) return 'attr'
-  })()
-
-  addBinding({ bindKey, source, watchKey: obj[source], callback: obj.callback })
-}
-
-function addBindingFromString (bindKey, str) {
-  addBinding({ bindKey, source: str, watchKey: bindKey, callback: undefined })
-}
-
-function failureToParse() {
-  Object(__WEBPACK_IMPORTED_MODULE_1__error_js__["a" /* default */])(
-    'shadowbind_invalid_subscribe',
-    'Your subscribe() response is invalid'
   )
+}
+
+function trainToCamel (trainCase) {
+  return trainCase.replace(
+    /-[a-z]/g,
+    letters => letters.charAt(1).toUpperCase()
+  ).replace(/-/g, '')
+}
+
+function camelToTrain (camelCase) {
+  return titleToTrain(camelCase)
 }
 
 
 /***/ }),
-/* 24 */
+/* 25 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -1515,11 +1539,11 @@ function setSelectValues (options, values) {
 
 
 /***/ }),
-/* 25 */
+/* 26 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__publish_js__ = __webpack_require__(5);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__publish_js__ = __webpack_require__(6);
 
 
 /* harmony default export */ __webpack_exports__["a"] = (store => {

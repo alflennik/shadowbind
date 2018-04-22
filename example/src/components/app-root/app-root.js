@@ -1,7 +1,7 @@
 import Shadowbind from '../../../../dist/shadowbind'
 import * as counter from '../../actions/counter'
 
-class AppRoot extends HTMLElement {
+class AppRoot extends Shadowbind.Element {
   connectedCallback() {
     this.data({}) // TODO: remove this godawful hack
   }
@@ -19,4 +19,4 @@ class AppRoot extends HTMLElement {
   }
 }
 
-Shadowbind.define(AppRoot)
+Shadowbind.define({ AppRoot })
