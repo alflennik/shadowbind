@@ -1,6 +1,6 @@
 import Shadowbind from '../../../src/index.js'
 
-class FormsImperative extends window.HTMLElement {
+class FormsImperative extends Shadowbind.Element {
   getActual () {
     this.form({
       textField: 'textValue',

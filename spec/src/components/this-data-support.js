@@ -1,6 +1,6 @@
 import Shadowbind from '../../../src/index.js'
 
-class ThisDataSupport extends window.HTMLElement {
+class ThisDataSupport extends Shadowbind.Element {
   subscribe () {
     return { d: 'attr', e: 'prop' }
   }

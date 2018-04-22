@@ -1,6 +1,6 @@
 import Shadowbind from '../../../src/index.js'
 
-class BindingsMethodType extends window.HTMLElement {
+class BindingsMethodType extends Shadowbind.Element {
   constructor () {
     super()
     this.bindings = 'a string'

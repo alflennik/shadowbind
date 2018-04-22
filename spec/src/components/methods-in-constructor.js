@@ -1,23 +1,26 @@
 import Shadowbind from '../../../src/index.js'
 
-class MethodsInConstructor extends window.HTMLElement {
+class MethodsInConstructor extends Shadowbind.Element {
   constructor () {
     super()
     this.tests = []
     this.tests.push(this.data())
-    try {
-      this.form()
-    } catch (err) {
-      this.tests.push(err.code || err.message)
-    }
+    this.tests.push(this.form())
+    this.tests.push(this.shadowRoot.querySelector('#test2').innerText)
+    this.tests.push(this.shadowRoot.querySelector('#test1').value)
     this.data({ message: 'Replacement message' })
     this.form({ textField: 'Replacement value' })
-  }
-  connectedCallback () {
     this.tests.push(this.data())
     this.tests.push(this.form())
-    this.tests.push(this.shadowRoot.querySelector('#test1').value)
     this.tests.push(this.shadowRoot.querySelector('#test2').innerText)
+    this.tests.push(this.shadowRoot.querySelector('#test1').value)
+  }
+  connectedCallback () {
+    this.tests.push('in connected callback')
+    this.tests.push(this.data())
+    this.tests.push(this.form())
+    this.tests.push(this.shadowRoot.querySelector('#test2').innerText)
+    this.tests.push(this.shadowRoot.querySelector('#test1').value)
   }
   getActual () {
     return this.tests
@@ -25,9 +28,16 @@ class MethodsInConstructor extends window.HTMLElement {
   getExpected () {
     return [
       {},
-      'shadowbind_form_without_shadow_root',
-      { message: 'Replacement message' },
       { textField: 'to be replaced' },
+      'Text to be replaced...',
+      'to be replaced',
+      { message: 'Replacement message' },
+      { textField: 'Replacement value' },
+      'Replacement message',
+      'Replacement value',
+      'in connected callback',
+      { message: 'Replacement message' },
+      { textField: 'Replacement value' },
       'Replacement message',
       'Replacement value'
     ]

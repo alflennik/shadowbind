@@ -1,6 +1,6 @@
 import Shadowbind from '../../../src/index.js'
 
-class ClosedShadowRoot extends window.HTMLElement {
+class ClosedShadowRoot extends Shadowbind.Element {
   constructor () {
     super()
     this.attachShadow({ mode: 'closed' })

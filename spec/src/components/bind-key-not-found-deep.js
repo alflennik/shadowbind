@@ -1,6 +1,6 @@
 import Shadowbind from '../../../src/index.js'
 
-class BindKeyNotFoundDeep extends window.HTMLElement {
+class BindKeyNotFoundDeep extends Shadowbind.Element {
   template () {
     return /* @html */`
       <div :text='level1.level2.level3'></div>

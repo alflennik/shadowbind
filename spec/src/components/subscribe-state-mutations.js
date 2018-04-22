@@ -3,7 +3,7 @@ import Shadowbind from '../../../src/index.js'
 let state
 let bindCount = 0
 
-class SubscribeStateMutations extends window.HTMLElement {
+class SubscribeStateMutations extends Shadowbind.Element {
   subscribe () {
     return {
       mutations: [{ state: 'level1.level2' }]

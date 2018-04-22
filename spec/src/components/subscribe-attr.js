@@ -1,6 +1,6 @@
 import Shadowbind from '../../../src/index.js'
 
-class SubscribeAttr extends window.HTMLElement {
+class SubscribeAttr extends Shadowbind.Element {
   subscribe () {
     return { attribute: 'attr', camelCased: 'attr' }
   }

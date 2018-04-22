@@ -1,6 +1,6 @@
 import Shadowbind from '../../../src/index.js'
 
-class TagAndRepeater extends window.HTMLElement {
+class TagAndRepeater extends Shadowbind.Element {
   getActual () {
     this.data({ tag: 'tag-repeater-component', myData: [1, 2] })
     const elements = this.shadowRoot.querySelectorAll('.repeatedElement')
@@ -20,7 +20,7 @@ class TagAndRepeater extends window.HTMLElement {
   }
 }
 
-class TagRepeaterComponent extends window.HTMLElement {
+class TagRepeaterComponent extends Shadowbind.Element {
   template () {
     return ''
   }

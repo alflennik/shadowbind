@@ -2,7 +2,7 @@ import Shadowbind from '../../../src/index.js'
 
 let latestValue
 
-class SubscribeProperty extends window.HTMLElement {
+class SubscribeProperty extends Shadowbind.Element {
   subscribe () {
     return { myProperty: 'prop' }
   }

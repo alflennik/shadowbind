@@ -1,6 +1,6 @@
 import Shadowbind from '../../../src/index.js'
 
-class BindNested extends window.HTMLElement {
+class BindNested extends Shadowbind.Element {
   template () {
     return /* @html */`
       <h2 :text="outer" id="outer"></h2>
@@ -26,7 +26,7 @@ class BindNested extends window.HTMLElement {
   }
 }
 
-class NestedElement extends window.HTMLElement {
+class NestedElement extends Shadowbind.Element {
   template () {
     return /* @html */`<h2 :text="inner" id="inner"></h2>`
   }

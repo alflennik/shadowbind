@@ -2,7 +2,7 @@ import Shadowbind from '../../../src/index.js'
 
 let mixed
 
-class SubscribeMultipleTypes extends window.HTMLElement {
+class SubscribeMultipleTypes extends Shadowbind.Element {
   subscribe () {
     return {
       mixed: ['state', 'prop', { attr: 'mixed', callback: val => Number(val) }],

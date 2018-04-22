@@ -1,6 +1,6 @@
 import Shadowbind from '../../../src/index.js'
 
-class RepeaterNonComponent extends window.HTMLElement {
+class RepeaterNonComponent extends Shadowbind.Element {
   getActual () {
     this.results = []
     try {
@@ -44,7 +44,7 @@ class NonShadowbindWebComponent extends window.HTMLElement {
   }
 }
 
-class ValidShadowbindComponent extends window.HTMLElement {
+class ValidShadowbindComponent extends Shadowbind.Element {
   template () {
     return ''
   }

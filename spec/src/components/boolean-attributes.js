@@ -1,6 +1,6 @@
 import Shadowbind from '../../../src/index.js'
 
-class BooleanAttributes extends window.HTMLElement {
+class BooleanAttributes extends Shadowbind.Element {
   getActual () {
     this.data({
       isChecked: true,

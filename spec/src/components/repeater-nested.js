@@ -1,6 +1,6 @@
 import Shadowbind from '../../../src/index.js'
 
-class Repeat1 extends window.HTMLElement {
+class Repeat1 extends Shadowbind.Element {
   template () {
     return /* @html */`<repeat-2 :map="myData"></repeat-2>`
   }
@@ -9,7 +9,7 @@ class Repeat1 extends window.HTMLElement {
   }
 }
 
-class Repeat2 extends window.HTMLElement {
+class Repeat2 extends Shadowbind.Element {
   template () {
     return /* @html */`<repeat-3 :map="myData"></repeat-3>`
   }
@@ -18,7 +18,7 @@ class Repeat2 extends window.HTMLElement {
   }
 }
 
-class Repeat3 extends window.HTMLElement {
+class Repeat3 extends Shadowbind.Element {
   template () {
     return /* @html */`<span :text="myText"></span>`
   }
@@ -27,7 +27,7 @@ class Repeat3 extends window.HTMLElement {
   }
 }
 
-class RepeaterNested extends window.HTMLElement {
+class RepeaterNested extends Shadowbind.Element {
   template () {
     return /* @html */`<repeat-1 :map="myData"></repeat-1>`
   }

@@ -226,6 +226,13 @@ Incidentally, this remarkable developer experience caries over to microservice w
 ## JavaScript API
 The Shadowbind variable is accessible through `import Shadowbind from 'shadowbind'`. It is also accessible as a global variable - simply make sure the script file is included before your components.
 
+#### `Shadowbind.Element`:
+The base class for your components that extends HTMLElement.
+```js
+class MyComponent extends Shadobind.Element {
+}
+```
+
 #### `Shadowbind.define({ MyComponent })`:
 Initializes your components.
 
@@ -273,21 +280,21 @@ getAppStateFromServer().then(appData => {
   }
   ```
 - You should run `Shadowbind.publish()` before your components are defined so you can access the default state in your components.
-  ```js
-  import Shadowbind from 'shadowbind'
-  import MyComponent1 from './components/my-component-1'
-  import MyComponent2 from './components/my-component-2'
-  import MyComponent3 from './components/my-component-3'
-  import getInitialState from './get-initial-state'
+```js
+import Shadowbind from 'shadowbind'
+import MyComponent1 from './components/my-component-1'
+import MyComponent2 from './components/my-component-2'
+import MyComponent3 from './components/my-component-3'
+import getInitialState from './get-initial-state'
 
-  getInitialState().then(initialState => {
-    Shadowbind.publish(initialState)
-    Shadowbind.define({
-      MyComponent1,
-      MyComponent2,
-      MyComponent3
-    })
+getInitialState().then(initialState => {
+  Shadowbind.publish(initialState)
+  Shadowbind.define({
+    MyComponent1,
+    MyComponent2,
+    MyComponent3
   })
+})
   ```
 
 #### `Shadowbind.redux`:
@@ -543,6 +550,9 @@ class LifecycleTester extends Shadowbind.Element {
   afterBindCallback() {}
 }
 ```
+
+#### `constructor`:
+Called when the component is created but before it is attached to the DOM.
 
 #### `connectedCallback`:
 Called when element is attached to the DOM, i.e. created.

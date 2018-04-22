@@ -1,6 +1,6 @@
 import Shadowbind from '../../../src/index.js'
 
-class BasicBindings extends window.HTMLElement {
+class BasicBindings extends Shadowbind.Element {
   template () {
     return /* @html */`
       <span :text="text" id="text"></span>

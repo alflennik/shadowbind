@@ -1,6 +1,6 @@
 import Shadowbind from '../../../src/index.js'
 
-class InitialEvents extends window.HTMLElement {
+class InitialEvents extends Shadowbind.Element {
   getActual () {
     this.eventTriggered = false
     const button = this.shadowRoot.querySelector('button')

@@ -1,6 +1,6 @@
 import Shadowbind from '../../../src/index.js'
 
-class InvalidTagName extends window.HTMLElement {
+class InvalidTagName extends Shadowbind.Element {
   template () {
     return /* @html */`<div :tag="invalidTagName"></div>`
   }

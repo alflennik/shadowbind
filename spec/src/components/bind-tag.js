@@ -25,7 +25,7 @@ function doTest (shadowRoot) {
   ]
 }
 
-class BindTag extends window.HTMLElement {
+class BindTag extends Shadowbind.Element {
   template () {
     return /* @html */`
       <div :tag="currentTag"

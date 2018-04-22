@@ -9,7 +9,7 @@ function tryDefine(Component) {
   return 'no errors'
 }
 
-class InvalidSubscribe extends window.HTMLElement {
+class InvalidSubscribe extends Shadowbind.Element {
   getActual () {
     return [
       tryDefine(InvalidSubscribe1),
@@ -28,25 +28,25 @@ class InvalidSubscribe extends window.HTMLElement {
   }
 }
 
-class InvalidSubscribe1 extends window.HTMLElement {
+class InvalidSubscribe1 extends Shadowbind.Element {
   subscribe() {
     return { attr: 'propertyName' }
   }
 }
 
-class InvalidSubscribe2 extends window.HTMLElement {
+class InvalidSubscribe2 extends Shadowbind.Element {
   subscribe() {
     return { myKey: true }
   }
 }
 
-class InvalidSubscribe3 extends window.HTMLElement {
+class InvalidSubscribe3 extends Shadowbind.Element {
   subscribe() {
     return { myKey: { attr: 'my-key', callback: true } }
   }
 }
 
-class InvalidSubscribe4 extends window.HTMLElement {
+class InvalidSubscribe4 extends Shadowbind.Element {
   subscribe() {
     return { myKey: { attr: true } }
   }

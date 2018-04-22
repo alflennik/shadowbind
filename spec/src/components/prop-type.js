@@ -1,13 +1,13 @@
 import Shadowbind from '../../../src/index.js'
 
-class WrongPropType extends window.HTMLElement {
+class WrongPropType extends Shadowbind.Element {
   constructor () {
     super()
     this.notFunction = 'a string'
   }
 }
 
-class PropType extends window.HTMLElement {
+class PropType extends Shadowbind.Element {
   getActual () {
     try {
       this.data({ someData: {} })

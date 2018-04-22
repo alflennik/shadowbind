@@ -1,6 +1,6 @@
 import Shadowbind from '../../../src/index.js'
 
-class BindingsType extends window.HTMLElement {
+class BindingsType extends Shadowbind.Element {
   template () {
     return ''
   }

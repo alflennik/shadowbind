@@ -1,6 +1,6 @@
 import Shadowbind from '../../../src/index.js'
 
-class SubscribePublishCallback extends window.HTMLElement {
+class SubscribePublishCallback extends Shadowbind.Element {
   subscribe () {
     return {
       miles: {

@@ -1,6 +1,6 @@
 import Shadowbind from '../../../src/index.js'
 
-class EventType extends window.HTMLElement {
+class EventType extends Shadowbind.Element {
   template () {
     return /* @html */`<div on:click='aString'></div>`
   }

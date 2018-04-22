@@ -1,6 +1,6 @@
 import Shadowbind from '../../../src/index.js'
 
-class ManualOverrides extends window.HTMLElement {
+class ManualOverrides extends Shadowbind.Element {
   subscribe () {
     return { stick: 'state' }
   }

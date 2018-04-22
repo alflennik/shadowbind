@@ -1,6 +1,6 @@
 import Shadowbind from '../../../src/index.js'
 
-class BindKeyNotFound extends window.HTMLElement {
+class BindKeyNotFound extends Shadowbind.Element {
   template () {
     return /* @html */`<div :text='undefKey'></div>`
   }

@@ -1,6 +1,6 @@
 import Shadowbind from '../../../src/index.js'
 
-class InitialData extends window.HTMLElement {
+class InitialData extends Shadowbind.Element {
   getActual () {
     let tests = []
     Shadowbind.publish({ initial: '100% awesome' })
@@ -24,7 +24,7 @@ class InitialData extends window.HTMLElement {
   }
 }
 
-class InitialDataState extends window.HTMLElement {
+class InitialDataState extends Shadowbind.Element {
   subscribe () {
     return { message: { state: 'initial' } }
   }
@@ -35,7 +35,7 @@ class InitialDataState extends window.HTMLElement {
   }
 }
 
-class InitialDataAttr extends window.HTMLElement {
+class InitialDataAttr extends Shadowbind.Element {
   subscribe () {
     return { message: { attr: 'detectAttr' } }
   }

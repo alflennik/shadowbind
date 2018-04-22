@@ -1,6 +1,6 @@
 import Shadowbind from '../../../src/index.js'
 
-class InvalidBind extends window.HTMLElement {
+class InvalidBind extends Shadowbind.Element {
   constructor () {
     super()
     this.bindings = 'a string'
@@ -10,7 +10,7 @@ class InvalidBind extends window.HTMLElement {
   }
 }
 
-class RepeaterBindType extends window.HTMLElement {
+class RepeaterBindType extends Shadowbind.Element {
   template () {
     return /* @html */`<invalid-bind :map="myData"></invalid-bind>`
   }

@@ -1,6 +1,6 @@
 import Shadowbind from '../../../src/index.js'
 
-class DefineType extends window.HTMLElement {
+class DefineType extends Shadowbind.Element {
   getActual () {
     window.ready = true
     let tests = []

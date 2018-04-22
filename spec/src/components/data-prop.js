@@ -1,6 +1,6 @@
 import Shadowbind from '../../../src/index.js'
 
-class ShowText extends window.HTMLElement {
+class ShowText extends Shadowbind.Element {
   subscribe () {
     return { text: 'state' }
   }
@@ -11,7 +11,7 @@ class ShowText extends window.HTMLElement {
   }
 }
 
-class DataProp extends window.HTMLElement {
+class DataProp extends Shadowbind.Element {
   subscribe () {
     return { text: 'state', alternate: 'state' }
   }

@@ -1,6 +1,6 @@
 import Shadowbind from '../../../src/index.js'
 
-class FormsDeclarative extends window.HTMLElement {
+class FormsDeclarative extends Shadowbind.Element {
   getActual () {
     this.data({
       textField: 'textValue',

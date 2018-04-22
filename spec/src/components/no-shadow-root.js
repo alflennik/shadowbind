@@ -1,6 +1,6 @@
 import Shadowbind from '../../../src/index.js'
 
-class NoShadowRoot extends window.HTMLElement {
+class NoShadowRoot extends Shadowbind.Element {
   getActual () {
     try {
       this.data({})

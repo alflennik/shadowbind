@@ -2,7 +2,7 @@ import Shadowbind from '../../../src/index.js'
 
 let counter = 0
 
-class BindEvents extends window.HTMLElement {
+class BindEvents extends Shadowbind.Element {
   template () {
     return /* @html */`
       <button on:click="incrementCounter" :text="counter"></button>

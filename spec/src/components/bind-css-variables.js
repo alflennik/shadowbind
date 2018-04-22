@@ -1,6 +1,6 @@
 import Shadowbind from '../../../src/index.js'
 
-class BindCssVariables extends window.HTMLElement {
+class BindCssVariables extends Shadowbind.Element {
   getActual () {
     this.data({
       widthValue: '100px',

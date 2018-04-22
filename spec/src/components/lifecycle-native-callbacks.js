@@ -7,7 +7,7 @@ function disconnectAndReconnect (element) {
   parent.insertBefore(element, referenceElement)
 }
 
-class LifecycleNativeCallbacks extends window.HTMLElement {
+class LifecycleNativeCallbacks extends Shadowbind.Element {
   static observedAttributes () {
     return ['tester', 'testy']
   }

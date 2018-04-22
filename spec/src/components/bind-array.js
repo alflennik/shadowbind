@@ -1,6 +1,6 @@
 import Shadowbind from '../../../src/index.js'
 
-class BindArray extends window.HTMLElement {
+class BindArray extends Shadowbind.Element {
   template () {
     return /* @html */`
       <div :text='getArray'></div>

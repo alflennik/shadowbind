@@ -1,6 +1,6 @@
 import Shadowbind from '../../../src/index.js'
 
-class BindCssClasses extends window.HTMLElement {
+class BindCssClasses extends Shadowbind.Element {
   getActual () {
     this.data({
       added: true,

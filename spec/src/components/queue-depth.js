@@ -2,7 +2,7 @@ import Shadowbind from '../../../src/index.js'
 
 let bindCounts = { top: 0, middle: 0, bottom: 0 }
 
-class QueueDepth extends window.HTMLElement {
+class QueueDepth extends Shadowbind.Element {
   subscribe () {
     return { myState: 'state' }
   }
@@ -24,7 +24,7 @@ class QueueDepth extends window.HTMLElement {
   }
 }
 
-class QueueDepth1 extends window.HTMLElement {
+class QueueDepth1 extends Shadowbind.Element {
   subscribe () {
     return { myState: 'state', watched: 'attr' }
   }
@@ -37,7 +37,7 @@ class QueueDepth1 extends window.HTMLElement {
   }
 }
 
-class QueueDepth2 extends window.HTMLElement {
+class QueueDepth2 extends Shadowbind.Element {
   subscribe () {
     return { myState: 'state', watched: 'attr' }
   }

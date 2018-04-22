@@ -1,4 +1,4 @@
-class GlobalShadowbindSupport extends window.HTMLElement {
+class GlobalShadowbindSupport extends Shadowbind.Element {
   subscribe () {
     return { fromGlobal: 'state' }
   }

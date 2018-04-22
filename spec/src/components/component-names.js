@@ -10,7 +10,7 @@ function tryToDefine (Component, name) {
   return 'no errors'
 }
 
-class ComponentNames extends window.HTMLElement {
+class ComponentNames extends Shadowbind.Element {
   getActual () {
     let tests = []
     tests.push(tryToDefine(ValidComponent, 'singleword'))
@@ -31,9 +31,9 @@ class ComponentNames extends window.HTMLElement {
   }
 }
 
-class ValidComponent extends window.HTMLElement {}
-class Single extends window.HTMLElement {}
-class capitalization_component extends window.HTMLElement {}
-class camelComponent extends window.HTMLElement {}
+class ValidComponent extends Shadowbind.Element {}
+class Single extends Shadowbind.Element {}
+class capitalization_component extends Shadowbind.Element {}
+class camelComponent extends Shadowbind.Element {}
 
 Shadowbind.define(ComponentNames)

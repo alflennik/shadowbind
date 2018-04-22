@@ -2,7 +2,7 @@ import Shadowbind from '../../../src/index.js'
 
 let state
 
-class SubscribeNested extends window.HTMLElement {
+class SubscribeNested extends Shadowbind.Element {
   subscribe () {
     return {
       myVal: [{ state: 'level1.level2.level3' }, { state: 'nested.not.found' }]

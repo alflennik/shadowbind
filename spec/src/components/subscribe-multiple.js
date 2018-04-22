@@ -2,7 +2,7 @@ import Shadowbind from '../../../src/index.js'
 
 let state
 
-class SubscribeMultiple extends window.HTMLElement {
+class SubscribeMultiple extends Shadowbind.Element {
   subscribe () {
     return { myVal: [{ state: 'usedFirst' }, { state: 'usedSecond' }] }
   }

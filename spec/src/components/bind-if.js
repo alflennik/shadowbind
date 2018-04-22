@@ -1,6 +1,6 @@
 import Shadowbind from '../../../src/index.js'
 
-class BindIf extends window.HTMLElement {
+class BindIf extends Shadowbind.Element {
   getActual () {
     let tests = []
     this.data({ showFirst: true, showSecond: false })

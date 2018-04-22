@@ -10,7 +10,7 @@ function readIdList () {
   return idList
 }
 
-class RepeaterAddRemove extends window.HTMLElement {
+class RepeaterAddRemove extends Shadowbind.Element {
   template () {
     return /* @html */`<id-list :map="idList"></id-list>`
   }
@@ -39,7 +39,7 @@ class RepeaterAddRemove extends window.HTMLElement {
   }
 }
 
-class IdList extends window.HTMLElement {
+class IdList extends Shadowbind.Element {
   template () {
     return /* @html */`<h2 attr:id="id"></h2>`
   }

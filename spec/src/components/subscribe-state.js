@@ -2,7 +2,7 @@ import Shadowbind from '../../../src/index.js'
 
 let state
 
-class SubscribeState extends window.HTMLElement {
+class SubscribeState extends Shadowbind.Element {
   subscribe () {
     return { abc: 'state' }
   }

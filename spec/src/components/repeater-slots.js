@@ -1,6 +1,6 @@
 import Shadowbind from '../../../src/index.js'
 
-class RepeaterSlots extends window.HTMLElement {
+class RepeaterSlots extends Shadowbind.Element {
   template () {
     return /* @html */`
       <repeated-slot-element :map="items" class="loop">
@@ -23,7 +23,7 @@ class RepeaterSlots extends window.HTMLElement {
   }
 }
 
-class RepeatedSlotElement extends window.HTMLElement {
+class RepeatedSlotElement extends Shadowbind.Element {
   template () {
     return /* @html */`<slot></slot>`
   }

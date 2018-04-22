@@ -1,6 +1,6 @@
 import Shadowbind from '../../../src/index.js'
 
-class PropUndefined extends window.HTMLElement {
+class PropUndefined extends Shadowbind.Element {
   template () {
     return /* @html */`<div prop:anything="someData"></div>`
   }

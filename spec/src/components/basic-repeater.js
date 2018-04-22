@@ -1,6 +1,6 @@
 import Shadowbind from '../../../src/index.js'
 
-class BasicRepeater extends window.HTMLElement {
+class BasicRepeater extends Shadowbind.Element {
   template () {
     return /* @html */`
       <h2 :text="beforeText" id="beforeText"></h2>
@@ -51,7 +51,7 @@ class BasicRepeater extends window.HTMLElement {
   }
 }
 
-class RepeatElement extends window.HTMLElement {
+class RepeatElement extends Shadowbind.Element {
   template () {
     return /* @html */`
       <h2 :text="name"></h2>

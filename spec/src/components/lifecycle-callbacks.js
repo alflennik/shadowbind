@@ -1,6 +1,6 @@
 import Shadowbind from '../../../src/index.js'
 
-class LifecycleCallbacks extends window.HTMLElement {
+class LifecycleCallbacks extends Shadowbind.Element {
   constructor() {
     super()
     this.sequence = []

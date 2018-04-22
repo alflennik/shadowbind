@@ -1,6 +1,6 @@
 import Shadowbind from '../../../src/index.js'
 
-class StateKeyInvalid extends window.HTMLElement {
+class StateKeyInvalid extends Shadowbind.Element {
   subscribe () {
     return { invalidKey: { state: 'firstKey.secondKey.' } }
   }

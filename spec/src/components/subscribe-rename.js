@@ -2,7 +2,7 @@ import Shadowbind from '../../../src/index.js'
 
 let state
 
-class SubscribeRename extends window.HTMLElement {
+class SubscribeRename extends Shadowbind.Element {
   subscribe () {
     return { remapped: { state: 'sourceState' } }
   }
