@@ -48,6 +48,16 @@ export default function bindAttribute (
   trace.add('attributeState', value)
   const valueType = getType(value)
 
+  if (value === undefined) {
+    error(
+      'shadowbind_undefined_binding',
+      `Your binding "${key}" is undefined, which is not allowed. Pass false ` +
+        `for negative values or null if you want the binding to be ignored.`
+    )
+  }
+
+  if (value === null) return
+
   if (
     (valueType === 'object' || valueType === 'array') &&
     (type === 'attr' || type === 'text' || type === 'html')
@@ -97,11 +107,8 @@ export default function bindAttribute (
 
     case 'text':
     case 'html':
-      assertType(value, ['string', 'number', 'null'], 'inner content type')
-
-      if (value != null) {
-        type === 'text' ? element.innerText = value : element.innerHTML = value
-      }
+      assertType(value, ['string', 'number'], `inner ${type} type`)
+      type === 'text' ? element.innerText = value : element.innerHTML = value
       break
 
     case 'show':
