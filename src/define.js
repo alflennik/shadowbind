@@ -35,7 +35,7 @@ function defineComponent (name, Component) {
     )
   }
 
-  if (name.indexOf(/A-Z/)) name = titleToTrain(name)
+  if (/^[A-Z]/.test(name)) name = titleToTrain(name)
   validateName(Component, name, arguments.length === 1)
 
   const rawSubscriptions = Component.prototype.subscribe

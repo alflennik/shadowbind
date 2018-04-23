@@ -136,6 +136,10 @@ test('this.data() and this.form() can be used in the constructor', async t => {
   t.deepEqual(...(await server.test('methods-in-constructor')))
 })
 
+test('undefined bindings produce errors and null is ignored', async t => {
+  t.deepEqual(...(await server.test('null-undefined-bindings')))
+})
+
 test('deeply nested elements are bound last to avoid thrashing', async t => {
   t.deepEqual(...(await server.test('queue-depth')))
 })

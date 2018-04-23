@@ -51,8 +51,8 @@ export default function bindAttribute (
   if (value === undefined) {
     error(
       'shadowbind_undefined_binding',
-      `Your binding "${key}" is undefined, which is not allowed. Pass false ` +
-        `for negative values or null if you want the binding to be ignored.`
+      `Your binding "${key}" is undefined, which is not allowed. Try setting ` +
+        `a default value in your bindings() method.`
     )
   }
 
@@ -193,6 +193,13 @@ export default function bindAttribute (
 }
 
 function bindEvent (component, element, bindings, subtype, key) {
+  if (component[key] === undefined) {
+    error(
+      'shadowbind_undefined_event_method',
+      `Expected to find method "${key}" on your component to use as an event ` +
+        `handler`
+    )
+  }
   assertType(component[key], 'function', 'event type')
 
   if (

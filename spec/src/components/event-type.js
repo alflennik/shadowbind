@@ -1,18 +1,29 @@
 import Shadowbind from '../../../src/index.js'
 
 class EventType extends Shadowbind.Element {
-  template () {
-    return /* @html */`<div on:click='aString'></div>`
-  }
-  async getExpected () {
-    return 'shadowbind_event_type'
-  }
-  async getActual () {
+  getActual () {
+    let tests = []
+
     try {
-      this.data({ aString: 'yayyy' })
+      this.data({})
     } catch (err) {
-      return err.code || err.message
+      tests.push(err.code || err.message)
     }
+
+    try {
+      this.handleEvent = 'aString'
+      this.data({})
+    } catch (err) {
+      tests.push(err.code || err.message)
+    }
+
+    return tests
+  }
+  getExpected () {
+    return ['shadowbind_undefined_event_method', 'shadowbind_event_type']
+  }
+  template () {
+    return /* @html */`<div on:click='handleEvent'></div>`
   }
 }
 
