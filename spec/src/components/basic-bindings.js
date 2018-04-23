@@ -1,29 +1,7 @@
 import Shadowbind from '../../../src/index.js'
 
 class BasicBindings extends Shadowbind.Element {
-  template () {
-    return /* @html */`
-      <span :text="text" id="text"></span>
-      <span :text="escaping" id="escaping"></span>
-      <span :html="html" id="html"></span>
-      <span :show="show" id="show"></span>
-      <span :show="hide" id="hide"></span>
-      <span attr:my-attr="myAttr" id="my-attr"></span>
-      <span attr:none="none" id="none"></span>
-    `
-  }
-  async getExpected () {
-    return {
-      text: 'This text',
-      escaping: '&lt;/span&gt;',
-      html: 'This html',
-      show: '',
-      hide: 'none',
-      myAttr: 'This attr',
-      none: null
-    }
-  }
-  async getActual () {
+  getActual () {
     this.data({
       text: 'This text',
       escaping: '</span>',
@@ -42,6 +20,28 @@ class BasicBindings extends Shadowbind.Element {
       myAttr: this.shadowRoot.querySelector('#my-attr').getAttribute('my-attr'),
       none: this.shadowRoot.querySelector('#none').getAttribute('none')
     }
+  }
+  getExpected () {
+    return {
+      text: 'This text',
+      escaping: '&lt;/span&gt;',
+      html: 'This html',
+      show: '',
+      hide: 'none',
+      myAttr: 'This attr',
+      none: null
+    }
+  }
+  template () {
+    return /* @html */`
+      <span :text="text" id="text"></span>
+      <span :text="escaping" id="escaping"></span>
+      <span :html="html" id="html"></span>
+      <span :show="show" id="show"></span>
+      <span :show="hide" id="hide"></span>
+      <span attr:my-attr="myAttr" id="my-attr"></span>
+      <span attr:none="none" id="none"></span>
+    `
   }
 }
 
