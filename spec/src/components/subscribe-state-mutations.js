@@ -12,6 +12,7 @@ class SubscribeStateMutations extends Shadowbind.Element {
   getActual () {
     let values = []
     let counts = []
+    counts.push(bindCount) // Should be bound once when initially created
 
     let nestedState = { level1: { level2: 'yo!' } }
     Shadowbind.publish(nestedState)
@@ -39,16 +40,18 @@ class SubscribeStateMutations extends Shadowbind.Element {
   getExpected () {
     return {
       values: ['yo!', 'hello!', '{"abc":{"dce":123}}', '{"abc":{"dce":456}}'],
-      counts: [1, 2, 3, 4] // this confirms SB detected the change in state
+      counts: [1, 2, 3, 4, 5] // this confirms SB detected the change in state
     }
   }
-  bindings ({ mutations }) {
+  bindings ({ mutations = null }) {
     bindCount++
     state = mutations
-    return {}
+    return { mutations: null }
   }
   template () {
-    return ''
+    return /* @html */`
+      <div :text="mutations"></div>
+    `
   }
 }
 

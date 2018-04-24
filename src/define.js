@@ -20,9 +20,11 @@ export default function define (Components) {
     )
   }
 
+  queue.stop()
   for (const [name, Component] of Object.entries(Components)) {
     defineComponent(name, Component)
   }
+  queue.start()
 }
 
 function defineComponent (name, Component) {
@@ -70,6 +72,7 @@ function defineComponent (name, Component) {
       this.sbPrivate.id = componentId
       components[componentId] = this
       forwardProperty(this, Component, 'connectedCallback')
+      this.data({}) // Initial bind and event listeners attachment
     }
     disconnectedCallback () {
       delete components[componentId]

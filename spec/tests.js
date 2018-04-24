@@ -212,6 +212,10 @@ test('subscribe supports state', async t => {
   t.deepEqual(...(await server.test('subscribe-state')))
 })
 
+test('convenient workflow for handling slots and slot changes', async t => {
+  t.deepEqual(...(await server.test('slotchange-workflow')))
+})
+
 test('repeater should work in concert with tag binding', async t => {
   t.deepEqual(...(await server.test('tag-and-repeater')))
 })

@@ -1,29 +1,27 @@
 import Shadowbind from '../../../src/index.js'
 
 class LifecycleCallbacks extends Shadowbind.Element {
-  constructor() {
+  constructor () {
     super()
     this.sequence = []
   }
   getActual () {
-    this.data({})
     return this.sequence
   }
   getExpected () {
     return ['beforeBindCallback', 'bindings', 'afterBindCallback']
   }
-  beforeBindCallback() {
+  beforeBindCallback () {
     this.sequence.push('beforeBindCallback')
   }
-  afterBindCallback() {
+  afterBindCallback () {
     this.sequence.push('afterBindCallback')
   }
-  bindings() {
+  bindings () {
     this.sequence.push('bindings')
     return {}
   }
-  template() {
-    return ''
+  template () {
   }
 }
 

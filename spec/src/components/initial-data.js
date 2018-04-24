@@ -1,6 +1,10 @@
 import Shadowbind from '../../../src/index.js'
 
 class InitialData extends Shadowbind.Element {
+  constructor () {
+    super()
+    this.data({ inner: null })
+  }
   getActual () {
     let tests = []
     Shadowbind.publish({ initial: '100% awesome' })
