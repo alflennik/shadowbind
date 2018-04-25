@@ -62,6 +62,7 @@ export default class Element extends window.HTMLElement {
     this.sbPrivate.updateState()
 
     this.sbPrivate.afterConnectedCallback = () => {
+      if (this.getAttribute(':map')) return // Initial bind triggered by parent
       this.data({}) // Initial bind and event listeners attachment
     }
   }

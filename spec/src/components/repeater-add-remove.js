@@ -20,20 +20,20 @@ class RepeaterAddRemove extends Shadowbind.Element {
       attempt2: ['b', 'c'],
       attempt3: ['c', 'b', 'a'],
       attempt4: [],
-      attempt5: ['a', 'b', 'c', 'd', 'e']
+      attempt5: ['a', 'b', 'c', 'e']
     }
   }
   async getActual () {
     let attempts = {}
-    this.data({ idList: ['a', 'b', 'c', 'd'] })
+    this.data({ idList: [{ id: 'a' }, { id: 'b' }, { id: 'c' }, { id: 'd' }] })
     attempts.attempt1 = readIdList()
-    this.data({ idList: ['b', 'c'] })
+    this.data({ idList: [{ id: 'b' }, { id: 'c' }] })
     attempts.attempt2 = readIdList()
-    this.data({ idList: ['c', 'b', 'a'] })
+    this.data({ idList: [{ id: 'c' }, { id: 'b' }, { id: 'a' }] })
     attempts.attempt3 = readIdList()
     this.data({ idList: [] })
     attempts.attempt4 = readIdList()
-    this.data({ idList: ['a', 'b', 'c', 'd', 'e'] })
+    this.data({ idList: [{ id: 'a' }, { id: 'b' }, { id: 'c' }, { id: 'e' }] })
     attempts.attempt5 = readIdList()
     return attempts
   }
@@ -43,10 +43,6 @@ class IdList extends Shadowbind.Element {
   template () {
     return /* @html */`<h2 attr:id="id"></h2>`
   }
-  bindings (state) {
-    return { id: state }
-  }
 }
 
-Shadowbind.define({ RepeaterAddRemove })
-Shadowbind.define({ IdList })
+Shadowbind.define({ RepeaterAddRemove, IdList })

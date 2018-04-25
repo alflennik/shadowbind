@@ -25,12 +25,8 @@ class Repeat3 extends Shadowbind.Element {
 }
 
 class RepeaterNested extends Shadowbind.Element {
-  constructor () {
-    super()
-    this.data({ myData: [{ num: 1 }, { num: 2 }, { num: 3 }] })
-    throw new Error('this is weird')
-  }
   getActual () {
+    this.data({ myData: [{ num: 1 }, { num: 2 }, { num: 3 }] })
     let results = []
     for (const repeat1 of this.shadowRoot.querySelectorAll('repeat-1')) {
       for (const repeat2 of repeat1.shadowRoot.querySelectorAll('repeat-2')) {

@@ -1,7 +1,7 @@
 import getType from '../util/getType.js'
 import trace from './trace.js'
 import error from './error.js'
-import bindComponent from './bindComponent.js'
+import * as queue from './queue.js'
 
 let emptyExamples = {}
 let placeholderId = 0
@@ -44,7 +44,7 @@ export default function bindRepeater (element, bindings) {
   }
 
   for (let i = 0; i < expectedCount; i++) {
-    bindComponent(element, value[i])
+    queue.add(element, { direct: value[i] })
     element = element.nextElementSibling
   }
 
