@@ -1,25 +1,41 @@
 import Shadowbind from '../../../src/index.js'
 
+async function waitForData (expected, getData) {
+  return new Promise((resolve, reject) => {
+    const interval = setInterval(() => {
+      if (getData() === expected) {
+        clearTimeout(deadmanSwitch)
+        clearInterval(interval)
+        resolve(getData())
+      }
+    }, 10)
+
+    const deadmanSwitch = setTimeout(() => {
+      clearInterval(interval)
+      throw new Error('You got too fancy')
+    }, 100)
+  })
+}
+
 class SlotchangeWorkflow extends Shadowbind.Element {
-  getActual () {
+  async getActual () {
     let tests = []
     const single = this.shadowRoot.querySelector('test-single-slot')
     const multi = this.shadowRoot.querySelector('test-multiple-slots')
 
-    tests.push(single.result)
+    tests.push(await waitForData('H1', single.result))
     this.data({ test1: 'h2', 'test2:1': null, 'test2:2': null })
-    debugger
-    tests.push(single.result)
+    tests.push(await waitForData('H2', single.result))
 
-    tests.push(multi.slot1)
-    tests.push(multi.slot2)
+    tests.push(await waitForData('H3', multi.result1))
+    tests.push(await waitForData('H4', multi.result2))
     this.data({ 'test2:1': 'h5', 'test2:2': 'h6' })
-    tests.push(multi.slot1)
-    tests.push(multi.slot2)
+    tests.push(await waitForData('H5', multi.result1))
+    tests.push(await waitForData('H6', multi.result2))
 
     return tests
   }
-  getExpected () {
+  async getExpected () {
     return ['H1', 'H2', 'H3', 'H4', 'H5', 'H6']
   }
   template () {
@@ -38,11 +54,12 @@ class SlotchangeWorkflow extends Shadowbind.Element {
 class TestSingleSlot extends Shadowbind.Element {
   constructor () {
     super()
-    this.data({}) // :(
+    this.result = () => {
+      return this.slot
+    }
   }
   onSlotchange (event) {
-    console.log('onSlotchange', event.target.assignedElements()[0].tagName)
-    this.result = event.target.assignedElements()[0].tagName
+    this.slot = event.target.assignedElements()[0].tagName
   }
   template () {
     return /* @html */`
@@ -54,11 +71,15 @@ class TestSingleSlot extends Shadowbind.Element {
 class TestMultipleSlots extends Shadowbind.Element {
   constructor () {
     super()
-    this.data({}) // :(
+    this.result1 = () => {
+      return this.slot1
+    }
+    this.result2 = () => {
+      return this.slot2
+    }
   }
   onSlotchange (event) {
-    const slotName = event.target.getAttribute('name')
-    this[slotName] = event.target.assignedElements()[0].tagName
+    this[event.target.name] = event.target.assignedElements()[0].tagName
   }
   template () {
     return /* @html */`

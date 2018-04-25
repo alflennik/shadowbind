@@ -9,7 +9,7 @@
     "ava": "^0.22.0",
     "eslint": "^4.4.1",
     "live-server": "^1.2.0",
-    "puppeteer": "^0.10.1",
+    "puppeteer": "^0.10.2",
     "redux": "^3.7.2",
     "standard": "^10.0.3",
     "uglifyjs-webpack-plugin": "^1.1.2",
