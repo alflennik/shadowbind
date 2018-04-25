@@ -4,7 +4,7 @@ import { getFormValues, setFormValues } from './util/formValues.js'
 import parseSubscriptions from './lib/parseSubscriptions.js'
 import deepCompare from './util/deepCompare.js'
 import { state, oldState } from './publish.js'
-import getType from './util/getType.js'
+import objectSearch from './util/objectSearch.js'
 
 let componentId = 0
 
@@ -50,9 +50,8 @@ export default class Element extends window.HTMLElement {
       let changedState = {}
       const observedState = this.sbPrivate.observedState
       for (const watchKey of observedState) {
-        const oldValue = applyStateKeyDots(oldState, watchKey)
-        const newValue = applyStateKeyDots(state, watchKey)
-
+        let oldValue = objectSearch(oldState, watchKey)
+        let newValue = objectSearch(state, watchKey)
         if (!deepCompare(newValue, oldValue)) changedState[watchKey] = newValue
       }
       if (Object.keys(changedState).length) {
@@ -84,24 +83,4 @@ export default class Element extends window.HTMLElement {
       return getFormValues(firstForm)
     }
   }
-}
-
-export function applyStateKeyDots (state, watchKey) {
-  if (getType(state) !== 'object') return
-
-  if (!/^[^.].+[^.]$/.test(watchKey)) { // cannot begin or end with dot
-    error(
-      'shadowbind_subscribe_key_invalid',
-      `The key "${watchKey}" could not be parsed`
-    )
-  }
-
-  let search = state
-
-  for (const keyPart of watchKey.split('.')) {
-    if (search[keyPart] === undefined) return
-    search = search[keyPart]
-  }
-
-  return search
 }

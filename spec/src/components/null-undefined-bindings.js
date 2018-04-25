@@ -4,22 +4,27 @@ class NullUndefinedBindings extends Shadowbind.Element {
   getActual () {
     let tests = []
     tests.push(this.test({ myText: undefined }))
-    tests.push(this.test({ myText: null, myCondition: undefined }))
-    tests.push(this.test({ myCondition: null, shouldShow: undefined }))
-    tests.push(this.test({ shouldShow: null, tagName: undefined }))
-    tests.push(this.test({ tagName: null, myValue: undefined }))
-    tests.push(this.test({ myValue: null, myAttrValue: undefined }))
-    tests.push(this.test({ myAttrValue: null, myClass: undefined }))
-    tests.push(this.test({ myClass: null, myHeight: undefined }))
-    tests.push(this.test({ myHeight: null, myArray: undefined }))
+    tests.push(this.test({ myCondition: undefined }))
+    tests.push(this.test({ shouldShow: undefined }))
+    tests.push(this.test({ tagName: undefined }))
+    tests.push(this.test({ myValue: undefined }))
+    tests.push(this.test({ myAttrValue: undefined }))
+    tests.push(this.test({ myClass: undefined }))
+    tests.push(this.test({ myHeight: undefined }))
+    tests.push(this.test({ myArray: undefined }))
+    tests.push(this.test({ myText: null }))
+    tests.push(this.test({ myCondition: null }))
+    tests.push(this.test({ shouldShow: null }))
+    tests.push(this.test({ tagName: null }))
+    tests.push(this.test({ myValue: null }))
+    tests.push(this.test({ myAttrValue: null }))
+    tests.push(this.test({ myClass: null }))
+    tests.push(this.test({ myHeight: null }))
     tests.push(this.test({ myArray: null }))
     return tests
   }
   getExpected () {
-    let results = new Array(8).fill('shadowbind_undefined_binding')
-    results.push('shadowbind_map_type')
-    results.push('shadowbind_undefined_event_method')
-    return results
+    return new Array(18).fill('no errors')
   }
   test (data) {
     try {
@@ -27,6 +32,7 @@ class NullUndefinedBindings extends Shadowbind.Element {
     } catch (err) {
       return err.code || err.message
     }
+    return 'no errors'
   }
   template () {
     return /* @html */`
@@ -39,7 +45,6 @@ class NullUndefinedBindings extends Shadowbind.Element {
       <div class:a-class="myClass"></div>
       <div css:height="myHeight"></div>
       <just-another-repeater :map="myArray"></just-another-repeater>
-      <button on:click="handleClick">Handle click</button>
     `
   }
 }

@@ -1,12 +1,10 @@
-import { bindingsMethodUsed } from './bindComponent.js'
 import trace from './trace.js'
 import error from './error.js'
 import assertType from './assertType.js'
-import applyDots from './applyDots.js'
+import objectSearch from '../util/objectSearch.js'
 import getType from '../util/getType.js'
 import toCamelCase from '../util/toCamelCase.js'
 import walkElement from '../util/walkElement.js'
-import * as queue from './queue.js'
 import { replaceWithPlaceholder, putElementBack } from './bindIf.js'
 
 export default function bindAttribute (
@@ -21,43 +19,14 @@ export default function bindAttribute (
     return bindEvent(component, element, bindings, subtype, key)
   }
 
-  let value
+  let value = key.indexOf('.') === -1
+    ? bindings[key]
+    : objectSearch(bindings, key)
 
-  if (key.indexOf('.') === -1) {
-    if (!Object.keys(bindings).includes(key)) {
-      const searchSource = trace.get().bindReturned
-        ? 'bindings'
-        : 'subscribed state'
-
-      error(
-        'shadowbind_key_not_found',
-        `The key "${key}" could not be found in ${searchSource}`
-      )
-    }
-
-    value = bindings[key]
-  } else {
-    value = applyDots(
-      bindings,
-      key,
-      bindingsMethodUsed ? 'localState' : 'subscribedState',
-      bindingsMethodUsed ? 'local state' : 'subscribed state',
-      'shadowbind_key_not_found'
-    )
-  }
+  if (value == null) return
 
   trace.add('attributeState', value)
   const valueType = getType(value)
-
-  if (value === undefined) {
-    error(
-      'shadowbind_undefined_binding',
-      `Your binding "${key}" is undefined, which is not allowed. Try setting ` +
-        `a default value in your bindings() method.`
-    )
-  }
-
-  if (value === null) return
 
   if (
     (valueType === 'object' || valueType === 'array') &&

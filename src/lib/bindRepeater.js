@@ -12,7 +12,7 @@ export default function bindRepeater (element, bindings) {
 
   let { key, value } = loadKeyValue(element, emptyRepeaterId, bindings)
 
-  if (value === null) return
+  if (value == null) return
   if (getType(value) !== 'array') {
     error(
       'shadowbind_map_type',

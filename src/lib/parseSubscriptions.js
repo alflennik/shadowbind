@@ -59,6 +59,8 @@ function addBindingFromObject (bindKey, obj) {
     if (obj.attr) return 'attr'
   })()
 
+  if (!/^[^.].+[^.]$/.test(obj[source])) failureToParse()
+
   addBinding({ bindKey, source, watchKey: obj[source], callback: obj.callback })
 }
 
@@ -66,7 +68,7 @@ function addBindingFromString (bindKey, str) {
   addBinding({ bindKey, source: str, watchKey: bindKey, callback: undefined })
 }
 
-function failureToParse() {
+function failureToParse () {
   error(
     'shadowbind_invalid_subscribe',
     'Your subscribe() response is invalid'
