@@ -7,11 +7,12 @@ class QueueDepth extends Shadowbind.Element {
     return { myState: 'state' }
   }
   getActual () {
+    bindCounts = { top: 0, middle: 0, bottom: 0 }
     Shadowbind.publish({ myState: 10 })
     return bindCounts
   }
   getExpected () {
-    return { top: 2, middle: 2, bottom: 2 }
+    return { top: 1, middle: 1, bottom: 1 }
   }
   bindings () {
     bindCounts.top++
