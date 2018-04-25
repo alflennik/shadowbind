@@ -6,6 +6,7 @@ import applyDots from './applyDots.js'
 import getType from '../util/getType.js'
 import toCamelCase from '../util/toCamelCase.js'
 import walkElement from '../util/walkElement.js'
+import * as queue from './queue.js'
 import { replaceWithPlaceholder, putElementBack } from './bindIf.js'
 
 export default function bindAttribute (

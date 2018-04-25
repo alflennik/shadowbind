@@ -1,9 +1,10 @@
+/* eslint-disable no-undef */
+
 class GlobalShadowbindSupport extends Shadowbind.Element {
   subscribe () {
     return { fromGlobal: 'state' }
   }
   getActual () {
-    // eslint-disable-next-line no-undef
     Shadowbind.publish({ fromGlobal: 'worked fine, no errors' })
     return this.shadowRoot.querySelector('#test').innerText
   }
@@ -17,4 +18,4 @@ class GlobalShadowbindSupport extends Shadowbind.Element {
   }
 }
 
-Shadowbind.define({ GlobalShadowbindSupport })  // eslint-disable-line no-undef
+Shadowbind.define({ GlobalShadowbindSupport })

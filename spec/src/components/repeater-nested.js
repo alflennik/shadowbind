@@ -1,38 +1,36 @@
 import Shadowbind from '../../../src/index.js'
 
 class Repeat1 extends Shadowbind.Element {
+  bindings () {
+    return { myData: [{}, {}, {}] }
+  }
   template () {
     return /* @html */`<repeat-2 :map="myData"></repeat-2>`
-  }
-  bindings (state) {
-    return { myData: [1, 2, 3] }
   }
 }
 
 class Repeat2 extends Shadowbind.Element {
+  bindings () {
+    return { myData: [{ num: 1 }, { num: 2 }, { num: 3 }] }
+  }
   template () {
     return /* @html */`<repeat-3 :map="myData"></repeat-3>`
-  }
-  bindings (state) {
-    return { myData: [1, 2, 3] }
   }
 }
 
 class Repeat3 extends Shadowbind.Element {
   template () {
-    return /* @html */`<span :text="myText"></span>`
-  }
-  bindings (state) {
-    return { myText: state }
+    return /* @html */`<span :text="num"></span>`
   }
 }
 
 class RepeaterNested extends Shadowbind.Element {
-  template () {
-    return /* @html */`<repeat-1 :map="myData"></repeat-1>`
+  constructor () {
+    super()
+    this.data({ myData: [{ num: 1 }, { num: 2 }, { num: 3 }] })
+    throw new Error('this is weird')
   }
   getActual () {
-    this.data({ myData: [1, 2, 3] })
     let results = []
     for (const repeat1 of this.shadowRoot.querySelectorAll('repeat-1')) {
       for (const repeat2 of repeat1.shadowRoot.querySelectorAll('repeat-2')) {
@@ -50,9 +48,14 @@ class RepeaterNested extends Shadowbind.Element {
       '1', '2', '3', '1', '2', '3', '1', '2', '3'
     ]
   }
+  template () {
+    return /* @html */`<repeat-1 :map="myData"></repeat-1>`
+  }
 }
 
-Shadowbind.define({ RepeaterNested })
-Shadowbind.define({ 'repeat-1':  Repeat1 })
-Shadowbind.define({ 'repeat-2':  Repeat2 })
-Shadowbind.define({ 'repeat-3':  Repeat3 })
+Shadowbind.define({
+  RepeaterNested,
+  'repeat-1': Repeat1,
+  'repeat-2': Repeat2,
+  'repeat-3': Repeat3
+})

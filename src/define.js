@@ -2,13 +2,10 @@ import trace from './lib/trace.js'
 import getType from './util/getType.js'
 import error from './lib/error.js'
 import * as queue from './lib/queue.js'
+import * as connectedComponents from './lib/connectedComponents.js'
 import { titleToTrain, trainToCamel, camelToTrain } from './util/convertCase.js'
 import parseSubscriptions from './lib/parseSubscriptions.js'
 import ShadowbindElement from './Element.js'
-
-let components = {}
-let componentId = 0
-export { components }
 
 export default function define (Components) {
   trace.reset()
@@ -62,20 +59,17 @@ function defineComponent (name, Component) {
         for (const prop of this.sbPrivate.observedProps) {
           this[prop] = value => {
             queue.add(this, { props: { [prop]: value } })
-            // TODO: forward properties
           }
         }
       }
     }
     connectedCallback () {
-      componentId++
-      this.sbPrivate.id = componentId
-      components[componentId] = this
+      connectedComponents.add(this.sbPrivate.id, this)
       forwardProperty(this, Component, 'connectedCallback')
-      this.data({}) // Initial bind and event listeners attachment
+      this.sbPrivate.afterConnectedCallback()
     }
     disconnectedCallback () {
-      delete components[componentId]
+      connectedComponents.remove(this.sbPrivate.id)
       forwardProperty(this, Component, 'disconnectedCallback')
     }
     attributeChangedCallback (attrName, oldValue, newValue) {

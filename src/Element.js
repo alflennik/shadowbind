@@ -6,10 +6,15 @@ import deepCompare from './util/deepCompare.js'
 import { state, oldState } from './publish.js'
 import getType from './util/getType.js'
 
+let componentId = 0
+
 export default class Element extends window.HTMLElement {
   constructor () {
     super()
-    if (!this.sbPrivate) this.sbPrivate = {}
+    this.sbPrivate = {}
+
+    componentId++
+    this.sbPrivate.id = componentId
 
     const {
       subscriptions,
@@ -22,24 +27,23 @@ export default class Element extends window.HTMLElement {
     this.sbPrivate.subscriptions = subscriptions
     this.sbPrivate.data = {}
 
+    this.sbPrivate.getDepth = () => {
+      if (
+        !this.parentNode ||
+        !this.parentNode.host ||
+        !this.parentNode.host.sbPrivate
+      ) {
+        return 0
+      }
+      return this.parentNode.host.sbPrivate.getDepth() + 1
+    }
+
     if (this.template) {
       this.attachShadow({ mode: 'open' })
       const template = document.createElement('template')
       const innerContent = this.template()
       template.innerHTML = innerContent === undefined ? '' : innerContent
       this.shadowRoot.appendChild(template.content.cloneNode(true))
-    }
-
-    this.sbPrivate.getDepth = () => {
-      if (
-        !this.parentNode ||
-        !this.parentNode.host ||
-        !this.parentNode.host.sbPrivate ||
-        !this.parentNode.host.sbPrivate.getDepth
-      ) {
-        return 0
-      }
-      return this.parentNode.host.sbPrivate.getDepth() + 1
     }
 
     this.sbPrivate.updateState = () => {
@@ -57,6 +61,10 @@ export default class Element extends window.HTMLElement {
     }
 
     this.sbPrivate.updateState()
+
+    this.sbPrivate.afterConnectedCallback = () => {
+      this.data({}) // Initial bind and event listeners attachment
+    }
   }
   data (bindings) {
     if (arguments.length === 0) return this.sbPrivate.data

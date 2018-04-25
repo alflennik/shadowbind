@@ -2,15 +2,15 @@ import addBindings from './addBindings.js'
 import bindComponent from './bindComponent.js'
 
 let queue = []
-let processing = true
+let stopCount = 0
 
 export function start () {
-  processing = true
+  if (stopCount > 0) stopCount--
   processQueue()
 }
 
 export function stop () {
-  processing = false
+  stopCount++
 }
 
 export function add (component, changes = {}) {
@@ -28,7 +28,7 @@ export function add (component, changes = {}) {
 }
 
 function processQueue () {
-  if (!processing) return
+  if (stopCount !== 0) return
 
   let queueItem = nextQueueItem()
   while (queueItem) {

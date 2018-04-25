@@ -6,12 +6,12 @@ class QueueDepth extends Shadowbind.Element {
   subscribe () {
     return { myState: 'state' }
   }
-  async getActual () {
+  getActual () {
     Shadowbind.publish({ myState: 10 })
     return bindCounts
   }
-  async getExpected () {
-    return { top: 1, middle: 1, bottom: 1 }
+  getExpected () {
+    return { top: 2, middle: 2, bottom: 2 }
   }
   bindings () {
     bindCounts.top++
@@ -50,6 +50,6 @@ class QueueDepth2 extends Shadowbind.Element {
   }
 }
 
-Shadowbind.define({ 'queue-depth-2':  QueueDepth2 })
+Shadowbind.define({ 'queue-depth-2': QueueDepth2 })
 Shadowbind.define({ QueueDepth })
-Shadowbind.define({ 'queue-depth-1':  QueueDepth1 })
+Shadowbind.define({ 'queue-depth-1': QueueDepth1 })
