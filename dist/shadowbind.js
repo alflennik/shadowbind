@@ -170,21 +170,21 @@ function getType (item) {
 /* harmony export (immutable) */ __webpack_exports__["b"] = start;
 /* harmony export (immutable) */ __webpack_exports__["c"] = stop;
 /* harmony export (immutable) */ __webpack_exports__["a"] = add;
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__addBindings_js__ = __webpack_require__(16);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__bindComponent_js__ = __webpack_require__(4);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__addBindings_js__ = __webpack_require__(15);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__bindComponent_js__ = __webpack_require__(16);
 
 
 
 let queue = []
-let processing = true
+let stopCount = 0
 
 function start () {
-  processing = true
+  if (stopCount > 0) stopCount--
   processQueue()
 }
 
 function stop () {
-  processing = false
+  stopCount++
 }
 
 function add (component, changes = {}) {
@@ -202,7 +202,7 @@ function add (component, changes = {}) {
 }
 
 function processQueue () {
-  if (!processing) return
+  if (stopCount !== 0) return
 
   let queueItem = nextQueueItem()
   while (queueItem) {
@@ -210,7 +210,7 @@ function processQueue () {
       queueItem.component.sbPrivate.bindings,
       queueItem.component.sbPrivate.direct
     )
-    Object(__WEBPACK_IMPORTED_MODULE_1__bindComponent_js__["b" /* default */])(queueItem.component, queueItem.component.sbPrivate.data)
+    Object(__WEBPACK_IMPORTED_MODULE_1__bindComponent_js__["a" /* default */])(queueItem.component, queueItem.component.sbPrivate.data)
     queueItem = nextQueueItem()
   }
 }
@@ -243,74 +243,36 @@ function nextQueueItem () {
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return bindingsMethodUsed; });
-/* harmony export (immutable) */ __webpack_exports__["b"] = bindComponent;
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__bindRepeater_js__ = __webpack_require__(17);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__util_walkFragment_js__ = __webpack_require__(18);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__assertType_js__ = __webpack_require__(5);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__bindElement_js__ = __webpack_require__(20);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__trace_js__ = __webpack_require__(0);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__parseAttribute_js__ = __webpack_require__(9);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__bindAttribute_js__ = __webpack_require__(10);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "c", function() { return state; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "b", function() { return oldState; });
+/* harmony export (immutable) */ __webpack_exports__["a"] = publish;
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__lib_trace_js__ = __webpack_require__(0);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__util_deepClone_js__ = __webpack_require__(14);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__lib_connectedComponents_js__ = __webpack_require__(6);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__lib_queue_js__ = __webpack_require__(3);
 
 
 
 
 
+let state
+let oldState
 
+// Apply data-binding to all affected web components when the state changes
+function publish (newState) {
+  __WEBPACK_IMPORTED_MODULE_0__lib_trace_js__["a" /* default */].reset()
+  __WEBPACK_IMPORTED_MODULE_0__lib_trace_js__["a" /* default */].add('publishedState', newState)
+  __WEBPACK_IMPORTED_MODULE_3__lib_queue_js__["c" /* stop */]()
 
+  oldState = state
+  state = Object(__WEBPACK_IMPORTED_MODULE_1__util_deepClone_js__["a" /* default */])(newState)
 
-let bindingsMethodUsed
-
-
-function bindComponent (component, bindings) {
-  __WEBPACK_IMPORTED_MODULE_4__trace_js__["a" /* default */].add('component', component)
-  __WEBPACK_IMPORTED_MODULE_4__trace_js__["a" /* default */].add('subscribedState', bindings)
-
-  if (component.beforeBindCallback) component.beforeBindCallback()
-
-  if (component.bindings) {
-    Object(__WEBPACK_IMPORTED_MODULE_2__assertType_js__["a" /* default */])(component.bindings, 'function', 'bindings property type')
-
-    bindings = component.bindings(bindings)
-    __WEBPACK_IMPORTED_MODULE_4__trace_js__["a" /* default */].add('bindReturned', bindings)
-    bindingsMethodUsed = true
-
-    Object(__WEBPACK_IMPORTED_MODULE_2__assertType_js__["a" /* default */])(bindings, 'object', 'bindings method return type')
-  } else {
-    bindingsMethodUsed = false
+  for (const component of __WEBPACK_IMPORTED_MODULE_2__lib_connectedComponents_js__["b" /* getAll */]()) {
+    component.sbPrivate.updateState()
   }
 
-  Object(__WEBPACK_IMPORTED_MODULE_1__util_walkFragment_js__["a" /* default */])(component, element => {
-    __WEBPACK_IMPORTED_MODULE_4__trace_js__["a" /* default */].add('element', element)
-    // Bind the tag first so events can be reattached after element is recreated
-    // and repeaters can run
-    const tagAttribute = element.attributes[':tag']
-    if (tagAttribute) {
-      __WEBPACK_IMPORTED_MODULE_4__trace_js__["a" /* default */].add('attribute', tagAttribute)
-      bindTag(component, element, bindings)
-      __WEBPACK_IMPORTED_MODULE_4__trace_js__["a" /* default */].remove('attribute')
-      // If element has been removed, continue to next element, its replacement
-      if (element.parentNode === null) return
-    }
-
-    Object(__WEBPACK_IMPORTED_MODULE_0__bindRepeater_js__["a" /* default */])(element, bindings)
-    if (!element.attributes[':map']) {
-      Object(__WEBPACK_IMPORTED_MODULE_3__bindElement_js__["a" /* default */])(component, element, bindings)
-    }
-    __WEBPACK_IMPORTED_MODULE_4__trace_js__["a" /* default */].remove('element')
-  })
-
-  if (component.afterBindCallback) component.afterBindCallback()
-
-  __WEBPACK_IMPORTED_MODULE_4__trace_js__["a" /* default */].remove('bindReturned')
-  __WEBPACK_IMPORTED_MODULE_4__trace_js__["a" /* default */].remove('subscribedState')
-  __WEBPACK_IMPORTED_MODULE_4__trace_js__["a" /* default */].remove('component')
-}
-
-function bindTag (component, element, bindings) {
-  const { type, subtype, key } = Object(__WEBPACK_IMPORTED_MODULE_5__parseAttribute_js__["a" /* default */])(element.attributes[':tag'])
-  Object(__WEBPACK_IMPORTED_MODULE_6__bindAttribute_js__["a" /* default */])(component, element, bindings, type, subtype, key)
+  __WEBPACK_IMPORTED_MODULE_3__lib_queue_js__["b" /* start */]()
+  __WEBPACK_IMPORTED_MODULE_0__lib_trace_js__["a" /* default */].remove('publishedState')
 }
 
 
@@ -350,198 +312,27 @@ function assertType (value, types, name) {
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-/* unused harmony export state */
-/* harmony export (immutable) */ __webpack_exports__["a"] = publish;
-/* unused harmony export applyStateKeyDots */
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__lib_trace_js__ = __webpack_require__(0);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__util_getType_js__ = __webpack_require__(2);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__util_deepClone_js__ = __webpack_require__(14);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__util_deepCompare_js__ = __webpack_require__(15);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__lib_error_js__ = __webpack_require__(1);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__define_js__ = __webpack_require__(7);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__lib_queue_js__ = __webpack_require__(3);
+/* unused harmony export components */
+/* harmony export (immutable) */ __webpack_exports__["a"] = add;
+/* harmony export (immutable) */ __webpack_exports__["c"] = remove;
+/* harmony export (immutable) */ __webpack_exports__["b"] = getAll;
+let components = {}
 
-
-
-
-
-
-
-
-let state
-
-
-// Apply data-binding to all affected web components when the state changes
-function publish (newState) {
-  __WEBPACK_IMPORTED_MODULE_0__lib_trace_js__["a" /* default */].reset()
-  __WEBPACK_IMPORTED_MODULE_0__lib_trace_js__["a" /* default */].add('publishedState', newState)
-  __WEBPACK_IMPORTED_MODULE_6__lib_queue_js__["c" /* stop */]()
-
-  for (const component of Object.values(__WEBPACK_IMPORTED_MODULE_5__define_js__["a" /* components */])) {
-    let changedState = {}
-    const observedState = component.sbPrivate.observedState
-    for (const watchKey of observedState) {
-      const oldValue = applyStateKeyDots(state, watchKey)
-      const newValue = applyStateKeyDots(newState, watchKey)
-
-      if (!Object(__WEBPACK_IMPORTED_MODULE_3__util_deepCompare_js__["a" /* default */])(newValue, oldValue)) changedState[watchKey] = newValue
-    }
-    if (Object.keys(changedState).length) {
-      __WEBPACK_IMPORTED_MODULE_6__lib_queue_js__["a" /* add */](component, { state: changedState })
-    }
-  }
-
-  __WEBPACK_IMPORTED_MODULE_6__lib_queue_js__["b" /* start */]()
-  __WEBPACK_IMPORTED_MODULE_0__lib_trace_js__["a" /* default */].remove('publishedState')
-  state = Object(__WEBPACK_IMPORTED_MODULE_2__util_deepClone_js__["a" /* default */])(newState)
+function add (id, component) {
+  components[id] = component
 }
 
-function applyStateKeyDots (state, watchKey) {
-  if (Object(__WEBPACK_IMPORTED_MODULE_1__util_getType_js__["a" /* default */])(state) !== 'object') return
+function remove (id) {
+  delete components[id]
+}
 
-  if (!/^[^.].+[^.]$/.test(watchKey)) { // cannot begin or end with dot
-    Object(__WEBPACK_IMPORTED_MODULE_4__lib_error_js__["a" /* default */])(
-      'shadowbind_subscribe_key_invalid',
-      `The key "${watchKey}" could not be parsed`
-    )
-  }
-
-  let search = state
-
-  for (const keyPart of watchKey.split('.')) {
-    if (search[keyPart] === undefined) return
-    search = search[keyPart]
-  }
-
-  return search
+function getAll () {
+  return Object.values(components)
 }
 
 
 /***/ }),
 /* 7 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return components; });
-/* harmony export (immutable) */ __webpack_exports__["b"] = define;
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__lib_trace_js__ = __webpack_require__(0);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__util_getType_js__ = __webpack_require__(2);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__lib_error_js__ = __webpack_require__(1);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__lib_queue_js__ = __webpack_require__(3);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__util_convertCase_js__ = __webpack_require__(24);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__lib_parseSubscriptions_js__ = __webpack_require__(11);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__Element_js__ = __webpack_require__(12);
-
-
-
-
-
-
-
-
-let components = {}
-let componentId = 0
-
-
-function define (Components) {
-  __WEBPACK_IMPORTED_MODULE_0__lib_trace_js__["a" /* default */].reset()
-  if (!arguments.length) {
-    Object(__WEBPACK_IMPORTED_MODULE_2__lib_error_js__["a" /* default */])(
-      'shadowbind_define_without_arguments',
-      'The first argument of define() should an object but no arguments were ' +
-        'given'
-    )
-  }
-
-  for (const [name, Component] of Object.entries(Components)) {
-    defineComponent(name, Component)
-  }
-}
-
-function defineComponent (name, Component) {
-  if (!(Component.prototype instanceof __WEBPACK_IMPORTED_MODULE_6__Element_js__["a" /* default */])) {
-    Object(__WEBPACK_IMPORTED_MODULE_2__lib_error_js__["a" /* default */])(
-      'shadowbind_define_type',
-      'The first argument of define() should be an object where the keys are ' +
-        'component names and the values are classes extending ' +
-        `Shadowbind.Element`
-    )
-  }
-
-  if (name.indexOf(/A-Z/)) name = Object(__WEBPACK_IMPORTED_MODULE_4__util_convertCase_js__["b" /* titleToTrain */])(name)
-  validateName(Component, name, arguments.length === 1)
-
-  const rawSubscriptions = Component.prototype.subscribe
-    ? Component.prototype.subscribe()
-    : {}
-
-  const { observedAttrs } = Object(__WEBPACK_IMPORTED_MODULE_5__lib_parseSubscriptions_js__["a" /* default */])(rawSubscriptions)
-
-  class ShadowComponent extends Component {
-    static get observedAttributes () {
-      let manualAttrs = (() => {
-        if (Object(__WEBPACK_IMPORTED_MODULE_1__util_getType_js__["a" /* default */])(Component.observedAttributes) === 'function') {
-          return Component.observedAttributes()
-        }
-        return []
-      })()
-      return observedAttrs.concat(manualAttrs).map(attr => Object(__WEBPACK_IMPORTED_MODULE_4__util_convertCase_js__["a" /* camelToTrain */])(attr))
-    }
-    constructor () {
-      super()
-      if (this.sbPrivate.observedProps.length) {
-        for (const prop of this.sbPrivate.observedProps) {
-          this[prop] = value => {
-            __WEBPACK_IMPORTED_MODULE_3__lib_queue_js__["a" /* add */](this, { props: { [prop]: value } })
-            // TODO: forward properties
-          }
-        }
-      }
-    }
-    connectedCallback () {
-      componentId++
-      this.sbPrivate.id = componentId
-      components[componentId] = this
-      forwardProperty(this, Component, 'connectedCallback')
-    }
-    disconnectedCallback () {
-      delete components[componentId]
-      forwardProperty(this, Component, 'disconnectedCallback')
-    }
-    attributeChangedCallback (attrName, oldValue, newValue) {
-      __WEBPACK_IMPORTED_MODULE_3__lib_queue_js__["a" /* add */](this, { attrs: { [Object(__WEBPACK_IMPORTED_MODULE_4__util_convertCase_js__["c" /* trainToCamel */])(attrName)]: newValue } })
-      forwardProperty(this, Component, 'attributeChangedCallback', arguments)
-    }
-  }
-
-  window.customElements.define(name, ShadowComponent)
-}
-
-function forwardProperty (component, Component, propertyName, args = []) {
-  if (Component.prototype[propertyName]) {
-    Component.prototype[propertyName].call(component, ...args)
-  }
-}
-
-function validateName (Component, name, isImplicit) {
-  if (!(
-    name.indexOf('--') !== -1 ||
-    name.indexOf('-') === -1 ||
-    /^-/.test(name) !== false ||
-    /-$/.test(name) !== false ||
-    /[^a-zA-Z0-9-]/.test(name) !== false
-  )) return
-
-  Object(__WEBPACK_IMPORTED_MODULE_2__lib_error_js__["a" /* default */])(
-    `shadowbind_component_name`,
-    `Web component name "${name}" was invalid - note that names must be two ` +
-      `words.`
-  )
-}
-
-
-/***/ }),
-/* 8 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -556,7 +347,7 @@ function walkElement (element, callback) {
 
 
 /***/ }),
-/* 9 */
+/* 8 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -565,10 +356,10 @@ function walkElement (element, callback) {
 function parseAttribute (attr) {
   const key = attr.value
 
-  let matches = /^:(text|html|if|show|publish|tag|value)$/.exec(attr.name)
+  let matches = /^:(text|html|if|show|tag|value)$/.exec(attr.name)
   if (matches) return { type: matches[1], subtype: null, key }
 
-  matches = /^(bind|attr|prop|on|css|class):(.{1,})$/.exec(attr.name)
+  matches = /^(attr|prop|on|css|class):(.{1,})$/.exec(attr.name)
   if (matches) return { type: matches[1], subtype: matches[2], key }
 
   return null
@@ -580,21 +371,19 @@ const priorityAttributes = ['value']
 
 
 /***/ }),
-/* 10 */
+/* 9 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 /* harmony export (immutable) */ __webpack_exports__["a"] = bindAttribute;
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__bindComponent_js__ = __webpack_require__(4);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__trace_js__ = __webpack_require__(0);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__error_js__ = __webpack_require__(1);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__assertType_js__ = __webpack_require__(5);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__applyDots_js__ = __webpack_require__(21);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__util_getType_js__ = __webpack_require__(2);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__util_toCamelCase_js__ = __webpack_require__(22);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_7__util_walkElement_js__ = __webpack_require__(8);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_8__bindIf_js__ = __webpack_require__(23);
-
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__trace_js__ = __webpack_require__(0);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__error_js__ = __webpack_require__(1);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__assertType_js__ = __webpack_require__(5);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__util_objectSearch_js__ = __webpack_require__(10);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__util_getType_js__ = __webpack_require__(2);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__util_toCamelCase_js__ = __webpack_require__(21);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__util_walkElement_js__ = __webpack_require__(7);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_7__bindIf_js__ = __webpack_require__(22);
 
 
 
@@ -616,33 +405,14 @@ function bindAttribute (
     return bindEvent(component, element, bindings, subtype, key)
   }
 
-  let value
+  let value = key.indexOf('.') === -1
+    ? bindings[key]
+    : Object(__WEBPACK_IMPORTED_MODULE_3__util_objectSearch_js__["a" /* default */])(bindings, key)
 
-  if (key.indexOf('.') === -1) {
-    if (!Object.keys(bindings).includes(key)) {
-      const searchSource = __WEBPACK_IMPORTED_MODULE_1__trace_js__["a" /* default */].get().bindReturned
-        ? 'bindings'
-        : 'subscribed state'
+  if (value == null) return
 
-      Object(__WEBPACK_IMPORTED_MODULE_2__error_js__["a" /* default */])(
-        'shadowbind_key_not_found',
-        `The key "${key}" could not be found in ${searchSource}`
-      )
-    }
-
-    value = bindings[key]
-  } else {
-    value = Object(__WEBPACK_IMPORTED_MODULE_4__applyDots_js__["a" /* default */])(
-      bindings,
-      key,
-      __WEBPACK_IMPORTED_MODULE_0__bindComponent_js__["a" /* bindingsMethodUsed */] ? 'localState' : 'subscribedState',
-      __WEBPACK_IMPORTED_MODULE_0__bindComponent_js__["a" /* bindingsMethodUsed */] ? 'local state' : 'subscribed state',
-      'shadowbind_key_not_found'
-    )
-  }
-
-  __WEBPACK_IMPORTED_MODULE_1__trace_js__["a" /* default */].add('attributeState', value)
-  const valueType = Object(__WEBPACK_IMPORTED_MODULE_5__util_getType_js__["a" /* default */])(value)
+  __WEBPACK_IMPORTED_MODULE_0__trace_js__["a" /* default */].add('attributeState', value)
+  const valueType = Object(__WEBPACK_IMPORTED_MODULE_4__util_getType_js__["a" /* default */])(value)
 
   if (
     (valueType === 'object' || valueType === 'array') &&
@@ -652,7 +422,7 @@ function bindAttribute (
       ? ` or use prop:${subtype} to bind the data as a property instead of ` +
         'an attribute'
       : ''
-    Object(__WEBPACK_IMPORTED_MODULE_2__error_js__["a" /* default */])(
+    Object(__WEBPACK_IMPORTED_MODULE_1__error_js__["a" /* default */])(
       'shadowbind_binding_array_or_object',
       `Objects and arrays cannot be bound with "${type}" directly. Try ` +
         `calling JSON.stringify on the ${valueType} first${bindSubnote}.`
@@ -671,17 +441,17 @@ function bindAttribute (
       break
 
     case 'prop':
-      const camelCaseSubtype = Object(__WEBPACK_IMPORTED_MODULE_6__util_toCamelCase_js__["a" /* default */])(subtype)
-      const methodType = Object(__WEBPACK_IMPORTED_MODULE_5__util_getType_js__["a" /* default */])(element[camelCaseSubtype])
+      const camelCaseSubtype = Object(__WEBPACK_IMPORTED_MODULE_5__util_toCamelCase_js__["a" /* default */])(subtype)
+      const methodType = Object(__WEBPACK_IMPORTED_MODULE_4__util_getType_js__["a" /* default */])(element[camelCaseSubtype])
 
       if (methodType !== 'function') {
         if (methodType === 'undefined') {
-          Object(__WEBPACK_IMPORTED_MODULE_2__error_js__["a" /* default */])(
+          Object(__WEBPACK_IMPORTED_MODULE_1__error_js__["a" /* default */])(
             'shadowbind_prop_undefined',
             `Cannot call prop "${camelCaseSubtype}" because it is undefined`
           )
         }
-        Object(__WEBPACK_IMPORTED_MODULE_2__error_js__["a" /* default */])(
+        Object(__WEBPACK_IMPORTED_MODULE_1__error_js__["a" /* default */])(
           'shadowbind_prop_type',
           `Prop "${camelCaseSubtype}" must be a function, but it is type ` +
             `${methodType}`
@@ -693,11 +463,8 @@ function bindAttribute (
 
     case 'text':
     case 'html':
-      Object(__WEBPACK_IMPORTED_MODULE_3__assertType_js__["a" /* default */])(value, ['string', 'number', 'null'], 'inner content type')
-
-      if (value != null) {
-        type === 'text' ? element.innerText = value : element.innerHTML = value
-      }
+      Object(__WEBPACK_IMPORTED_MODULE_2__assertType_js__["a" /* default */])(value, ['string', 'number'], `inner ${type} type`)
+      type === 'text' ? element.innerText = value : element.innerHTML = value
       break
 
     case 'show':
@@ -709,10 +476,10 @@ function bindAttribute (
       const placeholderId = element.getAttribute('sb:i')
       if (value) {
         if (!placeholderId) return
-        Object(__WEBPACK_IMPORTED_MODULE_8__bindIf_js__["a" /* putElementBack */])(element)
+        Object(__WEBPACK_IMPORTED_MODULE_7__bindIf_js__["a" /* putElementBack */])(element)
       } else {
         if (placeholderId) return
-        Object(__WEBPACK_IMPORTED_MODULE_8__bindIf_js__["b" /* replaceWithPlaceholder */])(element)
+        Object(__WEBPACK_IMPORTED_MODULE_7__bindIf_js__["b" /* replaceWithPlaceholder */])(element)
       }
       break
 
@@ -740,7 +507,7 @@ function bindAttribute (
       })()
 
       if (!validTagName) {
-        Object(__WEBPACK_IMPORTED_MODULE_2__error_js__["a" /* default */])(
+        Object(__WEBPACK_IMPORTED_MODULE_1__error_js__["a" /* default */])(
           'shadowbind_tag_name',
           `The value given for :tag must be a valid element name`
         )
@@ -749,7 +516,7 @@ function bindAttribute (
       if (element.tagName.toLowerCase() === value.toLowerCase()) return
       const replacement = document.createElement(value)
       replacement.innerHTML = element.innerHTML
-      Object(__WEBPACK_IMPORTED_MODULE_7__util_walkElement_js__["a" /* default */])(element, attribute => {
+      Object(__WEBPACK_IMPORTED_MODULE_6__util_walkElement_js__["a" /* default */])(element, attribute => {
         replacement.setAttribute(attribute.name, attribute.value)
       })
 
@@ -778,11 +545,18 @@ function bindAttribute (
       break
   }
 
-  __WEBPACK_IMPORTED_MODULE_1__trace_js__["a" /* default */].remove('attributeState')
+  __WEBPACK_IMPORTED_MODULE_0__trace_js__["a" /* default */].remove('attributeState')
 }
 
 function bindEvent (component, element, bindings, subtype, key) {
-  Object(__WEBPACK_IMPORTED_MODULE_3__assertType_js__["a" /* default */])(component[key], 'function', 'event type')
+  if (component[key] === undefined) {
+    Object(__WEBPACK_IMPORTED_MODULE_1__error_js__["a" /* default */])(
+      'shadowbind_undefined_event_method',
+      `Expected to find method "${key}" on your component to use as an event ` +
+        `handler`
+    )
+  }
+  Object(__WEBPACK_IMPORTED_MODULE_2__assertType_js__["a" /* default */])(component[key], 'function', 'event type')
 
   if (
     !(element.sbPrivate && element.sbPrivate.eventsAlreadyBound)
@@ -798,6 +572,31 @@ function bindEvent (component, element, bindings, subtype, key) {
       element.sbPrivate.eventsAlreadyBound = true
     })
   }
+}
+
+
+/***/ }),
+/* 10 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony export (immutable) */ __webpack_exports__["a"] = objectSearch;
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__getType_js__ = __webpack_require__(2);
+
+
+function objectSearch (obj, key) {
+  if (Object(__WEBPACK_IMPORTED_MODULE_0__getType_js__["a" /* default */])(obj) !== 'object') return
+
+  if (!/^[^.].+[^.]$/.test(key)) return
+
+  let search = obj
+
+  for (const keyPart of key.split('.')) {
+    if (search[keyPart] === undefined) return
+    search = search[keyPart]
+  }
+
+  return search
 }
 
 
@@ -871,6 +670,8 @@ function addBindingFromObject (bindKey, obj) {
     if (obj.attr) return 'attr'
   })()
 
+  if (!/^[^.].+[^.]$/.test(obj[source])) failureToParse()
+
   addBinding({ bindKey, source, watchKey: obj[source], callback: obj.callback })
 }
 
@@ -878,7 +679,7 @@ function addBindingFromString (bindKey, str) {
   addBinding({ bindKey, source: str, watchKey: bindKey, callback: undefined })
 }
 
-function failureToParse() {
+function failureToParse () {
   Object(__WEBPACK_IMPORTED_MODULE_1__error_js__["a" /* default */])(
     'shadowbind_invalid_subscribe',
     'Your subscribe() response is invalid'
@@ -895,15 +696,26 @@ function failureToParse() {
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__lib_queue_js__ = __webpack_require__(3);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__util_formValues_js__ = __webpack_require__(25);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__lib_parseSubscriptions_js__ = __webpack_require__(11);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__util_deepCompare_js__ = __webpack_require__(26);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__publish_js__ = __webpack_require__(4);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__util_objectSearch_js__ = __webpack_require__(10);
 
 
 
 
+
+
+
+
+let componentId = 0
 
 class Element extends window.HTMLElement {
   constructor () {
     super()
-    if (!this.sbPrivate) this.sbPrivate = {}
+    this.sbPrivate = {}
+
+    componentId++
+    this.sbPrivate.id = componentId
 
     const {
       subscriptions,
@@ -916,13 +728,6 @@ class Element extends window.HTMLElement {
     this.sbPrivate.subscriptions = subscriptions
     this.sbPrivate.data = {}
 
-    if (this.template) {
-      this.attachShadow({ mode: 'open' })
-      const template = document.createElement('template')
-      template.innerHTML = this.template()
-      this.shadowRoot.appendChild(template.content.cloneNode(true))
-    }
-
     this.sbPrivate.getDepth = () => {
       if (
         !this.parentNode ||
@@ -932,6 +737,34 @@ class Element extends window.HTMLElement {
         return 0
       }
       return this.parentNode.host.sbPrivate.getDepth() + 1
+    }
+
+    if (this.template) {
+      this.attachShadow({ mode: 'open' })
+      const template = document.createElement('template')
+      const innerContent = this.template()
+      template.innerHTML = innerContent === undefined ? '' : innerContent
+      this.shadowRoot.appendChild(template.content.cloneNode(true))
+    }
+
+    this.sbPrivate.updateState = () => {
+      let changedState = {}
+      const observedState = this.sbPrivate.observedState
+      for (const watchKey of observedState) {
+        let oldValue = Object(__WEBPACK_IMPORTED_MODULE_6__util_objectSearch_js__["a" /* default */])(__WEBPACK_IMPORTED_MODULE_5__publish_js__["b" /* oldState */], watchKey)
+        let newValue = Object(__WEBPACK_IMPORTED_MODULE_6__util_objectSearch_js__["a" /* default */])(__WEBPACK_IMPORTED_MODULE_5__publish_js__["c" /* state */], watchKey)
+        if (!Object(__WEBPACK_IMPORTED_MODULE_4__util_deepCompare_js__["a" /* default */])(newValue, oldValue)) changedState[watchKey] = newValue
+      }
+      if (Object.keys(changedState).length) {
+        __WEBPACK_IMPORTED_MODULE_1__lib_queue_js__["a" /* add */](this, { state: changedState })
+      }
+    }
+
+    this.sbPrivate.updateState()
+
+    this.sbPrivate.afterConnectedCallback = () => {
+      if (this.getAttribute(':map')) return // Initial bind triggered by parent
+      this.data({}) // Initial bind and event listeners attachment
     }
   }
   data (bindings) {
@@ -963,17 +796,17 @@ class Element extends window.HTMLElement {
 
 "use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__publish_js__ = __webpack_require__(6);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__define_js__ = __webpack_require__(7);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__redux_js__ = __webpack_require__(26);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__publish_js__ = __webpack_require__(4);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__define_js__ = __webpack_require__(23);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__redux_js__ = __webpack_require__(27);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__Element_js__ = __webpack_require__(12);
 
 
 
 
 
-/* harmony default export */ __webpack_exports__["default"] = ({ define: __WEBPACK_IMPORTED_MODULE_1__define_js__["b" /* default */], publish: __WEBPACK_IMPORTED_MODULE_0__publish_js__["a" /* default */], redux: __WEBPACK_IMPORTED_MODULE_2__redux_js__["a" /* default */], Element: __WEBPACK_IMPORTED_MODULE_3__Element_js__["a" /* default */] });
-window.Shadowbind = { define: __WEBPACK_IMPORTED_MODULE_1__define_js__["b" /* default */], publish: __WEBPACK_IMPORTED_MODULE_0__publish_js__["a" /* default */], redux: __WEBPACK_IMPORTED_MODULE_2__redux_js__["a" /* default */], Element: __WEBPACK_IMPORTED_MODULE_3__Element_js__["a" /* default */] }
+/* harmony default export */ __webpack_exports__["default"] = ({ define: __WEBPACK_IMPORTED_MODULE_1__define_js__["a" /* default */], publish: __WEBPACK_IMPORTED_MODULE_0__publish_js__["a" /* default */], redux: __WEBPACK_IMPORTED_MODULE_2__redux_js__["a" /* default */], Element: __WEBPACK_IMPORTED_MODULE_3__Element_js__["a" /* default */] });
+window.Shadowbind = { define: __WEBPACK_IMPORTED_MODULE_1__define_js__["a" /* default */], publish: __WEBPACK_IMPORTED_MODULE_0__publish_js__["a" /* default */], redux: __WEBPACK_IMPORTED_MODULE_2__redux_js__["a" /* default */], Element: __WEBPACK_IMPORTED_MODULE_3__Element_js__["a" /* default */] }
 
 
 /***/ }),
@@ -989,17 +822,6 @@ function deepClone (obj) {
 
 /***/ }),
 /* 15 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-/* harmony export (immutable) */ __webpack_exports__["a"] = deepCompare;
-function deepCompare (val1, val2) {
-  return JSON.stringify(val1) === JSON.stringify(val2)
-}
-
-
-/***/ }),
-/* 16 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -1041,6 +863,75 @@ function addBindings (component, changes = {}) {
 
 
 /***/ }),
+/* 16 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony export (immutable) */ __webpack_exports__["a"] = bindComponent;
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__bindRepeater_js__ = __webpack_require__(17);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__util_walkFragment_js__ = __webpack_require__(18);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__assertType_js__ = __webpack_require__(5);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__bindElement_js__ = __webpack_require__(20);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__trace_js__ = __webpack_require__(0);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__parseAttribute_js__ = __webpack_require__(8);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__bindAttribute_js__ = __webpack_require__(9);
+
+
+
+
+
+
+
+
+function bindComponent (component, bindings) {
+  __WEBPACK_IMPORTED_MODULE_4__trace_js__["a" /* default */].add('component', component)
+  __WEBPACK_IMPORTED_MODULE_4__trace_js__["a" /* default */].add('subscribedState', bindings)
+
+  if (component.beforeBindCallback) component.beforeBindCallback()
+
+  if (component.bindings) {
+    Object(__WEBPACK_IMPORTED_MODULE_2__assertType_js__["a" /* default */])(component.bindings, 'function', 'bindings property type')
+
+    bindings = component.bindings(bindings)
+    __WEBPACK_IMPORTED_MODULE_4__trace_js__["a" /* default */].add('bindReturned', bindings)
+
+    Object(__WEBPACK_IMPORTED_MODULE_2__assertType_js__["a" /* default */])(bindings, 'object', 'bindings method return type')
+  }
+
+  Object(__WEBPACK_IMPORTED_MODULE_1__util_walkFragment_js__["a" /* default */])(component, element => {
+    __WEBPACK_IMPORTED_MODULE_4__trace_js__["a" /* default */].add('element', element)
+    // Bind the tag first so events can be reattached after element is recreated
+    // and repeaters can run
+    const tagAttribute = element.attributes[':tag']
+    if (tagAttribute) {
+      __WEBPACK_IMPORTED_MODULE_4__trace_js__["a" /* default */].add('attribute', tagAttribute)
+      bindTag(component, element, bindings)
+      __WEBPACK_IMPORTED_MODULE_4__trace_js__["a" /* default */].remove('attribute')
+      // If element has been removed, continue to next element, its replacement
+      if (element.parentNode === null) return
+    }
+
+    Object(__WEBPACK_IMPORTED_MODULE_0__bindRepeater_js__["a" /* default */])(element, bindings)
+    if (!element.attributes[':map']) {
+      Object(__WEBPACK_IMPORTED_MODULE_3__bindElement_js__["a" /* default */])(component, element, bindings)
+    }
+    __WEBPACK_IMPORTED_MODULE_4__trace_js__["a" /* default */].remove('element')
+  })
+
+  if (component.afterBindCallback) component.afterBindCallback()
+
+  __WEBPACK_IMPORTED_MODULE_4__trace_js__["a" /* default */].remove('bindReturned')
+  __WEBPACK_IMPORTED_MODULE_4__trace_js__["a" /* default */].remove('subscribedState')
+  __WEBPACK_IMPORTED_MODULE_4__trace_js__["a" /* default */].remove('component')
+}
+
+function bindTag (component, element, bindings) {
+  const { type, subtype, key } = Object(__WEBPACK_IMPORTED_MODULE_5__parseAttribute_js__["a" /* default */])(element.attributes[':tag'])
+  Object(__WEBPACK_IMPORTED_MODULE_6__bindAttribute_js__["a" /* default */])(component, element, bindings, type, subtype, key)
+}
+
+
+/***/ }),
 /* 17 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
@@ -1049,7 +940,7 @@ function addBindings (component, changes = {}) {
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__util_getType_js__ = __webpack_require__(2);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__trace_js__ = __webpack_require__(0);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__error_js__ = __webpack_require__(1);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__bindComponent_js__ = __webpack_require__(4);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__queue_js__ = __webpack_require__(3);
 
 
 
@@ -1064,6 +955,7 @@ function bindRepeater (element, bindings) {
 
   let { key, value } = loadKeyValue(element, emptyRepeaterId, bindings)
 
+  if (value == null) return
   if (Object(__WEBPACK_IMPORTED_MODULE_0__util_getType_js__["a" /* default */])(value) !== 'array') {
     Object(__WEBPACK_IMPORTED_MODULE_2__error_js__["a" /* default */])(
       'shadowbind_map_type',
@@ -1095,7 +987,7 @@ function bindRepeater (element, bindings) {
   }
 
   for (let i = 0; i < expectedCount; i++) {
-    Object(__WEBPACK_IMPORTED_MODULE_3__bindComponent_js__["b" /* default */])(element, value[i])
+    __WEBPACK_IMPORTED_MODULE_3__queue_js__["a" /* add */](element, { direct: value[i] })
     element = element.nextElementSibling
   }
 
@@ -1273,9 +1165,9 @@ function arrayToSentence (arr) {
 
 "use strict";
 /* harmony export (immutable) */ __webpack_exports__["a"] = bindElement;
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__util_walkElement_js__ = __webpack_require__(8);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__parseAttribute_js__ = __webpack_require__(9);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__bindAttribute_js__ = __webpack_require__(10);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__util_walkElement_js__ = __webpack_require__(7);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__parseAttribute_js__ = __webpack_require__(8);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__bindAttribute_js__ = __webpack_require__(9);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__trace_js__ = __webpack_require__(0);
 
 
@@ -1314,55 +1206,6 @@ function tryApplyAttribute(component, element, bindings, attribute) {
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-/* harmony export (immutable) */ __webpack_exports__["a"] = applyDots;
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__trace_js__ = __webpack_require__(0);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__error_js__ = __webpack_require__(1);
-
-
-
-function applyDots (
-  baseData,
-  key,
-  baseName,
-  errorSource,
-  errorCode
-) {
-  traceSearch([`${baseName}:`, baseData])
-  let search = baseData
-  let keySearch = baseName
-
-  for (const keyPart of key.split('.')) {
-    keySearch = `${keySearch}.${keyPart}`
-    if (!Object.keys(search).includes(keyPart)) {
-      traceSearch([`${keySearch}:`, 'not found'])
-      __WEBPACK_IMPORTED_MODULE_0__trace_js__["a" /* default */].remove('publishedState')
-
-      Object(__WEBPACK_IMPORTED_MODULE_1__error_js__["a" /* default */])(
-        errorCode,
-        `The key "${keyPart}" in "${key}" could not be found in the ` +
-          errorSource
-      )
-    }
-
-    search = search[keyPart]
-    traceSearch([`${keySearch}:`, search])
-  }
-
-  __WEBPACK_IMPORTED_MODULE_0__trace_js__["a" /* default */].remove('search')
-  return search
-}
-
-function traceSearch (item) {
-  if (!__WEBPACK_IMPORTED_MODULE_0__trace_js__["a" /* default */].get().search) __WEBPACK_IMPORTED_MODULE_0__trace_js__["a" /* default */].add('search', [])
-  __WEBPACK_IMPORTED_MODULE_0__trace_js__["a" /* default */].add('search', [ ...__WEBPACK_IMPORTED_MODULE_0__trace_js__["a" /* default */].get().search, item ])
-}
-
-
-/***/ }),
-/* 22 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
 /* harmony export (immutable) */ __webpack_exports__["a"] = toCamelCase;
 function toCamelCase (trainCase) {
   return trainCase.replace(/-([a-z])/g, letters => letters[1].toUpperCase())
@@ -1370,7 +1213,7 @@ function toCamelCase (trainCase) {
 
 
 /***/ }),
-/* 23 */
+/* 22 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -1403,6 +1246,126 @@ function createPlaceholder (element) {
   placeholder.setAttribute('sb:i', removedCount)
   placeholder.setAttribute(':if', element.getAttribute(':if'))
   return placeholder
+}
+
+
+/***/ }),
+/* 23 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony export (immutable) */ __webpack_exports__["a"] = define;
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__lib_trace_js__ = __webpack_require__(0);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__util_getType_js__ = __webpack_require__(2);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__lib_error_js__ = __webpack_require__(1);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__lib_queue_js__ = __webpack_require__(3);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__lib_connectedComponents_js__ = __webpack_require__(6);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__util_convertCase_js__ = __webpack_require__(24);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__lib_parseSubscriptions_js__ = __webpack_require__(11);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_7__Element_js__ = __webpack_require__(12);
+
+
+
+
+
+
+
+
+
+function define (Components) {
+  __WEBPACK_IMPORTED_MODULE_0__lib_trace_js__["a" /* default */].reset()
+  if (!arguments.length) {
+    Object(__WEBPACK_IMPORTED_MODULE_2__lib_error_js__["a" /* default */])(
+      'shadowbind_define_without_arguments',
+      'The first argument of define() should an object but no arguments were ' +
+        'given'
+    )
+  }
+
+  __WEBPACK_IMPORTED_MODULE_3__lib_queue_js__["c" /* stop */]()
+  for (const [name, Component] of Object.entries(Components)) {
+    defineComponent(name, Component)
+  }
+  __WEBPACK_IMPORTED_MODULE_3__lib_queue_js__["b" /* start */]()
+}
+
+function defineComponent (name, Component) {
+  if (!(Component.prototype instanceof __WEBPACK_IMPORTED_MODULE_7__Element_js__["a" /* default */])) {
+    Object(__WEBPACK_IMPORTED_MODULE_2__lib_error_js__["a" /* default */])(
+      'shadowbind_define_type',
+      'The first argument of define() should be an object where the keys are ' +
+        'component names and the values are classes extending ' +
+        `Shadowbind.Element`
+    )
+  }
+
+  if (/^[A-Z]/.test(name)) name = Object(__WEBPACK_IMPORTED_MODULE_5__util_convertCase_js__["b" /* titleToTrain */])(name)
+  validateName(Component, name, arguments.length === 1)
+
+  const rawSubscriptions = Component.prototype.subscribe
+    ? Component.prototype.subscribe()
+    : {}
+
+  const { observedAttrs } = Object(__WEBPACK_IMPORTED_MODULE_6__lib_parseSubscriptions_js__["a" /* default */])(rawSubscriptions)
+
+  class ShadowComponent extends Component {
+    static get observedAttributes () {
+      let manualAttrs = (() => {
+        if (Object(__WEBPACK_IMPORTED_MODULE_1__util_getType_js__["a" /* default */])(Component.observedAttributes) === 'function') {
+          return Component.observedAttributes()
+        }
+        return []
+      })()
+      return observedAttrs.concat(manualAttrs).map(attr => Object(__WEBPACK_IMPORTED_MODULE_5__util_convertCase_js__["a" /* camelToTrain */])(attr))
+    }
+    constructor () {
+      super()
+      if (this.sbPrivate.observedProps.length) {
+        for (const prop of this.sbPrivate.observedProps) {
+          this[prop] = value => {
+            __WEBPACK_IMPORTED_MODULE_3__lib_queue_js__["a" /* add */](this, { props: { [prop]: value } })
+          }
+        }
+      }
+    }
+    connectedCallback () {
+      __WEBPACK_IMPORTED_MODULE_4__lib_connectedComponents_js__["a" /* add */](this.sbPrivate.id, this)
+      forwardProperty(this, Component, 'connectedCallback')
+      this.sbPrivate.afterConnectedCallback()
+    }
+    disconnectedCallback () {
+      __WEBPACK_IMPORTED_MODULE_4__lib_connectedComponents_js__["c" /* remove */](this.sbPrivate.id)
+      forwardProperty(this, Component, 'disconnectedCallback')
+    }
+    attributeChangedCallback (attrName, oldValue, newValue) {
+      __WEBPACK_IMPORTED_MODULE_3__lib_queue_js__["a" /* add */](this, { attrs: { [Object(__WEBPACK_IMPORTED_MODULE_5__util_convertCase_js__["c" /* trainToCamel */])(attrName)]: newValue } })
+      forwardProperty(this, Component, 'attributeChangedCallback', arguments)
+    }
+  }
+
+  window.customElements.define(name, ShadowComponent)
+}
+
+function forwardProperty (component, Component, propertyName, args = []) {
+  if (Component.prototype[propertyName]) {
+    Component.prototype[propertyName].call(component, ...args)
+  }
+}
+
+function validateName (Component, name, isImplicit) {
+  if (!(
+    name.indexOf('--') !== -1 ||
+    name.indexOf('-') === -1 ||
+    /^-/.test(name) !== false ||
+    /-$/.test(name) !== false ||
+    /[^a-zA-Z0-9-]/.test(name) !== false
+  )) return
+
+  Object(__WEBPACK_IMPORTED_MODULE_2__lib_error_js__["a" /* default */])(
+    `shadowbind_component_name`,
+    `Web component name "${name}" was invalid - note that names must be two ` +
+      `words.`
+  )
 }
 
 
@@ -1543,7 +1506,18 @@ function setSelectValues (options, values) {
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__publish_js__ = __webpack_require__(6);
+/* harmony export (immutable) */ __webpack_exports__["a"] = deepCompare;
+function deepCompare (val1, val2) {
+  return JSON.stringify(val1) === JSON.stringify(val2)
+}
+
+
+/***/ }),
+/* 27 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__publish_js__ = __webpack_require__(4);
 
 
 /* harmony default export */ __webpack_exports__["a"] = (store => {

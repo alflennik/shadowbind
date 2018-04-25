@@ -2,9 +2,6 @@ import Shadowbind from '../../../../dist/shadowbind'
 import * as counter from '../../actions/counter'
 
 class AppRoot extends Shadowbind.Element {
-  connectedCallback() {
-    this.data({}) // TODO: remove this godawful hack
-  }
   increment() {
     counter.increment()
   }
