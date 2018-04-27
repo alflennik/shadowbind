@@ -1,8 +1,8 @@
 import Shadowbind from '../../../src/index.js'
 
-function tryToDefine (componentAndName) {
+async function tryToDefine (componentAndName) {
   try {
-    Shadowbind.define(componentAndName)
+    await Shadowbind.define(componentAndName)
   } catch (err) {
     return err.code || err.message
   }
@@ -10,14 +10,14 @@ function tryToDefine (componentAndName) {
 }
 
 class ComponentNames extends Shadowbind.Element {
-  getActual () {
+  async getActual () {
     let tests = []
-    tests.push(tryToDefine({ 'singleword': ValidComponent }))
-    tests.push(tryToDefine({ '-element': ValidComponent }))
-    tests.push(tryToDefine({ 'element--name': ValidComponent }))
-    tests.push(tryToDefine({ 'Single': ValidComponent }))
-    tests.push(tryToDefine({ capitalization_component: ValidComponent }))
-    tests.push(tryToDefine({ camelComponent: ValidComponent }))
+    tests.push(await tryToDefine({ 'singleword': ValidComponent }))
+    tests.push(await tryToDefine({ '-element': ValidComponent }))
+    tests.push(await tryToDefine({ 'element--name': ValidComponent }))
+    tests.push(await tryToDefine({ 'Single': ValidComponent }))
+    tests.push(await tryToDefine({ capitalization_component: ValidComponent }))
+    tests.push(await tryToDefine({ camelComponent: ValidComponent }))
     return tests
   }
   getExpected () {

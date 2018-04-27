@@ -1,9 +1,9 @@
 import Shadowbind from '../../../src/index.js'
 
 class NoShadowRoot extends Shadowbind.Element {
-  getActual () {
+  async getActual () {
     try {
-      Shadowbind.define({ NoShadowRootExample })
+      await Shadowbind.define({ NoShadowRootExample })
     } catch (err) {
       return err.code || err.message
     }

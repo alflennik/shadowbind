@@ -7,7 +7,7 @@ import { titleToTrain, trainToCamel, camelToTrain } from './util/convertCase.js'
 import parseSubscriptions from './lib/parseSubscriptions.js'
 import ShadowbindElement from './Element.js'
 
-export default function define (Components) {
+export default async function define (Components) {
   trace.reset()
   if (!arguments.length) {
     error(
@@ -18,9 +18,14 @@ export default function define (Components) {
   }
 
   queue.stop()
+
+  let definitions = []
   for (const [name, Component] of Object.entries(Components)) {
-    defineComponent(name, Component)
+    definitions.push(defineComponent(name, Component))
   }
+
+  await Promise.all(definitions)
+
   queue.start()
 }
 
@@ -79,6 +84,7 @@ function defineComponent (name, Component) {
   }
 
   window.customElements.define(name, ShadowComponent)
+  return window.customElements.whenDefined(name)
 }
 
 function forwardProperty (component, Component, propertyName, args = []) {

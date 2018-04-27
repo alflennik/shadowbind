@@ -1272,7 +1272,7 @@ function createPlaceholder (element) {
 
 
 
-function define (Components) {
+async function define (Components) {
   __WEBPACK_IMPORTED_MODULE_0__lib_trace_js__["a" /* default */].reset()
   if (!arguments.length) {
     Object(__WEBPACK_IMPORTED_MODULE_2__lib_error_js__["a" /* default */])(
@@ -1283,9 +1283,14 @@ function define (Components) {
   }
 
   __WEBPACK_IMPORTED_MODULE_3__lib_queue_js__["c" /* stop */]()
+
+  let definitions = []
   for (const [name, Component] of Object.entries(Components)) {
-    defineComponent(name, Component)
+    definitions.push(defineComponent(name, Component))
   }
+
+  await Promise.all(definitions)
+
   __WEBPACK_IMPORTED_MODULE_3__lib_queue_js__["b" /* start */]()
 }
 
@@ -1344,6 +1349,7 @@ function defineComponent (name, Component) {
   }
 
   window.customElements.define(name, ShadowComponent)
+  return window.customElements.whenDefined(name)
 }
 
 function forwardProperty (component, Component, propertyName, args = []) {

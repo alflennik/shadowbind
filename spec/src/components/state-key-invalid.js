@@ -1,9 +1,9 @@
 import Shadowbind from '../../../src/index.js'
 
 class StateKeyInvalid extends Shadowbind.Element {
-  getActual () {
+  async getActual () {
     try {
-      Shadowbind.define({ SubscribeKeyInvalidExample })
+      await Shadowbind.define({ SubscribeKeyInvalidExample })
     } catch (err) {
       return err.code || err.message
     }

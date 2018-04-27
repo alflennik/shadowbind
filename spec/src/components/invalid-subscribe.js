@@ -1,8 +1,8 @@
 import Shadowbind from '../../../src/index.js'
 
-function tryDefine (Component) {
+async function tryDefine (Component) {
   try {
-    Shadowbind.define({ 'invalid-subscribe': Component })
+    await Shadowbind.define({ 'invalid-subscribe': Component })
   } catch (err) {
     return err.code || err.message
   }
@@ -10,12 +10,12 @@ function tryDefine (Component) {
 }
 
 class InvalidSubscribe extends Shadowbind.Element {
-  getActual () {
+  async getActual () {
     return [
-      tryDefine(InvalidSubscribe1),
-      tryDefine(InvalidSubscribe2),
-      tryDefine(InvalidSubscribe3),
-      tryDefine(InvalidSubscribe4)
+      await tryDefine(InvalidSubscribe1),
+      await tryDefine(InvalidSubscribe2),
+      await tryDefine(InvalidSubscribe3),
+      await tryDefine(InvalidSubscribe4)
     ]
   }
   getExpected () {
