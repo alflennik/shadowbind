@@ -32,7 +32,7 @@ Shadowbind.define({ MyComponent })
 - Unopinionated about build tools: package your project with Webpack, Rollup, Parcel or any bundler, or don’t - if you want you can import all your components through script tags and skip the build step altogether.
 - Just like React, you declare the way you want your data to be displayed, and the framework does the work of automatically keeping that data in sync.
 - Integrates elegantly with Redux or any central datastore library for cleanly managing incredibly complex state.
-- Produces components that interoperate with any other framework, like React, Angular, Vue, Ember, Aurelia... or whatever you might want to use. But powerful enough that you don’t need any other framework.
+- Produces components that interoperate with any other framework, like React, Angular, Vue, Polymer, Ember, Aurelia... or whatever you might want to use. But powerful enough that you don’t need any other framework.
 - Simple HTML-based templates. No JSX, just JS, HTML and CSS.
 - As a web component, gains access to awesome features like scoped CSS, templates, strict encapsulation with shadow DOM and slots for sharing HTML with outside components.
 - Only 18KB (6KB gzipped!) with no dependencies.
@@ -229,7 +229,7 @@ The Shadowbind variable is accessible through `import Shadowbind from 'shadowbin
 #### `Shadowbind.Element`:
 The base class for your components that extends HTMLElement.
 ```js
-class MyComponent extends Shadobind.Element {
+class MyComponent extends Shadowbind.Element {
 }
 ```
 
@@ -688,8 +688,7 @@ Results in:
 <div style="display: none !important" :show="isHidden"></div>
 ```
 
-- For all bindings, a value of `null` will result in the element not being updated. The current value will remain unchanged.
-- A value of `undefined` will result in an error (`shadowbind_key_not_found`).
+- For all bindings, a value of `null` or `undefined` will result in the element not being updated. The current value will remain unchanged.
 - Unlike other binding languages, the values are "dumb" - not supporting logic like ternary statements, if statements, function calls, etc. This helps keep your HTML clean and simple. This logic is instead contained in the `bindings()` section.
 
 #### `attr:my-attr="value"`:
@@ -999,7 +998,7 @@ this.form({ assigned: ['Billy', 'Barry'] })
   - This pattern requires more up-front setup, but in workflows where you need your form to know which form elements have been edited or focused, to support clearing or bulk setting values, the ability to control the form values directly in Redux is indispensable.
 
 ## Notes On Tooling
-Shadowbind works out of the box with current browsers and so most tooling will work without any special setup. However, there are some steps you can take to improve your experience working with Shadowbind.
+Shadowbind works out of the box with current browsers so most tooling will work without any special setup. However, there are some steps you can take to improve your experience working with Shadowbind.
 
 - Installing support for HTML syntax highlighting within template tags is a must. Here are instructions [for Atom](https://github.com/gandm/language-babel#javascript-tagged-template-literal-grammar-extensions), [for VSCode](https://marketplace.visualstudio.com/items?itemName=natewallace.angular2-inline) and [for Sublime Text](https://github.com/Thom1729/Sublime-JS-Custom/#custom_tagged_literals-object).
 - For some components, particularly with extensive CSS styles, it is desirable to split the CSS and/or HTML into separate files. This is easy to set up with Webpack's raw loader.
