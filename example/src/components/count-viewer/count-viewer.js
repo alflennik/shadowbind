@@ -1,4 +1,4 @@
-import Shadowbind from '../../../../dist/shadowbind'
+import Shadowbind from 'shadowbind'
 
 class CountViewer extends Shadowbind.Element {
   subscribe() {

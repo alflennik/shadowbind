@@ -1,5 +1,5 @@
 import { combineReducers, createStore, applyMiddleware } from 'redux'
-import Shadowbind from '../../dist/shadowbind'
+import Shadowbind from 'shadowbind'
 import counter from './reducers/counter'
 
 const rootReducer = combineReducers({ counter })

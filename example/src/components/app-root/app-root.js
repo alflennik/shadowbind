@@ -1,4 +1,4 @@
-import Shadowbind from '../../../../dist/shadowbind'
+import Shadowbind from 'shadowbind'
 import * as counter from '../../actions/counter'
 
 class AppRoot extends Shadowbind.Element {

@@ -12,7 +12,8 @@
   "author": "My project author",
   "license": "MIT",
   "dependencies": {
-    "redux": "^4.0.0"
+    "redux": "^4.0.0",
+    "shadowbind": "^0.1.1"
   },
   "devDependencies": {
     "live-server": "^1.2.0",
