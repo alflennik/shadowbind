@@ -94,14 +94,33 @@ You should see "I am a web component!"
 ### Bundler-Based Setup (Recommended)
 Bundlers are complicated, but in 99% of projects, the benefits of introducing a build process outweigh the inconvenience of maintaining it. Bundlers allow you to use the import keyword, apply build optimizations like minification, and access rich ecosystems of plugins from performance budgets to SASS compilers.
 
+Run `npm init -y`
+
 Run `npm install --save shadowbind`
 
-Run `npm install -g parcel-bundler`
+Run `npm install --save-dev webpack webpack-cli live-server`
 
-Create `src/app-root.js`
+Create `index.html`:
+
+```html
+<html>
+<body>
+  <app-root></app-root>
+  <script src="dist/main.js"></script>
+</body>
+</html>
+```
+
+Create `src/index.js`
 
 ```js
-import Shadowbind from 'shadowbind'
+import './app-root'
+```
+
+Create a component `src/app-root.js`:
+
+```js
+import Shadowbind from '../../../Shadowbind/dist/shadowbind.js'
 
 class AppRoot extends Shadowbind.Element {
   template() {
@@ -112,24 +131,20 @@ class AppRoot extends Shadowbind.Element {
 Shadowbind.define({ AppRoot })
 ```
 
-Create `src/index.js`
+Replace the scripts section in your `package.json`:
 
 ```js
-import './app-root.js'
+{
+  // ...
+  "scripts": {
+    "dev": "webpack -d --watch",
+    "serve": "live-server"
+  },
+  // ...
+}
 ```
 
-Create `index.html`
-
-```html
-<html>
-<body>
-  <app-root></app-root>
-  <script src="src/index.js"></script>
-</body>
-</html>
-```
-
-Run `parcel index.html`
+Run `npm run dev` and `npm run serve` in two terminal windows.
 
 ### Full Starter Project
 For an even more sophisticated setup, this repo includes an starter project including Redux, Webpack and an example of some basic interactivity. Download the example folder and follow the instructions in its readme.
