@@ -616,13 +616,13 @@ All web components come with support for slotted content, where HTML elements ar
 ```
 ```js
 class FancyInput extends Shadowbind.Element {
-  getSlotContent(event) {
-    this.slottedInput = event.target.assignedNodes()
+  updateSlotContent(event) {
+    this.input = event.target.assignedElements()
   }
   template() {
     return `
       <div class="fancy-style">
-        <slot on:slotchange="getSlotContent"></slot>
+        <slot on:slotchange="updateSlotContent"></slot>
       </div>
     `
   }
@@ -638,11 +638,11 @@ Slots can be named, allowing you to have several slots in your component.
   <div slot="content">My post content</div>
 </blog-post>
 ```
+
 ```js
 class BlogPost extends Shadowbind.Element {
   updateSlot(event) {
-    const slotName = event.target.getAttribute('name')
-    this[slotName] = event.target.assignedNodes()
+    this[event.target.name] = event.target.assignedElements()
     // Now this.content, this.date and this.title refer to the DOM nodes!
   }
   template() {
@@ -662,6 +662,8 @@ class BlogPost extends Shadowbind.Element {
   }
 }
 ```
+
+Remember that `assignedElements()` returns an array (since you can have multiple elements attached to a single slot).
 
 ## HTML API
 Shadowbind's declarative binding syntax bridges the gap between your data and its expression in the HTML document.
