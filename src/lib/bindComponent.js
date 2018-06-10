@@ -34,7 +34,7 @@ export default function bindComponent (component, bindings) {
       if (element.parentNode === null) return
     }
 
-    bindRepeater(element, bindings)
+    bindRepeater(component, element, bindings)
     if (!element.attributes[':map']) {
       bindElement(component, element, bindings)
     }

@@ -152,6 +152,10 @@ test('error if bind property is wrong type', async t => {
   t.deepEqual(...(await server.test('repeater-bind-type')))
 })
 
+test('events are bound successfully with repeaters', async t => {
+  t.deepEqual(...(await server.test('repeater-events')))
+})
+
 test('can bind nested repeaters', async t => {
   t.deepEqual(...(await server.test('repeater-nested')))
 })

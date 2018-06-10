@@ -19,7 +19,7 @@ export default function bindElement (component, element, bindings) {
   })
 }
 
-function tryApplyAttribute(component, element, bindings, attribute) {
+function tryApplyAttribute (component, element, bindings, attribute) {
   const parsedAttribute = parseAttribute(attribute)
   if (parsedAttribute) {
     trace.add('attribute', attribute)

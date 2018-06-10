@@ -1,12 +1,13 @@
 import getType from '../util/getType.js'
 import trace from './trace.js'
 import error from './error.js'
+import bindElement from './bindElement.js'
 import * as queue from './queue.js'
 
 let emptyExamples = {}
 let placeholderId = 0
 
-export default function bindRepeater (element, bindings) {
+export default function bindRepeater (component, element, bindings) {
   const emptyRepeaterId = getEmptyRepeaterId(element)
   if (!firstElementInRepeat(element) && !emptyRepeaterId) return
 
@@ -44,6 +45,7 @@ export default function bindRepeater (element, bindings) {
   }
 
   for (let i = 0; i < expectedCount; i++) {
+    bindElement(component, element, bindings)
     queue.add(element, { direct: value[i] })
     element = element.nextElementSibling
   }
