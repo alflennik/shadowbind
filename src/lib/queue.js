@@ -1,4 +1,4 @@
-import addBindings from './addBindings.js'
+import { addBindings, flattenBindings } from './addBindings.js'
 import bindComponent from './bindComponent.js'
 
 let queue = []
@@ -32,10 +32,7 @@ function processQueue () {
 
   let queueItem = nextQueueItem()
   while (queueItem) {
-    queueItem.component.sbPrivate.data = Object.assign(
-      queueItem.component.sbPrivate.bindings,
-      queueItem.component.sbPrivate.direct
-    )
+    flattenBindings(queueItem.component)
     bindComponent(queueItem.component, queueItem.component.sbPrivate.data)
     queueItem = nextQueueItem()
   }

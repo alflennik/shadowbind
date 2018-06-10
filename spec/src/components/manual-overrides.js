@@ -2,23 +2,30 @@ import Shadowbind from '../../../src/index.js'
 
 class ManualOverrides extends Shadowbind.Element {
   subscribe () {
-    return { stick: 'state' }
+    return {
+      setByStateOnly: 'state',
+      overriddenByState: 'state',
+      overriddenByData: 'state'
+    }
   }
   getActual () {
-    Shadowbind.publish({ stick: 'sticky', stink: 'stinky' })
-    this.data({ stink: false, dynamic: 'dynamo' })
-    return this.results
+    this.data({ overriddenByState: false })
+    Shadowbind.publish({
+      setByStateOnly: true,
+      overriddenByData: false,
+      overriddenByState: true
+    })
+    this.data({ overriddenByData: true })
+    return this.data()
   }
   getExpected () {
-    return { stick: 'sticky', stink: false, dynamic: 'dynamo' }
+    return {
+      overriddenByState: true,
+      setByStateOnly: true,
+      overriddenByData: true
+    }
   }
-  bindings (data) {
-    this.results = data
-    return {}
-  }
-  template () {
-    return ''
-  }
+  template () {}
 }
 
 Shadowbind.define({ ManualOverrides })

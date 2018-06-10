@@ -15,7 +15,7 @@ class ThisDataSupport extends Shadowbind.Element {
     this.setAttribute('d', 40)
     this.e(50)
     const button = this.shadowRoot.querySelector('button')
-    button.dispatchEvent(new Event('click')) // eslint-disable-line
+    button.dispatchEvent(new window.Event('click'))
     return this.results
   }
   template () {

@@ -1,4 +1,4 @@
-export default function addBindings (component, changes = {}) {
+export function addBindings (component, changes = {}) {
   const subscriptions = component.sbPrivate.subscriptions
   let bindings = {}
 
@@ -19,16 +19,23 @@ export default function addBindings (component, changes = {}) {
     }
   }
 
-  const newPublished = Object.assign(
+  component.sbPrivate.bindings = Object.assign(
     component.sbPrivate.bindings || {},
     bindings
   )
 
   component.sbPrivate.direct = Object.assign(
     component.sbPrivate.direct || {},
-    changes.direct
+    changes.direct || {}
   )
+}
 
-  component.sbPrivate.bindings = newPublished
-  return newPublished
+export function flattenBindings (component) {
+  component.sbPrivate.data = Object.assign(
+    component.sbPrivate.data || {},
+    component.sbPrivate.bindings || {},
+    component.sbPrivate.direct
+  )
+  component.sbPrivate.bindings = {}
+  component.sbPrivate.direct = {}
 }

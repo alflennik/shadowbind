@@ -67,7 +67,7 @@ export default class Element extends window.HTMLElement {
     }
   }
   data (bindings) {
-    if (arguments.length === 0) return this.sbPrivate.data
+    if (arguments.length === 0) return Object.assign({}, this.sbPrivate.data)
     queue.add(this, { direct: bindings })
   }
   form (newValues) {
