@@ -1,7 +1,7 @@
 {
   "name": "shadowbind",
   "author": "Alexander Flenniken",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "repository": "https://github.com/alflennik/shadowbind",
   "description": "Radically Simple Web Components",
   "main": "dist/shadowbind.js",
